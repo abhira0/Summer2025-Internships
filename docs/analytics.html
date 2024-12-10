@@ -253,7 +253,22 @@
                     }
                 });
 
-                const sortedDates = Object.keys(dailyStats).sort();
+                // Generate all dates in the range
+                const allDates = [];
+                const startDate = minDate ? new Date(minDate) : new Date(Math.min(...data.map(job => new Date(job.tracked_date))));
+                const endDate = now;
+                for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                    const dateStr = d.toISOString().split('T')[0];
+                    allDates.push(dateStr);
+                    if (!dailyStats[dateStr]) {
+                        dailyStats[dateStr] = {
+                            totalApplications: 0,
+                            uniqueCompanies: new Set()
+                        };
+                    }
+                }
+
+                const sortedDates = allDates;
                 const uniqueCompanies = sortedDates.map(date => dailyStats[date].uniqueCompanies.size);
                 const additionalApps = sortedDates.map(date => 
                     dailyStats[date].totalApplications - dailyStats[date].uniqueCompanies.size
