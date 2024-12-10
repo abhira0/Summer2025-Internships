@@ -14,6 +14,15 @@
             border-radius: 8px;
             float: left;
         }
+        .full-width-chart {
+            width: 95%;
+            height: 800px; /* Increased from 600px */
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            clear: both;
+        }
         .stats-container {
             clear: both;
             padding: 20px;
@@ -27,6 +36,10 @@
         .chart-scroll-container {
             overflow-x: auto;
             padding-bottom: 10px;
+            height: 90%; /* Add this to take up most of container height */
+        }
+        .chart-scroll-container canvas {
+            height: 700px !important; /* Force canvas height */
         }
         select {
             padding: 5px;
@@ -38,6 +51,22 @@
 <body>
     <h1>Internship Data Analytics Dashboard</h1>
     
+    <div class="full-width-chart">
+        <h2>Daily Application Analysis</h2>
+        <div class="chart-controls">
+            <select id="dateRange">
+                <option value="7" selected>Last 7 Days</option>
+                <option value="14">Last 14 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="60">Last 2 Months</option>
+                <option value="all">All Time</option>
+            </select>
+        </div>
+        <div class="chart-scroll-container">
+            <canvas id="dailyApplicationsChart"></canvas>
+        </div>
+    </div>
+
     <div class="stats-container" id="summary-stats">
         <h2>Summary Statistics</h2>
     </div>
@@ -60,22 +89,6 @@
     <div class="chart-container">
         <h2>Monthly Application Trend</h2>
         <canvas id="trendChart"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <h2>Daily Application Analysis</h2>
-        <div class="chart-controls">
-            <select id="dateRange">
-                <option value="7">Last 7 Days</option>
-                <option value="14">Last 14 Days</option>
-                <option value="30">Last 30 Days</option>
-                <option value="60">Last 2 Months</option>
-                <option value="all">All Time</option>
-            </select>
-        </div>
-        <div class="chart-scroll-container">
-            <canvas id="dailyApplicationsChart"></canvas>
-        </div>
     </div>
 
     <script>
@@ -248,9 +261,8 @@
             let chartInstance = null;
             const dateRangeSelect = document.getElementById('dateRange');
 
-            function updateChart(days = null) {
-                const dailyTotals = {};
-                const dailyUnique = {};
+            function updateChart(days = 7) {
+                const dailyStats = {};
                 
                 // Get current date and calculate date range
                 const now = new Date();
@@ -262,41 +274,44 @@
                         const date = new Date(job.tracked_date);
                         if (!minDate || date >= minDate) {
                             const dateStr = date.toISOString().split('T')[0];
-                            dailyTotals[dateStr] = (dailyTotals[dateStr] || 0) + 1;
-                            dailyUnique[dateStr] = dailyUnique[dateStr] || new Set();
+                            dailyStats[dateStr] = dailyStats[dateStr] || {
+                                totalApplications: 0,
+                                uniqueCompanies: new Set()
+                            };
+                            dailyStats[dateStr].totalApplications++;
                             if (job.company_id) {
-                                dailyUnique[dateStr].add(job.company_id);
+                                dailyStats[dateStr].uniqueCompanies.add(job.company_id);
                             }
                         }
                     }
                 });
 
-                const sortedDates = Object.keys(dailyTotals).sort();
-                const totalApps = sortedDates.map(date => dailyTotals[date]);
-                const uniqueCompanies = sortedDates.map(date => dailyUnique[date].size);
+                const sortedDates = Object.keys(dailyStats).sort();
+                const uniqueCompanies = sortedDates.map(date => dailyStats[date].uniqueCompanies.size);
+                const additionalApps = sortedDates.map(date => 
+                    dailyStats[date].totalApplications - dailyStats[date].uniqueCompanies.size
+                );
 
-                // Destroy existing chart if it exists
                 if (chartInstance) {
                     chartInstance.destroy();
                 }
 
-                // Create new chart with stacked bars
                 chartInstance = new Chart('dailyApplicationsChart', {
                     type: 'bar',
                     data: {
                         labels: sortedDates,
                         datasets: [
                             {
-                                label: 'Total Applications',
-                                data: totalApps,
-                                backgroundColor: 'rgba(54, 162, 235, 0.7)', // Blue color
-                                stack: 'Stack 0',
-                            },
-                            {
                                 label: 'Unique Companies',
                                 data: uniqueCompanies,
-                                backgroundColor: 'rgba(75, 192, 192, 0.7)', // Teal color
-                                stack: 'Stack 0',
+                                backgroundColor: 'rgba(56, 189, 248, 0.6)',
+                                stack: 'Stack 0'
+                            },
+                            {
+                                label: 'Additional Applications',
+                                data: additionalApps,
+                                backgroundColor: 'rgba(244, 114, 182, 0.6)',
+                                stack: 'Stack 0'
                             }
                         ]
                     },
@@ -309,12 +324,10 @@
                         },
                         scales: {
                             x: {
+                                stacked: true,
                                 title: {
                                     display: true,
                                     text: 'Date'
-                                },
-                                grid: {
-                                    display: false
                                 }
                             },
                             y: {
@@ -333,28 +346,23 @@
                                         return new Date(context[0].label).toLocaleDateString();
                                     },
                                     label: function(context) {
-                                        return `${context.dataset.label}: ${context.parsed.y}`;
-                                    },
-                                    footer: function(tooltipItems) {
-                                        const totalApps = tooltipItems[0].parsed.y;
-                                        const uniqueCompanies = tooltipItems[1].parsed.y;
-                                        return `Application/Company Ratio: ${(totalApps/uniqueCompanies).toFixed(2)}`;
+                                        const date = context.label;
+                                        const uniqueComps = uniqueCompanies[context.dataIndex];
+                                        const totalApps = dailyStats[date].totalApplications;
+                                        if (context.datasetIndex === 0) {
+                                            return `Unique Companies: ${uniqueComps}`;
+                                        } else {
+                                            return `Total Applications: ${totalApps}`;
+                                        }
                                     }
                                 }
-                            },
-                            legend: {
-                                display: true,
-                                position: 'top'
                             }
                         }
                     }
                 });
             }
 
-            // Initialize chart with all data
-            updateChart();
-
-            // Add event listener for date range changes
+            updateChart(7);
             dateRangeSelect.addEventListener('change', function() {
                 const days = this.value === 'all' ? null : parseInt(this.value);
                 updateChart(days);
