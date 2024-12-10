@@ -243,11 +243,16 @@
                             const dateStr = date.toISOString().split('T')[0];
                             dailyStats[dateStr] = dailyStats[dateStr] || {
                                 totalApplications: 0,
-                                uniqueCompanies: new Set()
+                                uniqueCompanies: new Set(),
+                                rejections: 0  // Initialize rejection count
                             };
                             dailyStats[dateStr].totalApplications++;
                             if (job.company_id) {
                                 dailyStats[dateStr].uniqueCompanies.add(job.company_id);
+                            }
+                            // Check for rejections based on status_events
+                            if (job.status_events && job.status_events.some(event => event.status === 23)) {
+                                dailyStats[dateStr].rejections++;
                             }
                         }
                     }
@@ -255,7 +260,7 @@
 
                 // Generate all dates in the range
                 const allDates = [];
-                const startDate = minDate ? new Date(minDate) : new Date(Math.min(...data.map(job => new Date(job.tracked_date))));
+                const startDate = minDate ? new Date(minDate) : new Date(Math.min(...data.map(job => new Date(job.tracked_date || '9999-12-31'))));
                 const endDate = now;
                 for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                     const dateStr = d.toISOString().split('T')[0];
@@ -263,7 +268,8 @@
                     if (!dailyStats[dateStr]) {
                         dailyStats[dateStr] = {
                             totalApplications: 0,
-                            uniqueCompanies: new Set()
+                            uniqueCompanies: new Set(),
+                            rejections: 0  // Ensure rejection count exists
                         };
                     }
                 }
@@ -273,6 +279,7 @@
                 const additionalApps = sortedDates.map(date => 
                     dailyStats[date].totalApplications - dailyStats[date].uniqueCompanies.size
                 );
+                const rejections = sortedDates.map(date => dailyStats[date].rejections);
 
                 if (chartInstance) {
                     chartInstance.destroy();
@@ -294,6 +301,15 @@
                                 data: additionalApps,
                                 backgroundColor: 'rgba(244, 114, 182, 0.6)',
                                 stack: 'Stack 0'
+                            },
+                            {
+                                label: 'Rejections',
+                                data: rejections,
+                                type: 'line',  // Specify as line chart
+                                borderColor: 'red',
+                                backgroundColor: 'rgba(255, 0, 0, 0.0)',
+                                borderWidth: 2
+                                // Removed yAxisID to use the primary y-axis
                             }
                         ]
                     },
@@ -320,6 +336,7 @@
                                     text: 'Count'
                                 }
                             }
+                            // Removed y1 axis
                         },
                         plugins: {
                             tooltip: {
@@ -329,12 +346,16 @@
                                     },
                                     label: function(context) {
                                         const date = context.label;
-                                        const uniqueComps = uniqueCompanies[context.dataIndex];
-                                        const totalApps = dailyStats[date].totalApplications;
-                                        if (context.datasetIndex === 0) {
-                                            return `Unique Companies: ${uniqueComps}`;
+                                        if (context.dataset.label === 'Rejections') {
+                                            return `Rejections: ${rejections[context.dataIndex]}`;
                                         } else {
-                                            return `Total Applications: ${totalApps}`;
+                                            const uniqueComps = uniqueCompanies[context.dataIndex];
+                                            const totalApps = dailyStats[date].totalApplications;
+                                            if (context.dataset.label === 'Unique Companies') {
+                                                return `Unique Companies: ${uniqueComps}`;
+                                            } else {
+                                                return `Total Applications: ${totalApps}`;
+                                            }
                                         }
                                     }
                                 }
