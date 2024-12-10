@@ -126,9 +126,9 @@ Promise.all([
     activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "vancouver, bc, canada" }] });
     activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "canada" }] });
     activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-contains", value: "vancouver, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-contains", value: "ottawa, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-contains", value: "london, uk" }] });
+    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "vancouver, canada" }] });
+    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "ottawa, canada" }] });
+    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "london, uk" }] });
     updateActiveFilters();
     applyFilters();
 
