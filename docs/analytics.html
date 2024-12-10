@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Data Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            width: 45%;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            float: left;
+        }
+        .stats-container {
+            clear: both;
+            padding: 20px;
+            margin: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Internship Data Analytics Dashboard</h1>
+    
+    <div class="stats-container" id="summary-stats">
+        <h2>Summary Statistics</h2>
+    </div>
+
+    <div class="chart-container">
+        <h2>Salary Distribution</h2>
+        <canvas id="salaryChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h2>Top Locations</h2>
+        <canvas id="locationChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h2>Companies with Most Openings</h2>
+        <canvas id="companyChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h2>Monthly Application Trend</h2>
+        <canvas id="trendChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h2>Daily Application Analysis</h2>
+        <canvas id="dailyApplicationsChart"></canvas>
+    </div>
+
+    <script>
+        // Load and process the data
+        fetch('simplify_tracker.json')
+            .then(response => response.json())
+            .then(data => {
+                displaySummaryStats(data);
+                createSalaryChart(data);
+                createLocationChart(data);
+                createCompanyChart(data);
+                createTrendChart(data);
+                createDailyApplicationsChart(data); // Add this line
+            });
+
+        function displaySummaryStats(data) {
+            const totalJobs = data.length;
+            const jobsWithSalary = data.filter(job => job.salary_low || job.salary_high).length;
+            
+            const avgSalary = data
+                .filter(job => job.salary_low)
+                .reduce((sum, job) => sum + job.salary_low, 0) / jobsWithSalary;
+
+            document.getElementById('summary-stats').innerHTML += `
+                <p>Total Jobs: ${totalJobs}</p>
+                <p>Jobs with Salary Info: ${jobsWithSalary}</p>
+                <p>Average Starting Salary: $${avgSalary.toFixed(2)}/hr</p>
+            `;
+        }
+
+        function createSalaryChart(data) {
+            const salaryRanges = {
+                '0-20': 0, '21-30': 0, '31-40': 0,
+                '41-50': 0, '51+': 0
+            };
+
+            data.forEach(job => {
+                if (job.salary_low) {
+                    if (job.salary_low <= 20) salaryRanges['0-20']++;
+                    else if (job.salary_low <= 30) salaryRanges['21-30']++;
+                    else if (job.salary_low <= 40) salaryRanges['31-40']++;
+                    else if (job.salary_low <= 50) salaryRanges['41-50']++;
+                    else salaryRanges['51+']++;
+                }
+            });
+
+            new Chart('salaryChart', {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(salaryRanges),
+                    datasets: [{
+                        label: 'Number of Jobs',
+                        data: Object.values(salaryRanges),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createLocationChart(data) {
+            const locations = {};
+            data.forEach(job => {
+                if (job.job_posting_location) {
+                    const city = job.job_posting_location.split(',')[0];
+                    locations[city] = (locations[city] || 0) + 1;
+                }
+            });
+
+            const topLocations = Object.entries(locations)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            new Chart('locationChart', {
+                type: 'pie',
+                data: {
+                    labels: topLocations.map(loc => loc[0]),
+                    datasets: [{
+                        data: topLocations.map(loc => loc[1]),
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                            '#9966FF', '#FF9F40', '#FF6384', '#36A2EB',
+                            '#FFCE56', '#4BC0C0'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+
+        function createCompanyChart(data) {
+            const companies = {};
+            data.forEach(job => {
+                if (job.company && job.company.id) {
+                    companies[job.company.id] = (companies[job.company.id] || 0) + 1;
+                }
+            });
+
+            const topCompanies = Object.entries(companies)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+
+            new Chart('companyChart', {
+                type: 'bar',  // Changed from horizontalBar to bar
+                data: {
+                    labels: topCompanies.map(comp => comp[0]),
+                    datasets: [{
+                        label: 'Number of Positions',
+                        data: topCompanies.map(comp => comp[1]),
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y',  // This makes the bars horizontal
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTrendChart(data) {
+            const months = {};
+            data.forEach(job => {
+                if (job.tracked_date) {
+                    const date = new Date(job.tracked_date);
+                    const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
+                    months[monthYear] = (months[monthYear] || 0) + 1;
+                }
+            });
+
+            const sortedMonths = Object.entries(months)
+                .sort((a, b) => a[0].localeCompare(b[0]));
+
+            new Chart('trendChart', {
+                type: 'line',
+                data: {
+                    labels: sortedMonths.map(m => m[0]),
+                    datasets: [{
+                        label: 'Applications per Month',
+                        data: sortedMonths.map(m => m[1]),
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createDailyApplicationsChart(data) {
+            const dailyTotals = {};
+            const dailyUnique = {};
+            
+            // Process data to get daily counts
+            data.forEach(job => {
+                if (job.tracked_date) {
+                    const date = new Date(job.tracked_date).toISOString().split('T')[0];
+                    
+                    // Track total applications
+                    dailyTotals[date] = (dailyTotals[date] || 0) + 1;
+                    
+                    // Track unique companies
+                    dailyUnique[date] = dailyUnique[date] || new Set();
+                    if (job.company_id) {
+                        dailyUnique[date].add(job.company_id);
+                    }
+                }
+            });
+
+            // Convert to arrays for chart
+            const sortedDates = Object.keys(dailyTotals).sort();
+            const totalApps = sortedDates.map(date => dailyTotals[date]);
+            const uniqueCompanies = sortedDates.map(date => dailyUnique[date].size);
+
+            new Chart('dailyApplicationsChart', {
+                type: 'bar',
+                data: {
+                    labels: sortedDates,
+                    datasets: [
+                        {
+                            label: 'Total Applications',
+                            data: totalApps,
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            order: 2
+                        },
+                        {
+                            label: 'Unique Companies',
+                            data: uniqueCompanies,
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            order: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Applications'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return new Date(context[0].label).toLocaleDateString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
