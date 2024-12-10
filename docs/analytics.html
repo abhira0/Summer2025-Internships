@@ -7,6 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body class="bg-[#121212] text-[#FFFFFF]">
     <h1 class="text-3xl font-bold text-center my-8 text-[#FFFFFF]">Internship Data Analytics Dashboard</h1>
@@ -34,20 +37,6 @@
         <canvas id="salaryChart"></canvas>
     </div>
 
-    <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
-        <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Top Locations</h2>
-        <canvas id="locationChart"></canvas>
-    </div>
-
-    <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
-        <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Companies with Most Openings</h2>
-        <canvas id="companyChart"></canvas>
-    </div>
-
-    <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
-        <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Monthly Application Trend</h2>
-        <canvas id="trendChart"></canvas>
-    </div>
 
     <script>
         // Load and process the data
@@ -56,9 +45,6 @@
             .then(data => {
                 displaySummaryStats(data);
                 createSalaryChart(data);
-                createLocationChart(data);
-                createCompanyChart(data);
-                createTrendChart(data);
                 createDailyApplicationsChart(data); // Add this line
             });
 
@@ -101,148 +87,6 @@
                         label: 'Number of Jobs',
                         data: Object.values(salaryRanges),
                         backgroundColor: 'rgba(54, 162, 235, 0.8)' // More vibrant blue
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { color: '#FFFFFF' },
-                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
-                        },
-                        x: {
-                            ticks: { color: '#FFFFFF' },
-                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#FFFFFF' // Set legend text color
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createLocationChart(data) {
-            const locations = {};
-            data.forEach(job => {
-                if (job.job_posting_location) {
-                    const city = job.job_posting_location.split(',')[0];
-                    locations[city] = (locations[city] || 0) + 1;
-                }
-            });
-
-            const topLocations = Object.entries(locations)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-
-            new Chart('locationChart', {
-                type: 'pie',
-                data: {
-                    labels: topLocations.map(loc => loc[0]),
-                    datasets: [{
-                        data: topLocations.map(loc => loc[1]),
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.8)',   // Vibrant red
-                            'rgba(54, 162, 235, 0.8)',   // Vibrant blue
-                            'rgba(255, 206, 86, 0.8)',   // Vibrant yellow
-                            'rgba(75, 192, 192, 0.8)',   // Vibrant teal
-                            'rgba(153, 102, 255, 0.8)',  // Vibrant purple
-                            'rgba(255, 159, 64, 0.8)',   // Vibrant orange
-                            'rgba(255, 99, 132, 0.8)',   // Vibrant red
-                            'rgba(255, 206, 86, 0.8)',   // Vibrant yellow
-                            'rgba(75, 192, 192, 0.8)',   // Vibrant teal
-                            'rgba(153, 102, 255, 0.8)'   // Vibrant purple
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#FFFFFF' // Set legend text color
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createCompanyChart(data) {
-            const companies = {};
-            data.forEach(job => {
-                if (job.company && job.company.id) {
-                    companies[job.company.id] = (companies[job.company.id] || 0) + 1;
-                }
-            });
-
-            const topCompanies = Object.entries(companies)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 8);
-
-            new Chart('companyChart', {
-                type: 'bar',  // Changed from horizontalBar to bar
-                data: {
-                    labels: topCompanies.map(comp => comp[0]),
-                    datasets: [{
-                        label: 'Number of Positions',
-                        data: topCompanies.map(comp => comp[1]),
-                        backgroundColor: 'rgba(75, 192, 192, 0.8)' // More vibrant teal
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    indexAxis: 'y',  // This makes the bars horizontal
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            ticks: { color: '#FFFFFF' },
-                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
-                        },
-                        y: {
-                            ticks: { color: '#FFFFFF' },
-                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#FFFFFF' // Set legend text color
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createTrendChart(data) {
-            const months = {};
-            data.forEach(job => {
-                if (job.tracked_date) {
-                    const date = new Date(job.tracked_date);
-                    const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
-                    months[monthYear] = (months[monthYear] || 0) + 1;
-                }
-            });
-
-            const sortedMonths = Object.entries(months)
-                .sort((a, b) => a[0].localeCompare(b[0]));
-
-            new Chart('trendChart', {
-                type: 'line',
-                data: {
-                    labels: sortedMonths.map(m => m[0]),
-                    datasets: [{
-                        label: 'Applications per Month',
-                        data: sortedMonths.map(m => m[1]),
-                        borderColor: 'rgba(255, 206, 86, 1)', // Vibrant yellow
-                        backgroundColor: 'rgba(255, 206, 86, 0.5)', // Lighter fill
-                        tension: 0.1
                     }]
                 },
                 options: {
