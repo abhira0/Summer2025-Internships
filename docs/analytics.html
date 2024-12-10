@@ -8,44 +8,44 @@
     <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <h1 class="text-3xl font-bold text-center my-8">Internship Data Analytics Dashboard</h1>
+<body class="bg-[#121212] text-[#FFFFFF]">
+    <h1 class="text-3xl font-bold text-center my-8 text-[#FFFFFF]">Internship Data Analytics Dashboard</h1>
     
     <div class="full-width-chart">
-        <h2 class="text-2xl font-semibold mb-4">Daily Application Analysis</h2>
+        <h2 class="text-2xl font-semibold mb-4 text-[#FFFFFF]">Daily Application Analysis</h2>
         <div class="chart-controls mb-4">
-            <button data-value="7" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Last 7 Days</button>
-            <button data-value="14" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Last 14 Days</button>
-            <button data-value="30" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Last 30 Days</button>
-            <button data-value="60" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Last 2 Months</button>
-            <button data-value="all" class="bg-blue-500 text-white px-4 py-2 rounded">All Time</button>
+            <button data-value="7" class="bg-[#7C3AED] text-[#FFFFFF] px-4 py-2 rounded mr-2 hover:bg-[#6D28D9]">Last 7 Days</button>
+            <button data-value="14" class="bg-[#7C3AED] text-[#FFFFFF] px-4 py-2 rounded mr-2 hover:bg-[#6D28D9]">Last 14 Days</button>
+            <button data-value="30" class="bg-[#7C3AED] text-[#FFFFFF] px-4 py-2 rounded mr-2 hover:bg-[#6D28D9]">Last 30 Days</button>
+            <button data-value="60" class="bg-[#7C3AED] text-[#FFFFFF] px-4 py-2 rounded mr-2 hover:bg-[#6D28D9]">Last 2 Months</button>
+            <button data-value="all" class="bg-[#7C3AED] text-[#FFFFFF] px-4 py-2 rounded hover:bg-[#6D28D9]">All Time</button>
         </div>
         <div class="chart-scroll-container overflow-x-auto pb-4 h-5/6">
             <canvas id="dailyApplicationsChart" class="h-[700px]"></canvas>
         </div>
     </div>
 
-    <div class="stats-container clear-both p-5 m-5 bg-gray-200 rounded" id="summary-stats">
-        <h2 class="text-2xl font-semibold mb-4">Summary Statistics</h2>
+    <div class="stats-container clear-both p-5 m-5 bg-[#1E1E1E] rounded" id="summary-stats">
+        <h2 class="text-2xl font-semibold mb-4 text-[#FFFFFF]">Summary Statistics</h2>
     </div>
 
-    <div class="chart-container w-1/2 m-5 p-4 border border-gray-300 rounded">
-        <h2 class="text-xl font-semibold mb-2">Salary Distribution</h2>
+    <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
+        <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Salary Distribution</h2>
         <canvas id="salaryChart"></canvas>
     </div>
 
-    <div class="chart-container w-1/2 m-5 p-4 border border-gray-300 rounded">
-        <h2 class="text-xl font-semibold mb-2">Top Locations</h2>
+    <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
+        <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Top Locations</h2>
         <canvas id="locationChart"></canvas>
     </div>
 
-    <div class="chart-container w-1/2 m-5 p-4 border border-gray-300 rounded">
-        <h2 class="text-xl font-semibold mb-2">Companies with Most Openings</h2>
+    <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
+        <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Companies with Most Openings</h2>
         <canvas id="companyChart"></canvas>
     </div>
 
-    <div class="chart-container w-1/2 m-5 p-4 border border-gray-300 rounded">
-        <h2 class="text-xl font-semibold mb-2">Monthly Application Trend</h2>
+    <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
+        <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Monthly Application Trend</h2>
         <canvas id="trendChart"></canvas>
     </div>
 
@@ -100,14 +100,27 @@
                     datasets: [{
                         label: 'Number of Jobs',
                         data: Object.values(salaryRanges),
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)' // More vibrant blue
                     }]
                 },
                 options: {
                     responsive: true,
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: { color: '#FFFFFF' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
+                        },
+                        x: {
+                            ticks: { color: '#FFFFFF' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#FFFFFF' // Set legend text color
+                            }
                         }
                     }
                 }
@@ -134,14 +147,28 @@
                     datasets: [{
                         data: topLocations.map(loc => loc[1]),
                         backgroundColor: [
-                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-                            '#9966FF', '#FF9F40', '#FF6384', '#36A2EB',
-                            '#FFCE56', '#4BC0C0'
+                            'rgba(255, 99, 132, 0.8)',   // Vibrant red
+                            'rgba(54, 162, 235, 0.8)',   // Vibrant blue
+                            'rgba(255, 206, 86, 0.8)',   // Vibrant yellow
+                            'rgba(75, 192, 192, 0.8)',   // Vibrant teal
+                            'rgba(153, 102, 255, 0.8)',  // Vibrant purple
+                            'rgba(255, 159, 64, 0.8)',   // Vibrant orange
+                            'rgba(255, 99, 132, 0.8)',   // Vibrant red
+                            'rgba(255, 206, 86, 0.8)',   // Vibrant yellow
+                            'rgba(75, 192, 192, 0.8)',   // Vibrant teal
+                            'rgba(153, 102, 255, 0.8)'   // Vibrant purple
                         ]
                     }]
                 },
                 options: {
-                    responsive: true
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#FFFFFF' // Set legend text color
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -165,7 +192,7 @@
                     datasets: [{
                         label: 'Number of Positions',
                         data: topCompanies.map(comp => comp[1]),
-                        backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)' // More vibrant teal
                     }]
                 },
                 options: {
@@ -173,7 +200,20 @@
                     indexAxis: 'y',  // This makes the bars horizontal
                     scales: {
                         x: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: { color: '#FFFFFF' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
+                        },
+                        y: {
+                            ticks: { color: '#FFFFFF' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#FFFFFF' // Set legend text color
+                            }
                         }
                     }
                 }
@@ -200,7 +240,8 @@
                     datasets: [{
                         label: 'Applications per Month',
                         data: sortedMonths.map(m => m[1]),
-                        borderColor: 'rgb(75, 192, 192)',
+                        borderColor: 'rgba(255, 206, 86, 1)', // Vibrant yellow
+                        backgroundColor: 'rgba(255, 206, 86, 0.5)', // Lighter fill
                         tension: 0.1
                     }]
                 },
@@ -208,7 +249,20 @@
                     responsive: true,
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: { color: '#FFFFFF' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
+                        },
+                        x: {
+                            ticks: { color: '#FFFFFF' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#FFFFFF' // Set legend text color
+                            }
                         }
                     }
                 }
@@ -293,21 +347,21 @@
                             {
                                 label: 'Unique Companies',
                                 data: uniqueCompanies,
-                                backgroundColor: 'rgba(56, 189, 248, 0.6)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.8)', // Vibrant blue
                                 stack: 'Stack 0'
                             },
                             {
                                 label: 'Additional Applications',
                                 data: additionalApps,
-                                backgroundColor: 'rgba(244, 114, 182, 0.6)',
+                                backgroundColor: 'rgba(255, 159, 64, 0.8)', // Vibrant orange
                                 stack: 'Stack 0'
                             },
                             {
                                 label: 'Rejections',
                                 data: rejections,
                                 type: 'line',  // Specify as line chart
-                                borderColor: 'red',
-                                backgroundColor: 'rgba(255, 0, 0, 0.0)',
+                                borderColor: 'rgba(255, 99, 132, 1)', // Vibrant red
+                                backgroundColor: 'rgba(255, 99, 132, 0.0)',
                                 borderWidth: 2
                                 // Removed yAxisID to use the primary y-axis
                             }
@@ -325,16 +379,22 @@
                                 stacked: true,
                                 title: {
                                     display: true,
-                                    text: 'Date'
-                                }
+                                    text: 'Date',
+                                    color: '#FFFFFF' // Set x-axis title color
+                                },
+                                ticks: { color: '#FFFFFF' }, // Set x-axis text color
+                                grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
                             },
                             y: {
                                 stacked: true,
                                 beginAtZero: true,
                                 title: {
                                     display: true,
-                                    text: 'Count'
-                                }
+                                    text: 'Count',
+                                    color: '#FFFFFF' // Set y-axis title color
+                                },
+                                ticks: { color: '#FFFFFF' }, // Set y-axis text color
+                                grid: { color: 'rgba(255, 255, 255, 0.2)' } // Lighter grid lines
                             }
                             // Removed y1 axis
                         },
@@ -358,6 +418,13 @@
                                             }
                                         }
                                     }
+                                },
+                                titleColor: '#FFFFFF', // Tooltip title color
+                                bodyColor: '#FFFFFF'   // Tooltip body text color
+                            },
+                            legend: {
+                                labels: {
+                                    color: '#FFFFFF' // Set legend text color
                                 }
                             }
                         }
