@@ -5,89 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internship Data Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .chart-container {
-            width: 45%;
-            margin: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            float: left;
-        }
-        .full-width-chart {
-            width: 95%;
-            height: 800px; /* Increased from 600px */
-            margin: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            clear: both;
-        }
-        .stats-container {
-            clear: both;
-            padding: 20px;
-            margin: 20px;
-            background-color: #f5f5f5;
-            border-radius: 8px;
-        }
-        .chart-controls {
-            margin-bottom: 10px;
-        }
-        .chart-scroll-container {
-            overflow-x: auto;
-            padding-bottom: 10px;
-            height: 90%; /* Add this to take up most of container height */
-        }
-        .chart-scroll-container canvas {
-            height: 700px !important; /* Force canvas height */
-        }
-        select {
-            padding: 5px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-    </style>
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Internship Data Analytics Dashboard</h1>
+<body class="bg-gray-100">
+    <h1 class="text-3xl font-bold text-center my-8">Internship Data Analytics Dashboard</h1>
     
     <div class="full-width-chart">
-        <h2>Daily Application Analysis</h2>
-        <div class="chart-controls">
-            <select id="dateRange">
-                <option value="7" selected>Last 7 Days</option>
-                <option value="14">Last 14 Days</option>
-                <option value="30">Last 30 Days</option>
-                <option value="60">Last 2 Months</option>
-                <option value="all">All Time</option>
-            </select>
+        <h2 class="text-2xl font-semibold mb-4">Daily Application Analysis</h2>
+        <div class="chart-controls mb-4">
+            <button data-value="7" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Last 7 Days</button>
+            <button data-value="14" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Last 14 Days</button>
+            <button data-value="30" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Last 30 Days</button>
+            <button data-value="60" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Last 2 Months</button>
+            <button data-value="all" class="bg-blue-500 text-white px-4 py-2 rounded">All Time</button>
         </div>
-        <div class="chart-scroll-container">
-            <canvas id="dailyApplicationsChart"></canvas>
+        <div class="chart-scroll-container overflow-x-auto pb-4 h-5/6">
+            <canvas id="dailyApplicationsChart" class="h-[700px]"></canvas>
         </div>
     </div>
 
-    <div class="stats-container" id="summary-stats">
-        <h2>Summary Statistics</h2>
+    <div class="stats-container clear-both p-5 m-5 bg-gray-200 rounded" id="summary-stats">
+        <h2 class="text-2xl font-semibold mb-4">Summary Statistics</h2>
     </div>
 
-    <div class="chart-container">
-        <h2>Salary Distribution</h2>
+    <div class="chart-container w-1/2 m-5 p-4 border border-gray-300 rounded">
+        <h2 class="text-xl font-semibold mb-2">Salary Distribution</h2>
         <canvas id="salaryChart"></canvas>
     </div>
 
-    <div class="chart-container">
-        <h2>Top Locations</h2>
+    <div class="chart-container w-1/2 m-5 p-4 border border-gray-300 rounded">
+        <h2 class="text-xl font-semibold mb-2">Top Locations</h2>
         <canvas id="locationChart"></canvas>
     </div>
 
-    <div class="chart-container">
-        <h2>Companies with Most Openings</h2>
+    <div class="chart-container w-1/2 m-5 p-4 border border-gray-300 rounded">
+        <h2 class="text-xl font-semibold mb-2">Companies with Most Openings</h2>
         <canvas id="companyChart"></canvas>
     </div>
 
-    <div class="chart-container">
-        <h2>Monthly Application Trend</h2>
+    <div class="chart-container w-1/2 m-5 p-4 border border-gray-300 rounded">
+        <h2 class="text-xl font-semibold mb-2">Monthly Application Trend</h2>
         <canvas id="trendChart"></canvas>
     </div>
 
@@ -259,7 +217,16 @@
 
         function createDailyApplicationsChart(data) {
             let chartInstance = null;
-            const dateRangeSelect = document.getElementById('dateRange');
+            // const dateRangeSelect = document.getElementById('dateRange');
+
+            const dateRangeButtons = document.querySelectorAll('.chart-controls button');
+    
+            dateRangeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const days = this.getAttribute('data-value') === 'all' ? null : parseInt(this.getAttribute('data-value'));
+                    updateChart(days);
+                });
+            });
 
             function updateChart(days = 7) {
                 const dailyStats = {};
@@ -363,10 +330,6 @@
             }
 
             updateChart(7);
-            dateRangeSelect.addEventListener('change', function() {
-                const days = this.value === 'all' ? null : parseInt(this.value);
-                updateChart(days);
-            });
         }
     </script>
 </body>
