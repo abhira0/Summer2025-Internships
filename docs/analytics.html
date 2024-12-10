@@ -21,6 +21,18 @@
             background-color: #f5f5f5;
             border-radius: 8px;
         }
+        .chart-controls {
+            margin-bottom: 10px;
+        }
+        .chart-scroll-container {
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -52,7 +64,18 @@
 
     <div class="chart-container">
         <h2>Daily Application Analysis</h2>
-        <canvas id="dailyApplicationsChart"></canvas>
+        <div class="chart-controls">
+            <select id="dateRange">
+                <option value="7">Last 7 Days</option>
+                <option value="14">Last 14 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="60">Last 2 Months</option>
+                <option value="all">All Time</option>
+            </select>
+        </div>
+        <div class="chart-scroll-container">
+            <canvas id="dailyApplicationsChart"></canvas>
+        </div>
     </div>
 
     <script>
@@ -222,76 +245,119 @@
         }
 
         function createDailyApplicationsChart(data) {
-            const dailyTotals = {};
-            const dailyUnique = {};
-            
-            // Process data to get daily counts
-            data.forEach(job => {
-                if (job.tracked_date) {
-                    const date = new Date(job.tracked_date).toISOString().split('T')[0];
-                    
-                    // Track total applications
-                    dailyTotals[date] = (dailyTotals[date] || 0) + 1;
-                    
-                    // Track unique companies
-                    dailyUnique[date] = dailyUnique[date] || new Set();
-                    if (job.company_id) {
-                        dailyUnique[date].add(job.company_id);
+            let chartInstance = null;
+            const dateRangeSelect = document.getElementById('dateRange');
+
+            function updateChart(days = null) {
+                const dailyTotals = {};
+                const dailyUnique = {};
+                
+                // Get current date and calculate date range
+                const now = new Date();
+                const minDate = days ? new Date(now - days * 24 * 60 * 60 * 1000) : null;
+                
+                // Process data to get daily counts
+                data.forEach(job => {
+                    if (job.tracked_date) {
+                        const date = new Date(job.tracked_date);
+                        if (!minDate || date >= minDate) {
+                            const dateStr = date.toISOString().split('T')[0];
+                            dailyTotals[dateStr] = (dailyTotals[dateStr] || 0) + 1;
+                            dailyUnique[dateStr] = dailyUnique[dateStr] || new Set();
+                            if (job.company_id) {
+                                dailyUnique[dateStr].add(job.company_id);
+                            }
+                        }
                     }
+                });
+
+                const sortedDates = Object.keys(dailyTotals).sort();
+                const totalApps = sortedDates.map(date => dailyTotals[date]);
+                const uniqueCompanies = sortedDates.map(date => dailyUnique[date].size);
+
+                // Destroy existing chart if it exists
+                if (chartInstance) {
+                    chartInstance.destroy();
                 }
-            });
 
-            // Convert to arrays for chart
-            const sortedDates = Object.keys(dailyTotals).sort();
-            const totalApps = sortedDates.map(date => dailyTotals[date]);
-            const uniqueCompanies = sortedDates.map(date => dailyUnique[date].size);
-
-            new Chart('dailyApplicationsChart', {
-                type: 'bar',
-                data: {
-                    labels: sortedDates,
-                    datasets: [
-                        {
-                            label: 'Total Applications',
-                            data: totalApps,
-                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                            order: 2
-                        },
-                        {
-                            label: 'Unique Companies',
-                            data: uniqueCompanies,
-                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                            order: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date'
+                // Create new chart with stacked bars
+                chartInstance = new Chart('dailyApplicationsChart', {
+                    type: 'bar',
+                    data: {
+                        labels: sortedDates,
+                        datasets: [
+                            {
+                                label: 'Total Applications',
+                                data: totalApps,
+                                backgroundColor: 'rgba(54, 162, 235, 0.7)', // Blue color
+                                stack: 'Stack 0',
+                            },
+                            {
+                                label: 'Unique Companies',
+                                data: uniqueCompanies,
+                                backgroundColor: 'rgba(75, 192, 192, 0.7)', // Teal color
+                                stack: 'Stack 0',
                             }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Number of Applications'
-                            }
-                        }
+                        ]
                     },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                title: function(context) {
-                                    return new Date(context[0].label).toLocaleDateString();
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Count'
                                 }
                             }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        return new Date(context[0].label).toLocaleDateString();
+                                    },
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y}`;
+                                    },
+                                    footer: function(tooltipItems) {
+                                        const totalApps = tooltipItems[0].parsed.y;
+                                        const uniqueCompanies = tooltipItems[1].parsed.y;
+                                        return `Application/Company Ratio: ${(totalApps/uniqueCompanies).toFixed(2)}`;
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            }
                         }
                     }
-                }
+                });
+            }
+
+            // Initialize chart with all data
+            updateChart();
+
+            // Add event listener for date range changes
+            dateRangeSelect.addEventListener('change', function() {
+                const days = this.value === 'all' ? null : parseInt(this.value);
+                updateChart(days);
             });
         }
     </script>
