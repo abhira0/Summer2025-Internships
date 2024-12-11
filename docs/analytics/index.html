@@ -320,31 +320,36 @@
             const locationsResponse = await fetch('cache/locations.json');
             const locationsData = await locationsResponse.json();
 
-            // Process locations
-            for (const [location, coordsList] of Object.entries(locationsData)) {
+            // Process job data
+            data.forEach(job => {
+                const location = job.job_posting_location;
+                if (!location) return;
+
                 if (location.toLowerCase().includes('remote')) {
                     remoteCount++;
-                    continue;
+                    return;
                 }
                 if (location.toLowerCase().includes('hybrid')) {
                     hybridCount++;
-                    continue;
+                    return;
                 }
 
-                coordsList.forEach(coords => {
-                    if (coords && coords.length >= 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
-                        const key = `${coords[0]},${coords[1]}`;
-                        if (!locationCounts.has(key)) {
-                            locationCounts.set(key, { count: 0, locations: new Set(), names: new Set() });
+                if (locationsData[location]) {
+                    locationsData[location].forEach(coords => {
+                        if (coords && coords.length >= 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+                            const key = `${coords[0]},${coords[1]}`;
+                            if (!locationCounts.has(key)) {
+                                locationCounts.set(key, { count: 0, locations: new Set(), names: new Set() });
+                            }
+                            locationCounts.get(key).count++;
+                            locationCounts.get(key).locations.add(location);
+                            if (coords.length === 3) {
+                                locationCounts.get(key).names.add(coords[2]);
+                            }
                         }
-                        locationCounts.get(key).count++;
-                        locationCounts.get(key).locations.add(location);
-                        if (coords.length === 3) {
-                            locationCounts.get(key).names.add(coords[2]);
-                        }
-                    }
-                });
-            }
+                    });
+                }
+            });
 
             // Add bubbles to map
             for (const [coordKey, { count, locations, names }] of locationCounts) {
