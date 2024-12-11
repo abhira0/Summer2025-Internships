@@ -10,6 +10,26 @@
     <!-- Add Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #jobMap { 
+            height: 500px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .map-container {
+            padding: 20px;
+            background: #1E1E1E;
+            margin: 20px;
+            border-radius: 8px;
+        }
+        .location-stats {
+            color: #FFFFFF;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body class="bg-[#121212] text-[#FFFFFF]">
     <h1 class="text-3xl font-bold text-center my-8 text-[#FFFFFF]">Internship Data Analytics Dashboard</h1>
@@ -37,15 +57,21 @@
         <canvas id="salaryChart"></canvas>
     </div>
 
+    <div class="map-container">
+        <h2 class="text-2xl font-semibold mb-4 text-[#FFFFFF]">Job Locations Map</h2>
+        <div id="jobMap"></div>
+        <div class="location-stats" id="locationStats"></div>
+    </div>
 
     <script>
         // Load and process the data
-        fetch('simplify_tracker.json')
+        fetch('cache/simplify/raw.json')
             .then(response => response.json())
             .then(data => {
                 displaySummaryStats(data);
                 createSalaryChart(data);
                 createDailyApplicationsChart(data); // Add this line
+                createJobMap(data);  // Add this line
             });
 
         function displaySummaryStats(data) {
@@ -277,6 +303,93 @@
             }
 
             updateChart(7);
+        }
+
+        async function geocodeLocation(location) {
+            // Skip remote/hybrid locations
+            if (location.toLowerCase().includes('remote') || 
+                location.toLowerCase().includes('hybrid') ||
+                location.toLowerCase().includes('multiple')) {
+                return null;
+            }
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}, USA`);
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    return {
+                        lat: parseFloat(data[0].lat),
+                        lon: parseFloat(data[0].lon)
+                    };
+                }
+                return null;
+            } catch (error) {
+                console.error('Geocoding error:', error);
+                return null;
+            }
+        }
+
+        async function createJobMap(data) {
+            const map = L.map('jobMap').setView([39.8283, -98.5795], 4); // Center of USA
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            const locationCounts = new Map();
+            let remoteCount = 0;
+            let hybridCount = 0;
+
+            // Process locations
+            for (const job of data) {
+                let location = job.job_posting_location;
+                if (!location) continue;
+
+                if (location.toLowerCase().includes('remote')) {
+                    remoteCount++;
+                    continue;
+                }
+                if (location.toLowerCase().includes('hybrid')) {
+                    hybridCount++;
+                    continue;
+                }
+
+                // Handle multiple locations
+                const locations = location.split('|');
+                for (const loc of locations) {
+                    const coords = await geocodeLocation(loc.trim());
+                    if (coords) {
+                        const key = `${coords.lat},${coords.lon}`;
+                        locationCounts.set(key, (locationCounts.get(key) || 0) + 1);
+                    }
+                }
+
+                // Add delay to avoid rate limiting
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            // Add bubbles to map
+            for (const [coordKey, count] of locationCounts) {
+                const [lat, lon] = coordKey.split(',').map(Number);
+                const radius = Math.sqrt(count) * 20000; // Adjust size based on count
+
+                L.circle([lat, lon], {
+                    color: '#7C3AED',
+                    fillColor: '#7C3AED',
+                    fillOpacity: 0.5,
+                    radius: radius
+                })
+                .bindPopup(`Number of positions: ${count}`)
+                .addTo(map);
+            }
+
+            // Update stats
+            document.getElementById('locationStats').innerHTML = `
+                <p>Remote Positions: ${remoteCount}</p>
+                <p>Hybrid Positions: ${hybridCount}</p>
+                <p>Unique Locations: ${locationCounts.size}</p>
+            `;
         }
     </script>
 </body>
