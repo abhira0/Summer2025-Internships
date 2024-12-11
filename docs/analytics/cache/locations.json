@@ -1,1 +1,615 @@
-{}
+{
+  "Remote, Pennsylvania, 99999 Remote, Colorado, 99999 Denver, Colorado, 80203 Midvale, Utah, 84047 Rem": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Remote in USA": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "locations (HE)Office_NC, Raleigh 901 (HE)Remote_NC, Raleigh 901": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Jackson Township, NJ, USA | Parsippany-Troy Hills, NJ, USA": [
+    [
+      40.1151766,
+      -74.3647772,
+      "Jackson Township, Ocean County, New Jersey, 08527, United States"
+    ],
+    [
+      40.8646542,
+      -74.4157768,
+      "Parsippany-Troy Hills, Morris County, New Jersey, United States"
+    ]
+  ],
+  "Remote in UK": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Seattle, WA, USA | San Francisco, CA, USA | Raleigh, NC, USA": [
+    [
+      47.6038321,
+      -122.330062,
+      "Seattle, King County, Washington, United States"
+    ],
+    [
+      37.7792588,
+      -122.4193286,
+      "San Francisco, California, United States"
+    ],
+    [
+      35.7803977,
+      -78.6390989,
+      "Raleigh, Wake County, North Carolina, United States"
+    ]
+  ],
+  "Remote in USA | Remote in Canada": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "San Francisco, CA, USA | New York, NY, USA": [
+    [
+      37.7792588,
+      -122.4193286,
+      "San Francisco, California, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ]
+  ],
+  "Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "US-CA-Mountain View | US-CA-San Diego | US-NY-New York | US-GA-Atlanta": [
+    [
+      37.3893889,
+      -122.0832101,
+      "Mountain View, Santa Clara County, California, United States"
+    ],
+    [
+      32.7174202,
+      -117.162772,
+      "San Diego, San Diego County, California, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ]
+  ],
+  "Research Triangle Park, North Carolina, United States; New York, New York, United States; San Jose,": [],
+  "San Jose, California, United States; Cranberry Township, Pennsylvania, United States; Boulder, Color": [],
+  "Palo Alto, CA, USA | New York, NY, USA": [],
+  "Chicago, IL, USA | Hoffman Estates, IL, USA | Brooklyn, OH, USA | Elgin, IL, USA": [
+    [
+      41.8755616,
+      -87.6244212,
+      "Chicago, Cook County, Illinois, United States"
+    ],
+    [
+      42.0427256,
+      -88.0792782,
+      "Hoffman Estates, Schaumburg Township, Cook County, Illinois, United States"
+    ],
+    [
+      41.439754,
+      -81.7405559,
+      "Brooklyn, Cuyahoga County, Ohio, 44144, United States"
+    ],
+    [
+      42.03726,
+      -88.2810994,
+      "Elgin, Elgin Township, Kane County, Illinois, United States"
+    ]
+  ],
+  "Durham, NC, USA | Columbus, OH, USA | Charlottesville, VA, USA": [
+    [
+      35.996653,
+      -78.9018053,
+      "Durham, Durham County, North Carolina, United States"
+    ],
+    [
+      39.9622601,
+      -83.0007065,
+      "Columbus, Franklin County, Ohio, United States"
+    ],
+    [
+      38.029306,
+      -78.4766781,
+      "Charlottesville, Virginia, United States"
+    ]
+  ],
+  "Durham, North Carolina, United States of America Remote, United States of America": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Remote USA": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "USA - Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "US, CA, Santa Clara US, Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Austin, TX, USA | New York, NY, USA": [
+    [
+      30.2711286,
+      -97.7436995,
+      "Austin, Travis County, Texas, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ]
+  ],
+  "San Francisco, CA, USA | Remote in USA": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Needham, MA, USA | Hartford, CT, USA | New York, NY, USA | Irving, TX, USA": [
+    [
+      42.2802645,
+      -71.2360624,
+      "Needham, Norfolk County, Massachusetts, United States"
+    ],
+    [
+      41.764582,
+      -72.6908547,
+      "Hartford, Capitol Planning Region, Connecticut, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ],
+    [
+      32.8295183,
+      -96.9442177,
+      "Irving, Dallas County, Texas, United States"
+    ]
+  ],
+  "Atlanta, GA, United States and 11 more": [],
+  "WA-Remote Tier 3, USA": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Austin, TX or Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "US-CO-Colorado Springs | US-GA-Atlanta | US-CA-Santa Rosa": [
+    [
+      38.8339578,
+      -104.825348,
+      "Colorado Springs, El Paso County, Colorado, United States"
+    ],
+    [
+      33.7489924,
+      -84.3902644,
+      "Atlanta, Fulton County, Georgia, United States"
+    ],
+    [
+      38.4404925,
+      -122.7141049,
+      "Santa Rosa, Sonoma County, California, United States"
+    ]
+  ],
+  "US-CA-Santa Rosa | US-CO-Colorado Springs": [
+    [
+      38.4404925,
+      -122.7141049,
+      "Santa Rosa, Sonoma County, California, United States"
+    ],
+    [
+      38.8339578,
+      -104.825348,
+      "Colorado Springs, El Paso County, Colorado, United States"
+    ]
+  ],
+  "Remote - US": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "US-CA-Palo Alto | US-CA-Irvine": [
+    [
+      37.4443293,
+      -122.1598465,
+      "Palo Alto, Santa Clara County, California, United States"
+    ]
+  ],
+  "Austin, TX., (US), Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Boston; Raleigh": [],
+  "Santa Barbara, California\u00a0\u00a0San Diego, California\u00a0\u00a0Remote, United States": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Remote, Worldwide": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Chicago, IL, USA | Boulder, CO, USA": [
+    [
+      41.8755616,
+      -87.6244212,
+      "Chicago, Cook County, Illinois, United States"
+    ],
+    [
+      40.0149856,
+      -105.270545,
+      "Boulder, Boulder County, Colorado, United States"
+    ]
+  ],
+  "San Jose;San Francisco": [],
+  "California, USA - Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "locations California, USA - Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Hybrid Remote, Boulder, Colorado": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "New York, NY; San Francisco, CA; US-Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "US-Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "US-WA-Seattle | US-CA-San Francisco": [
+    [
+      47.6038321,
+      -122.330062,
+      "Seattle, King County, Washington, United States"
+    ],
+    [
+      37.7792588,
+      -122.4193286,
+      "San Francisco, California, United States"
+    ]
+  ],
+  "Florida - Deerfield Beach; Missouri - St. Louis": [],
+  "New York; Massachusetts": [],
+  "Plano, TX; Purchase, NY": [],
+  "USA - Massachusetts - Remote; USA - New Hampshire - Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "New York, New York, USA; Boston, Massachusetts, USA": [],
+  "Palo Alto, CA, USA | Cambridge, MA, USA | Madison, WI, USA | Boston, MA, USA | Seattle, WA, USA | Ma": [
+    [
+      37.4443293,
+      -122.1598465,
+      "Palo Alto, Santa Clara County, California, United States"
+    ],
+    [
+      42.3656347,
+      -71.1040018,
+      "Cambridge, Middlesex County, Massachusetts, United States"
+    ],
+    [
+      43.074761,
+      -89.3837613,
+      "Madison, Dane County, Wisconsin, United States"
+    ],
+    [
+      42.3554334,
+      -71.060511,
+      "Boston, Suffolk County, Massachusetts, United States"
+    ],
+    [
+      47.6038321,
+      -122.330062,
+      "Seattle, King County, Washington, United States"
+    ],
+    [
+      31.1728205,
+      -7.3362482,
+      "Maroc \u2d4d\u2d4e\u2d56\u2d54\u2d49\u2d31 \u0627\u0644\u0645\u063a\u0631\u0628"
+    ]
+  ],
+  "Seattle, WA, USA | Arlington, VA, USA | New York, NY, USA | Portland, OR, USA": [
+    [
+      47.6038321,
+      -122.330062,
+      "Seattle, King County, Washington, United States"
+    ],
+    [
+      38.8769326,
+      -77.0893094,
+      "Arlington County, Virginia, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ],
+    [
+      45.5202471,
+      -122.674194,
+      "Portland, Multnomah County, Oregon, United States"
+    ]
+  ],
+  "Seattle, WA, USA | San Carlos, CA, USA": [
+    [
+      47.6038321,
+      -122.330062,
+      "Seattle, King County, Washington, United States"
+    ],
+    [
+      37.504936,
+      -122.261823,
+      "San Carlos, San Mateo County, California, 94070, United States"
+    ]
+  ],
+  "San Jose, California; Scottsdale, Arizona": [],
+  "San Antonio, TX; Plano, TX; Phoenix, AZ.": [],
+  "San Antonio Home Office I; Charlotte, NC - CENTS": [],
+  "New York, NY; San Francisco, CA; Sunnyvale, CA; Los Angeles, CA; Seattle, WA": [],
+  "Madison, WI; Lincoln, NE; Centennial, CO": [],
+  "Jackson Township, NJ, USA": [
+    40.1151766,
+    -74.3647772,
+    "Jackson Township, Ocean County, New Jersey, 08527, United States"
+  ],
+  "Parsippany-Troy Hills, NJ, USA": [
+    40.8646542,
+    -74.4157768,
+    "Parsippany-Troy Hills, Morris County, New Jersey, United States"
+  ],
+  "Seattle, WA, USA": [
+    47.6038321,
+    -122.330062,
+    "Seattle, King County, Washington, United States"
+  ],
+  "San Francisco, CA, USA": [
+    37.7792588,
+    -122.4193286,
+    "San Francisco, California, United States"
+  ],
+  "Raleigh, NC, USA": [
+    35.7803977,
+    -78.6390989,
+    "Raleigh, Wake County, North Carolina, United States"
+  ],
+  "New York, NY, USA": [
+    40.7127281,
+    -74.0060152,
+    "City of New York, New York, United States"
+  ],
+  "US-CA-Mountain View": [
+    37.3893889,
+    -122.0832101,
+    "Mountain View, Santa Clara County, California, United States"
+  ],
+  "US-CA-San Diego": [
+    32.7174202,
+    -117.162772,
+    "San Diego, San Diego County, California, United States"
+  ],
+  "US-NY-New York": [
+    40.7127281,
+    -74.0060152,
+    "City of New York, New York, United States"
+  ],
+  "US-GA-Atlanta": [
+    33.7489924,
+    -84.3902644,
+    "Atlanta, Fulton County, Georgia, United States"
+  ],
+  "Palo Alto, CA, USA": [
+    37.4443293,
+    -122.1598465,
+    "Palo Alto, Santa Clara County, California, United States"
+  ],
+  "Chicago, IL, USA": [
+    41.8755616,
+    -87.6244212,
+    "Chicago, Cook County, Illinois, United States"
+  ],
+  "Hoffman Estates, IL, USA": [
+    42.0427256,
+    -88.0792782,
+    "Hoffman Estates, Schaumburg Township, Cook County, Illinois, United States"
+  ],
+  "Brooklyn, OH, USA": [
+    41.439754,
+    -81.7405559,
+    "Brooklyn, Cuyahoga County, Ohio, 44144, United States"
+  ],
+  "Elgin, IL, USA": [
+    42.03726,
+    -88.2810994,
+    "Elgin, Elgin Township, Kane County, Illinois, United States"
+  ],
+  "Durham, NC, USA": [
+    35.996653,
+    -78.9018053,
+    "Durham, Durham County, North Carolina, United States"
+  ],
+  "Columbus, OH, USA": [
+    39.9622601,
+    -83.0007065,
+    "Columbus, Franklin County, Ohio, United States"
+  ],
+  "Charlottesville, VA, USA": [
+    38.029306,
+    -78.4766781,
+    "Charlottesville, Virginia, United States"
+  ],
+  "Austin, TX, USA": [
+    30.2711286,
+    -97.7436995,
+    "Austin, Travis County, Texas, United States"
+  ],
+  "Needham, MA, USA": [
+    42.2802645,
+    -71.2360624,
+    "Needham, Norfolk County, Massachusetts, United States"
+  ],
+  "Hartford, CT, USA": [
+    41.764582,
+    -72.6908547,
+    "Hartford, Capitol Planning Region, Connecticut, United States"
+  ],
+  "Irving, TX, USA": [
+    32.8295183,
+    -96.9442177,
+    "Irving, Dallas County, Texas, United States"
+  ],
+  "US-CO-Colorado Springs": [
+    38.8339578,
+    -104.825348,
+    "Colorado Springs, El Paso County, Colorado, United States"
+  ],
+  "US-CA-Santa Rosa": [
+    38.4404925,
+    -122.7141049,
+    "Santa Rosa, Sonoma County, California, United States"
+  ],
+  "US-CA-Palo Alto": [
+    37.4443293,
+    -122.1598465,
+    "Palo Alto, Santa Clara County, California, United States"
+  ],
+  "US-CA-Irvine": [
+    33.6856969,
+    -117.825981,
+    "Irvine, Orange County, California, United States"
+  ],
+  "Boulder, CO, USA": [
+    40.0149856,
+    -105.270545,
+    "Boulder, Boulder County, Colorado, United States"
+  ],
+  "US-WA-Seattle": [
+    47.6038321,
+    -122.330062,
+    "Seattle, King County, Washington, United States"
+  ],
+  "US-CA-San Francisco": [
+    37.7792588,
+    -122.4193286,
+    "San Francisco, California, United States"
+  ],
+  "Cambridge, MA, USA": [
+    42.3656347,
+    -71.1040018,
+    "Cambridge, Middlesex County, Massachusetts, United States"
+  ],
+  "Madison, WI, USA": [
+    43.074761,
+    -89.3837613,
+    "Madison, Dane County, Wisconsin, United States"
+  ],
+  "Boston, MA, USA": [
+    42.3554334,
+    -71.060511,
+    "Boston, Suffolk County, Massachusetts, United States"
+  ],
+  "Ma": [
+    31.1728205,
+    -7.3362482,
+    "Maroc \u2d4d\u2d4e\u2d56\u2d54\u2d49\u2d31 \u0627\u0644\u0645\u063a\u0631\u0628"
+  ],
+  "Arlington, VA, USA": [
+    38.8769326,
+    -77.0893094,
+    "Arlington County, Virginia, United States"
+  ],
+  "Portland, OR, USA": [
+    45.5202471,
+    -122.674194,
+    "Portland, Multnomah County, Oregon, United States"
+  ],
+  "San Carlos, CA, USA": [
+    37.504936,
+    -122.261823,
+    "San Carlos, San Mateo County, California, 94070, United States"
+  ]
+}
