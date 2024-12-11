@@ -75,11 +75,35 @@
       "City of New York, New York, United States"
     ]
   ],
+  "Los Angeles, California, United States of America \u2022 Los Gatos, California, United States of America": [
+    [
+      34.0536909,
+      -118.242766,
+      "Los Angeles, Los Angeles County, California, United States"
+    ],
+    [
+      37.226611,
+      -121.9746797,
+      "Los Gatos, Santa Clara County, California, United States"
+    ]
+  ],
   "Remote": [
     [
       "remote",
       "remote",
       "remote"
+    ]
+  ],
+  "IL Chicago Van Buren \u2022 TX Irving Corporate Office": [
+    [
+      41.8770575,
+      -87.62318680944584,
+      "Van Buren Street Station, 132, East Van Buren Street, Printer's Row, Loop, Chicago, Cook County, Illinois, 60605, United States"
+    ],
+    [
+      32.886776600000005,
+      -96.95867575033543,
+      "CVS Caremark Corporate Office, 750, West John W Carpenter Freeway, Las Colinas, Irving, Dallas County, Texas, 75039, United States"
     ]
   ],
   "US-CA-Mountain View | US-CA-San Diego | US-NY-New York | US-GA-Atlanta": [
@@ -99,9 +123,52 @@
       "City of New York, New York, United States"
     ]
   ],
-  "Research Triangle Park, North Carolina, United States; New York, New York, United States; San Jose,": [],
-  "San Jose, California, United States; Cranberry Township, Pennsylvania, United States; Boulder, Color": [],
-  "Palo Alto, CA, USA | New York, NY, USA": [],
+  "Research Triangle Park, North Carolina, United States; New York, New York, United States; San Jose,": [
+    [
+      35.8923773,
+      -78.86588989367681,
+      "Research Triangle Park, Durham County, North Carolina, 27709, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ],
+    [
+      37.3361663,
+      -121.890591,
+      "San Jose, Santa Clara County, California, United States"
+    ]
+  ],
+  "San Jose, California, United States; Cranberry Township, Pennsylvania, United States; Boulder, Color": [
+    [
+      37.3361663,
+      -121.890591,
+      "San Jose, Santa Clara County, California, United States"
+    ],
+    [
+      40.7099343,
+      -80.1060506,
+      "Cranberry Township, Butler County, Pennsylvania, 16066, United States"
+    ],
+    [
+      45.0645471,
+      -117.4141972,
+      "Boulder Park Resort Airstrip, Two Color-Eagle Creek Road, Baker County, Oregon, United States"
+    ]
+  ],
+  "Palo Alto, CA, USA | New York, NY, USA": [
+    [
+      37.4443293,
+      -122.1598465,
+      "Palo Alto, Santa Clara County, California, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ]
+  ],
   "Chicago, IL, USA | Hoffman Estates, IL, USA | Brooklyn, OH, USA | Elgin, IL, USA": [
     [
       41.8755616,
@@ -210,12 +277,35 @@
       "Irving, Dallas County, Texas, United States"
     ]
   ],
-  "Atlanta, GA, United States and 11 more": [],
+  "Atlanta, GA, United States and 11 more": [
+    [
+      33.7489924,
+      -84.3902644,
+      "Atlanta, Fulton County, Georgia, United States"
+    ]
+  ],
   "WA-Remote Tier 3, USA": [
     [
       "remote",
       "remote",
       "remote"
+    ]
+  ],
+  "San Francisco, CA \u2022 New York, NY \u2022 United States": [
+    [
+      37.7792588,
+      -122.4193286,
+      "San Francisco, California, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ],
+    [
+      39.7837304,
+      -100.445882,
+      "United States"
     ]
   ],
   "Austin, TX or Remote": [
@@ -254,6 +344,28 @@
       "Colorado Springs, El Paso County, Colorado, United States"
     ]
   ],
+  "Bellevue, WA \u2022 Menlo Park, CA \u2022 Seattle, WA \u2022 New York, NY": [
+    [
+      47.6144219,
+      -122.192337,
+      "Bellevue, King County, Washington, United States"
+    ],
+    [
+      37.4519671,
+      -122.177992,
+      "Menlo Park, San Mateo County, California, 94025, United States"
+    ],
+    [
+      47.6038321,
+      -122.330062,
+      "Seattle, King County, Washington, United States"
+    ],
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ]
+  ],
   "Remote - US": [
     [
       "remote",
@@ -275,7 +387,18 @@
       "remote"
     ]
   ],
-  "Boston; Raleigh": [],
+  "Boston; Raleigh": [
+    [
+      42.3554334,
+      -71.060511,
+      "Boston, Suffolk County, Massachusetts, United States"
+    ],
+    [
+      35.7803977,
+      -78.6390989,
+      "Raleigh, Wake County, North Carolina, United States"
+    ]
+  ],
   "Santa Barbara, California\u00a0\u00a0San Diego, California\u00a0\u00a0Remote, United States": [
     [
       "remote",
@@ -302,7 +425,18 @@
       "Boulder, Boulder County, Colorado, United States"
     ]
   ],
-  "San Jose;San Francisco": [],
+  "San Jose;San Francisco": [
+    [
+      37.3361663,
+      -121.890591,
+      "San Jose, Santa Clara County, California, United States"
+    ],
+    [
+      37.7792588,
+      -122.4193286,
+      "San Francisco, California, United States"
+    ]
+  ],
   "California, USA - Remote": [
     [
       "remote",
@@ -350,9 +484,42 @@
       "San Francisco, California, United States"
     ]
   ],
-  "Florida - Deerfield Beach; Missouri - St. Louis": [],
-  "New York; Massachusetts": [],
-  "Plano, TX; Purchase, NY": [],
+  "Florida - Deerfield Beach; Missouri - St. Louis": [
+    [
+      26.318342,
+      -80.0996306,
+      "Deerfield Beach, Broward County, Florida, United States"
+    ],
+    [
+      38.6280278,
+      -90.1910154,
+      "Saint Louis, Missouri, United States"
+    ]
+  ],
+  "New York; Massachusetts": [
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ],
+    [
+      42.3788774,
+      -72.032366,
+      "Massachusetts, United States"
+    ]
+  ],
+  "Plano, TX; Purchase, NY": [
+    [
+      33.0136764,
+      -96.6925096,
+      "Plano, Collin County, Texas, United States"
+    ],
+    [
+      41.0409305,
+      -73.7145746,
+      "Purchase, Town/Village of Harrison, Westchester County, New York, 10577, United States"
+    ]
+  ],
   "USA - Massachusetts - Remote; USA - New Hampshire - Remote": [
     [
       "remote",
@@ -360,7 +527,18 @@
       "remote"
     ]
   ],
-  "New York, New York, USA; Boston, Massachusetts, USA": [],
+  "New York, New York, USA; Boston, Massachusetts, USA": [
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ],
+    [
+      42.3554334,
+      -71.060511,
+      "Boston, Suffolk County, Massachusetts, United States"
+    ]
+  ],
   "Palo Alto, CA, USA | Cambridge, MA, USA | Madison, WI, USA | Boston, MA, USA | Seattle, WA, USA | Ma": [
     [
       37.4443293,
@@ -427,11 +605,91 @@
       "San Carlos, San Mateo County, California, 94070, United States"
     ]
   ],
-  "San Jose, California; Scottsdale, Arizona": [],
-  "San Antonio, TX; Plano, TX; Phoenix, AZ.": [],
-  "San Antonio Home Office I; Charlotte, NC - CENTS": [],
-  "New York, NY; San Francisco, CA; Sunnyvale, CA; Los Angeles, CA; Seattle, WA": [],
-  "Madison, WI; Lincoln, NE; Centennial, CO": [],
+  "San Jose, California; Scottsdale, Arizona": [
+    [
+      37.3361663,
+      -121.890591,
+      "San Jose, Santa Clara County, California, United States"
+    ],
+    [
+      33.4942189,
+      -111.926018,
+      "Scottsdale, Maricopa County, Arizona, United States"
+    ]
+  ],
+  "San Antonio, TX; Plano, TX; Phoenix, AZ.": [
+    [
+      29.4246002,
+      -98.4951405,
+      "San Antonio, Bexar County, Texas, United States"
+    ],
+    [
+      33.0136764,
+      -96.6925096,
+      "Plano, Collin County, Texas, United States"
+    ],
+    [
+      33.4484367,
+      -112.074141,
+      "Phoenix, Maricopa County, Arizona, United States"
+    ]
+  ],
+  "San Antonio; Charlotte, NC": [
+    [
+      29.4246002,
+      -98.4951405,
+      "San Antonio, Bexar County, Texas, United States"
+    ],
+    [
+      35.2272086,
+      -80.8430827,
+      "Charlotte, Mecklenburg County, North Carolina, United States"
+    ]
+  ],
+  "New York, NY; San Francisco, CA; Sunnyvale, CA; Los Angeles, CA; Seattle, WA": [
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ],
+    [
+      37.7792588,
+      -122.4193286,
+      "San Francisco, California, United States"
+    ],
+    [
+      37.3688301,
+      -122.036349,
+      "Sunnyvale, Santa Clara County, California, United States"
+    ],
+    [
+      34.0536909,
+      -118.242766,
+      "Los Angeles, Los Angeles County, California, United States"
+    ],
+    [
+      47.6038321,
+      -122.330062,
+      "Seattle, King County, Washington, United States"
+    ]
+  ],
+  "Madison, WI; Lincoln, NE; Centennial, CO": [
+    [
+      43.074761,
+      -89.3837613,
+      "Madison, Dane County, Wisconsin, United States"
+    ],
+    [
+      40.8088861,
+      -96.7077751,
+      "Lincoln, Lancaster County, Nebraska, United States"
+    ],
+    [
+      39.579155,
+      -104.8769227,
+      "Centennial, Arapahoe County, Colorado, United States"
+    ]
+  ],
   "Jackson Township, NJ, USA": [
     40.1151766,
     -74.3647772,
@@ -611,5 +869,220 @@
     37.504936,
     -122.261823,
     "San Carlos, San Mateo County, California, 94070, United States"
+  ],
+  "Research Triangle Park, North Carolina, United States": [
+    35.8923773,
+    -78.86588989367681,
+    "Research Triangle Park, Durham County, North Carolina, 27709, United States"
+  ],
+  " New York, New York, United States": [
+    40.7127281,
+    -74.0060152,
+    "City of New York, New York, United States"
+  ],
+  " San Jose,": [
+    37.3361663,
+    -121.890591,
+    "San Jose, Santa Clara County, California, United States"
+  ],
+  "San Jose, California, United States": [
+    37.3361663,
+    -121.890591,
+    "San Jose, Santa Clara County, California, United States"
+  ],
+  " Cranberry Township, Pennsylvania, United States": [
+    40.7099343,
+    -80.1060506,
+    "Cranberry Township, Butler County, Pennsylvania, 16066, United States"
+  ],
+  " Boulder, Color": [
+    45.0645471,
+    -117.4141972,
+    "Boulder Park Resort Airstrip, Two Color-Eagle Creek Road, Baker County, Oregon, United States"
+  ],
+  "Boston": [
+    42.3554334,
+    -71.060511,
+    "Boston, Suffolk County, Massachusetts, United States"
+  ],
+  " Raleigh": [
+    35.7803977,
+    -78.6390989,
+    "Raleigh, Wake County, North Carolina, United States"
+  ],
+  "San Jose": [
+    37.3361663,
+    -121.890591,
+    "San Jose, Santa Clara County, California, United States"
+  ],
+  "San Francisco": [
+    37.7792588,
+    -122.4193286,
+    "San Francisco, California, United States"
+  ],
+  "Florida - Deerfield Beach": [
+    26.318342,
+    -80.0996306,
+    "Deerfield Beach, Broward County, Florida, United States"
+  ],
+  " Missouri - St. Louis": [
+    38.6280278,
+    -90.1910154,
+    "Saint Louis, Missouri, United States"
+  ],
+  "New York": [
+    40.7127281,
+    -74.0060152,
+    "City of New York, New York, United States"
+  ],
+  " Massachusetts": [
+    42.3788774,
+    -72.032366,
+    "Massachusetts, United States"
+  ],
+  "Plano, TX": [
+    33.0136764,
+    -96.6925096,
+    "Plano, Collin County, Texas, United States"
+  ],
+  " Purchase, NY": [
+    41.0409305,
+    -73.7145746,
+    "Purchase, Town/Village of Harrison, Westchester County, New York, 10577, United States"
+  ],
+  "New York, New York, USA": [
+    40.7127281,
+    -74.0060152,
+    "City of New York, New York, United States"
+  ],
+  " Boston, Massachusetts, USA": [
+    42.3554334,
+    -71.060511,
+    "Boston, Suffolk County, Massachusetts, United States"
+  ],
+  "San Jose, California": [
+    37.3361663,
+    -121.890591,
+    "San Jose, Santa Clara County, California, United States"
+  ],
+  " Scottsdale, Arizona": [
+    33.4942189,
+    -111.926018,
+    "Scottsdale, Maricopa County, Arizona, United States"
+  ],
+  "San Antonio, TX": [
+    29.4246002,
+    -98.4951405,
+    "San Antonio, Bexar County, Texas, United States"
+  ],
+  " Plano, TX": [
+    33.0136764,
+    -96.6925096,
+    "Plano, Collin County, Texas, United States"
+  ],
+  " Phoenix, AZ.": [
+    33.4484367,
+    -112.074141,
+    "Phoenix, Maricopa County, Arizona, United States"
+  ],
+  "Atlanta, GA, United States": [
+    33.7489924,
+    -84.3902644,
+    "Atlanta, Fulton County, Georgia, United States"
+  ],
+  "San Antonio": [
+    29.4246002,
+    -98.4951405,
+    "San Antonio, Bexar County, Texas, United States"
+  ],
+  " Charlotte, NC": [
+    35.2272086,
+    -80.8430827,
+    "Charlotte, Mecklenburg County, North Carolina, United States"
+  ],
+  "New York, NY": [
+    40.7127281,
+    -74.0060152,
+    "City of New York, New York, United States"
+  ],
+  " San Francisco, CA": [
+    37.7792588,
+    -122.4193286,
+    "San Francisco, California, United States"
+  ],
+  " Sunnyvale, CA": [
+    37.3688301,
+    -122.036349,
+    "Sunnyvale, Santa Clara County, California, United States"
+  ],
+  " Los Angeles, CA": [
+    34.0536909,
+    -118.242766,
+    "Los Angeles, Los Angeles County, California, United States"
+  ],
+  " Seattle, WA": [
+    47.6038321,
+    -122.330062,
+    "Seattle, King County, Washington, United States"
+  ],
+  "Madison, WI": [
+    43.074761,
+    -89.3837613,
+    "Madison, Dane County, Wisconsin, United States"
+  ],
+  " Lincoln, NE": [
+    40.8088861,
+    -96.7077751,
+    "Lincoln, Lancaster County, Nebraska, United States"
+  ],
+  " Centennial, CO": [
+    39.579155,
+    -104.8769227,
+    "Centennial, Arapahoe County, Colorado, United States"
+  ],
+  "Los Angeles, California, United States of America": [
+    34.0536909,
+    -118.242766,
+    "Los Angeles, Los Angeles County, California, United States"
+  ],
+  "Los Gatos, California, United States of America": [
+    37.226611,
+    -121.9746797,
+    "Los Gatos, Santa Clara County, California, United States"
+  ],
+  "IL Chicago Van Buren": [
+    41.8770575,
+    -87.62318680944584,
+    "Van Buren Street Station, 132, East Van Buren Street, Printer's Row, Loop, Chicago, Cook County, Illinois, 60605, United States"
+  ],
+  "TX Irving Corporate Office": [
+    32.886776600000005,
+    -96.95867575033543,
+    "CVS Caremark Corporate Office, 750, West John W Carpenter Freeway, Las Colinas, Irving, Dallas County, Texas, 75039, United States"
+  ],
+  "San Francisco, CA": [
+    37.7792588,
+    -122.4193286,
+    "San Francisco, California, United States"
+  ],
+  "United States": [
+    39.7837304,
+    -100.445882,
+    "United States"
+  ],
+  "Bellevue, WA": [
+    47.6144219,
+    -122.192337,
+    "Bellevue, King County, Washington, United States"
+  ],
+  "Menlo Park, CA": [
+    37.4519671,
+    -122.177992,
+    "Menlo Park, San Mateo County, California, 94025, United States"
+  ],
+  "Seattle, WA": [
+    47.6038321,
+    -122.330062,
+    "Seattle, King County, Washington, United States"
   ]
 }
