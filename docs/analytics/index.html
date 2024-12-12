@@ -337,9 +337,7 @@
 
                 if (locationsData[location]) {
                     totalCount++;
-                    console.log(locationsData[location]);
                     locationsData[location].forEach(coords => {
-                        console.log(coords);
                         const key = `${coords[0]},${coords[1]}`;
                         if (!locationCounts.has(key)) {
                             locationCounts.set(key, { count: 0, names: coords[2] });
