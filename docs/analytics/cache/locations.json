@@ -6,6 +6,15 @@
       "City of New York, New York, United States"
     ]
   ],
+  "Austin, Texas Metropolitan Area": [
+    [
+      [
+        30.2711286,
+        -97.7436995,
+        "Austin, Travis County, Texas, United States"
+      ]
+    ]
+  ],
   "Lowell, MA, USA": [
     [
       42.6414437,
@@ -1198,6 +1207,29 @@
       "Palo Alto, Santa Clara County, California, United States"
     ]
   ],
+  "San Francisco, CA or Seattle, WA or Raleigh, North Carolina": [
+    [
+      [
+        37.7792588,
+        -122.4193286,
+        "San Francisco, California, United States"
+      ]
+    ],
+    [
+      [
+        47.6038321,
+        -122.330062,
+        "Seattle, King County, Washington, United States"
+      ]
+    ],
+    [
+      [
+        35.7803977,
+        -78.6390989,
+        "Raleigh, Wake County, North Carolina, United States"
+      ]
+    ]
+  ],
   "US-CA-Santa Rosa": [
     [
       38.4404925,
@@ -1622,6 +1654,7 @@
       "Philadelphia, Philadelphia County, Pennsylvania, United States"
     ]
   ],
+  "Seattle, South San Francisco HQ, or New York": [],
   "Seattle, Washington, United States": [
     [
       47.6038321,
@@ -2635,6 +2668,20 @@
       47.6038321,
       -122.330062,
       "Seattle, King County, Washington, United States"
+    ]
+  ],
+  "Austin, Texas, USA": [
+    [
+      30.2711286,
+      -97.7436995,
+      "Austin, Travis County, Texas, United States"
+    ]
+  ],
+  "Raleigh, North Carolina": [
+    [
+      35.7803977,
+      -78.6390989,
+      "Raleigh, Wake County, North Carolina, United States"
     ]
   ]
 }
