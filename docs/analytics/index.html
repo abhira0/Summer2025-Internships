@@ -315,6 +315,7 @@
             const locationCounts = new Map();
             let remoteCount = 0;
             let hybridCount = 0;
+            let totalCount = 0;
 
             // Fetch locations data
             const locationsResponse = await fetch('cache/locations.json');
@@ -323,7 +324,7 @@
             // Process job data
             data.forEach(job => {
                 const location = job.job_posting_location;
-                if (!location) return;
+
 
                 if (location.toLowerCase().includes('remote')) {
                     remoteCount++;
@@ -335,24 +336,21 @@
                 }
 
                 if (locationsData[location]) {
+                    totalCount++;
+                    console.log(locationsData[location]);
                     locationsData[location].forEach(coords => {
-                        if (coords && coords.length >= 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
-                            const key = `${coords[0]},${coords[1]}`;
-                            if (!locationCounts.has(key)) {
-                                locationCounts.set(key, { count: 0, locations: new Set(), names: new Set() });
-                            }
-                            locationCounts.get(key).count++;
-                            locationCounts.get(key).locations.add(location);
-                            if (coords.length === 3) {
-                                locationCounts.get(key).names.add(coords[2]);
-                            }
+                        console.log(coords);
+                        const key = `${coords[0]},${coords[1]}`;
+                        if (!locationCounts.has(key)) {
+                            locationCounts.set(key, { count: 0, names: coords[2] });
                         }
+                        locationCounts.get(key).count++;
                     });
                 }
             });
 
             // Add bubbles to map
-            for (const [coordKey, { count, locations, names }] of locationCounts) {
+            for (const [coordKey, { count, names }] of locationCounts) {
                 const [lat, lon] = coordKey.split(',').map(Number);
                 if (!isNaN(lat) && !isNaN(lon)) {
                     const radius = Math.sqrt(count) * 20000; // Adjust size based on count
@@ -365,7 +363,7 @@
                     }).addTo(map);
 
                     const popupContent = `
-                        Locations: ${Array.from(names).join(', ')}<br>
+                        Locations: ${names}<br>
                         Number of positions: ${count}<br>
                     `;
 
@@ -386,6 +384,7 @@
                 <p>Remote Positions: ${remoteCount}</p>
                 <p>Hybrid Positions: ${hybridCount}</p>
                 <p>Unique Locations: ${locationCounts.size}</p>
+                <p>Total Positions: ${totalCount}</p>
             `;
         }
     </script>
