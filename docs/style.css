@@ -460,6 +460,21 @@ h2 {
   overflow: hidden;
 }
 
+.table-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.row-count {
+  background-color: #333;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #90cdf4;
+  font-weight: bold;
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .container {
