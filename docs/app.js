@@ -84,6 +84,12 @@ function applyFilters() {
     row.style.display = shouldDisplay ? "" : "none";
   });
   updateRowCount();
+  
+  // Re-apply search if there's a search query
+  const searchQuery = document.querySelector("#search").value;
+  if (searchQuery) {
+    document.querySelector("#search").dispatchEvent(new Event('input'));
+  }
 }
 
 // Fetch both files and combine the data
@@ -585,11 +591,58 @@ Promise.all([
   .catch(err => console.error(err));
 
 // Search functionality
-document.querySelector("#search").addEventListener("input", (event) => {
-  const query = event.target.value.toLowerCase();
+function performSearch() {
+  const query = document.querySelector("#search").value.trim().toLowerCase();
+  const searchFiltered = document.querySelector("#searchFiltered").checked;
+  
+  // Skip search if query is empty or only whitespace
+  if (!query) {
+    clearSearch();
+    return;
+  }
+  
   document.querySelectorAll("#internshipTable tbody tr").forEach(row => {
     const text = row.textContent.toLowerCase();
-    row.style.display = text.includes(query) ? "" : "none";
+    const matchesSearch = text.includes(query);
+    
+    // If searching filtered rows, only search visible rows
+    if (searchFiltered) {
+      if (row.style.display !== "none") {
+        row.style.display = matchesSearch ? "" : "none";
+      }
+    } else {
+      // If searching all rows, ignore current visibility
+      row.style.display = matchesSearch ? "" : "none";
+    }
   });
   updateRowCount();
+}
+
+function clearSearch() {
+  document.querySelector("#search").value = '';
+  // Reset to filtered view
+  document.querySelectorAll("#internshipTable tbody tr").forEach(row => {
+    row.style.display = "";
+  });
+  applyFilters();
+}
+
+// Add event listeners for search
+document.querySelector("#searchButton").addEventListener("click", performSearch);
+document.querySelector("#cancelSearch").addEventListener("click", clearSearch);
+document.querySelector("#search").addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    performSearch();
+  }
+  if (event.key === "Escape") {
+    clearSearch();
+  }
+});
+
+// Update checkbox event listener
+document.querySelector("#searchFiltered").addEventListener("change", () => {
+  const query = document.querySelector("#search").value;
+  if (query) {
+    performSearch();
+  }
 });

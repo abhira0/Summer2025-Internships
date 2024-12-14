@@ -11,7 +11,17 @@
   <div class="container">
     <section class="search-section">
       <h2>Search</h2>
-      <input type="text" id="search" placeholder="Search for internships">
+      <div class="search-controls">
+        <div class="search-input-group">
+          <input type="text" id="search" placeholder="Search for internships...">
+          <button id="searchButton"><i class="fas fa-search"></i></button>
+          <button id="cancelSearch" class="cancel-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="search-option">
+          <input type="checkbox" id="searchFiltered" checked>
+          <label for="searchFiltered">Search in filtered rows only</label>
+        </div>
+      </div>
     </section>
 
     <section class="filter-section">
