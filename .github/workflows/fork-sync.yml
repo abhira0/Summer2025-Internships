@@ -31,7 +31,7 @@ jobs:
 
       # Merge upstream/main into dev
       - name: Merge upstream changes
-        run: git merge upstream/main --no-edit
+        run: git merge upstream/dev --no-edit
 
       # Push changes back to dev branch
       - name: Push changes
