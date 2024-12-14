@@ -43,21 +43,39 @@ function applyFilters() {
       if (filter.column !== "date" && filter.column !== "applied" && filter.column !== "active") {
         let conditionMet = false;
         if (filter.conditions) {
-          // Use some() to implement OR logic between conditions
-          conditionMet = filter.conditions.some(condition => {
-            switch (condition.type) {
-              case "contains":
-                return cellText.includes(condition.value);
-              case "equals":
-                return cellText === condition.value;
-              case "not-equals":
-                return cellText !== condition.value;
-              case "not-contains":
-                return !cellText.includes(condition.value);
-              default:
-                return false;
-            }
-          });
+          if (filter.conditionType === "AND") {
+            // Use every() to implement AND logic between conditions
+            conditionMet = filter.conditions.every(condition => {
+              switch (condition.type) {
+                case "contains":
+                  return cellText.includes(condition.value);
+                case "equals":
+                  return cellText === condition.value;
+                case "not-equals":
+                  return cellText !== condition.value;
+                case "not-contains":
+                  return !cellText.includes(condition.value);
+                default:
+                  return false;
+              }
+            });
+          } else {
+            // Use some() for OR logic (default behavior)
+            conditionMet = filter.conditions.some(condition => {
+              switch (condition.type) {
+                case "contains":
+                  return cellText.includes(condition.value);
+                case "equals":
+                  return cellText === condition.value;
+                case "not-equals":
+                  return cellText !== condition.value;
+                case "not-contains":
+                  return !cellText.includes(condition.value);
+                default:
+                  return false;
+              }
+            });
+          }
         }
         shouldDisplay = shouldDisplay && conditionMet;
       }
@@ -66,12 +84,18 @@ function applyFilters() {
     row.style.display = shouldDisplay ? "" : "none";
   });
   updateRowCount();
+  
+  // Re-apply search if there's a search query
+  const searchQuery = document.querySelector("#search").value;
+  if (searchQuery) {
+    document.querySelector("#search").dispatchEvent(new Event('input'));
+  }
 }
 
 // Fetch both files and combine the data
 Promise.all([
   fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/.github/scripts/listings.json"),
-  fetch("simplify_tracker.json")
+  fetch("./analytics/cache/simplify/raw.json")
 ])
   .then(responses => Promise.all(responses.map(r => r.json())))
   .then(([listings, tracker]) => {
@@ -117,18 +141,24 @@ Promise.all([
     // Apply default filters
     activeFilters.push({ column: "date", fromDate: "2024-01-01", toDate: "" });
     activeFilters.push({ column: "active", active: true });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "toronto, on, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "toronto, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "remote in canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "mississauga, on, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "montreal, qc, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "vancouver, bc, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-contains", value: "vancouver, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-contains", value: "ottawa, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-contains", value: "london, uk" }] });
+    activeFilters.push({
+      column: "location",
+      conditionType: "AND",
+      conditions: [
+      { type: "not-equals", value: "toronto, on, canada" },
+      { type: "not-equals", value: "toronto, canada" },
+      { type: "not-equals", value: "canada" },
+      { type: "not-equals", value: "remote in canada" },
+      { type: "not-equals", value: "mississauga, on, canada" },
+      { type: "not-equals", value: "montreal, qc, canada" },
+      { type: "not-equals", value: "vancouver, bc, canada" },
+      { type: "not-equals", value: "vancouver, canada" },
+      { type: "not-equals", value: "ottawa, canada" },
+      { type: "not-equals", value: "london, uk" },
+      { type: "not-equals", value: "cambridge, uk" },
+      { type: "not-equals", value: "uxbridge, uk" }
+      ]
+    });
     updateActiveFilters();
     applyFilters();
 
@@ -241,6 +271,20 @@ Promise.all([
         <button class="add-input">+</button>
         <button class="remove-input">-</button>
       `;
+      
+      // Add condition type selector if this is the first input
+      if (filterOptions.children.length === 0) {
+        const conditionTypeSelector = document.createElement("div");
+        conditionTypeSelector.className = "condition-type-selector";
+        conditionTypeSelector.innerHTML = `
+          <select id="conditionType">
+            <option value="OR">OR</option>
+            <option value="AND">AND</option>
+          </select>
+        `;
+        filterOptions.appendChild(conditionTypeSelector);
+      }
+      
       filterOptions.appendChild(filterInput);
 
       filterInput.querySelector(".add-input").onclick = () => {
@@ -269,6 +313,7 @@ Promise.all([
         filter[column] = document.getElementById(`${column}Filter`).value === "true";
       } else {
         filter.conditions = [];
+        filter.conditionType = document.getElementById("conditionType").value;
         document.querySelectorAll(".filter-input").forEach(input => {
           const type = input.querySelector(".filterType").value;
           const value = input.querySelector(".filterValue").value.toLowerCase();
@@ -324,7 +369,9 @@ Promise.all([
             (filter.column === "applied" ? "Not Applied" : "Inactive")}</span>`;
         } else {
           filter.conditions.forEach((condition, i) => {
-            if (i > 0) filterContent += `<span class="filter-condition">∨</span>`; // OR symbol
+            if (i > 0) {
+              filterContent += `<span class="filter-condition">${filter.conditionType === "AND" ? "∧" : "∨"}</span>`; // AND/OR symbol
+            }
             filterContent += `
               <span class="filter-condition">${getConditionSymbol(condition.type)}</span>
               <span class="filter-value">${condition.value}</span>`;
@@ -544,11 +591,58 @@ Promise.all([
   .catch(err => console.error(err));
 
 // Search functionality
-document.querySelector("#search").addEventListener("input", (event) => {
-  const query = event.target.value.toLowerCase();
+function performSearch() {
+  const query = document.querySelector("#search").value.trim().toLowerCase();
+  const searchFiltered = document.querySelector("#searchFiltered").checked;
+  
+  // Skip search if query is empty or only whitespace
+  if (!query) {
+    clearSearch();
+    return;
+  }
+  
   document.querySelectorAll("#internshipTable tbody tr").forEach(row => {
     const text = row.textContent.toLowerCase();
-    row.style.display = text.includes(query) ? "" : "none";
+    const matchesSearch = text.includes(query);
+    
+    // If searching filtered rows, only search visible rows
+    if (searchFiltered) {
+      if (row.style.display !== "none") {
+        row.style.display = matchesSearch ? "" : "none";
+      }
+    } else {
+      // If searching all rows, ignore current visibility
+      row.style.display = matchesSearch ? "" : "none";
+    }
   });
   updateRowCount();
+}
+
+function clearSearch() {
+  document.querySelector("#search").value = '';
+  // Reset to filtered view
+  document.querySelectorAll("#internshipTable tbody tr").forEach(row => {
+    row.style.display = "";
+  });
+  applyFilters();
+}
+
+// Add event listeners for search
+document.querySelector("#searchButton").addEventListener("click", performSearch);
+document.querySelector("#cancelSearch").addEventListener("click", clearSearch);
+document.querySelector("#search").addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    performSearch();
+  }
+  if (event.key === "Escape") {
+    clearSearch();
+  }
+});
+
+// Update checkbox event listener
+document.querySelector("#searchFiltered").addEventListener("change", () => {
+  const query = document.querySelector("#search").value;
+  if (query) {
+    performSearch();
+  }
 });
