@@ -104,13 +104,16 @@ button:hover {
 
 .filter-tag {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 3px;
   background-color: #333;
   border: 1px solid #404040;
   padding: 5px 8px;
   margin: 5px;
   border-radius: 5px;
   font-size: 14px;
+  max-width: calc(100% - 8px);
 }
 
 .filter-condition {
@@ -154,7 +157,7 @@ button:hover {
   color: red;
   cursor: pointer;
   margin-left: 5px;
-  padding: 2px 6px;
+  padding: 2px 4px;
   position: relative;
 }
 
@@ -329,6 +332,15 @@ button:hover {
   background-color: #252525;
 }
 
+#activeFilters, #activeSorts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -442,6 +454,12 @@ h2 {
   gap: 8px;
 }
 
+/* Make sure the container doesn't create horizontal scroll */
+.filters-container, .sorts-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .container {
@@ -484,6 +502,11 @@ h2 {
   .simplify-logo {
     height: 20px;
     width: 20px;
+  }
+
+  .filter-tag {
+    flex: 1 1 100%;
+    max-width: 100%;
   }
 }
 

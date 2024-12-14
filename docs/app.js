@@ -135,20 +135,24 @@ Promise.all([
     // Apply default filters
     activeFilters.push({ column: "date", fromDate: "2024-01-01", toDate: "" });
     activeFilters.push({ column: "active", active: true });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "toronto, on, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "toronto, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "remote in canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "mississauga, on, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "montreal, qc, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "vancouver, bc, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "vancouver, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "ottawa, canada" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "london, uk" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "cambridge, uk" }] });
-    activeFilters.push({ column: "location", conditions: [{ type: "not-equals", value: "uxbridge, uk" }] });
+    activeFilters.push({
+      column: "location",
+      conditionType: "AND",
+      conditions: [
+      { type: "not-equals", value: "toronto, on, canada" },
+      { type: "not-equals", value: "toronto, canada" },
+      { type: "not-equals", value: "canada" },
+      { type: "not-equals", value: "remote in canada" },
+      { type: "not-equals", value: "mississauga, on, canada" },
+      { type: "not-equals", value: "montreal, qc, canada" },
+      { type: "not-equals", value: "vancouver, bc, canada" },
+      { type: "not-equals", value: "vancouver, canada" },
+      { type: "not-equals", value: "ottawa, canada" },
+      { type: "not-equals", value: "london, uk" },
+      { type: "not-equals", value: "cambridge, uk" },
+      { type: "not-equals", value: "uxbridge, uk" }
+      ]
+    });
     updateActiveFilters();
     applyFilters();
 
