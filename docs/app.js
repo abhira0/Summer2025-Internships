@@ -43,21 +43,39 @@ function applyFilters() {
       if (filter.column !== "date" && filter.column !== "applied" && filter.column !== "active") {
         let conditionMet = false;
         if (filter.conditions) {
-          // Use some() to implement OR logic between conditions
-          conditionMet = filter.conditions.some(condition => {
-            switch (condition.type) {
-              case "contains":
-                return cellText.includes(condition.value);
-              case "equals":
-                return cellText === condition.value;
-              case "not-equals":
-                return cellText !== condition.value;
-              case "not-contains":
-                return !cellText.includes(condition.value);
-              default:
-                return false;
-            }
-          });
+          if (filter.conditionType === "AND") {
+            // Use every() to implement AND logic between conditions
+            conditionMet = filter.conditions.every(condition => {
+              switch (condition.type) {
+                case "contains":
+                  return cellText.includes(condition.value);
+                case "equals":
+                  return cellText === condition.value;
+                case "not-equals":
+                  return cellText !== condition.value;
+                case "not-contains":
+                  return !cellText.includes(condition.value);
+                default:
+                  return false;
+              }
+            });
+          } else {
+            // Use some() for OR logic (default behavior)
+            conditionMet = filter.conditions.some(condition => {
+              switch (condition.type) {
+                case "contains":
+                  return cellText.includes(condition.value);
+                case "equals":
+                  return cellText === condition.value;
+                case "not-equals":
+                  return cellText !== condition.value;
+                case "not-contains":
+                  return !cellText.includes(condition.value);
+                default:
+                  return false;
+              }
+            });
+          }
         }
         shouldDisplay = shouldDisplay && conditionMet;
       }
@@ -243,6 +261,20 @@ Promise.all([
         <button class="add-input">+</button>
         <button class="remove-input">-</button>
       `;
+      
+      // Add condition type selector if this is the first input
+      if (filterOptions.children.length === 0) {
+        const conditionTypeSelector = document.createElement("div");
+        conditionTypeSelector.className = "condition-type-selector";
+        conditionTypeSelector.innerHTML = `
+          <select id="conditionType">
+            <option value="OR">OR</option>
+            <option value="AND">AND</option>
+          </select>
+        `;
+        filterOptions.appendChild(conditionTypeSelector);
+      }
+      
       filterOptions.appendChild(filterInput);
 
       filterInput.querySelector(".add-input").onclick = () => {
@@ -271,6 +303,7 @@ Promise.all([
         filter[column] = document.getElementById(`${column}Filter`).value === "true";
       } else {
         filter.conditions = [];
+        filter.conditionType = document.getElementById("conditionType").value;
         document.querySelectorAll(".filter-input").forEach(input => {
           const type = input.querySelector(".filterType").value;
           const value = input.querySelector(".filterValue").value.toLowerCase();
@@ -326,7 +359,9 @@ Promise.all([
             (filter.column === "applied" ? "Not Applied" : "Inactive")}</span>`;
         } else {
           filter.conditions.forEach((condition, i) => {
-            if (i > 0) filterContent += `<span class="filter-condition">∨</span>`; // OR symbol
+            if (i > 0) {
+              filterContent += `<span class="filter-condition">${filter.conditionType === "AND" ? "∧" : "∨"}</span>`; // AND/OR symbol
+            }
             filterContent += `
               <span class="filter-condition">${getConditionSymbol(condition.type)}</span>
               <span class="filter-value">${condition.value}</span>`;
