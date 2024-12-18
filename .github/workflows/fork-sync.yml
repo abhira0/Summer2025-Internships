@@ -28,10 +28,12 @@ jobs:
           git fetch upstream
           git checkout dev
 
-      - name: Handle sync with conflicts
+      - name: Sync fork with strategy
         run: |
-          # Reset to upstream state
-          git reset --hard upstream/dev
-          
-          # Force push to overwrite fork's dev branch
-          git push --force origin dev
+          # Preserve our changes but prefer upstream contents for conflicts
+          git merge -X theirs upstream/dev
+          if [ $? -eq 0 ]; then
+            git push origin dev
+          else
+            echo "Merge conflicts detected. Manual intervention needed."
+            exit 1
