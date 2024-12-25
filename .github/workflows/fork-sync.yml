@@ -28,12 +28,23 @@ jobs:
           git fetch upstream
           git checkout dev
 
-      - name: Sync fork with strategy
+      - name: Sync conflicting files
         run: |
-          # Preserve our changes but prefer upstream contents for conflicts
-          git merge -X theirs upstream/dev
-          if [ $? -eq 0 ]; then
-            git push origin dev
-          else
-            echo "Merge conflicts detected. Manual intervention needed."
-            exit 1
+          # Try merge to identify conflicts
+          if ! git merge-tree $(git merge-base HEAD upstream/dev) HEAD upstream/dev | grep -q "^<<<<<<< .mine"; then
+            echo "No conflicts found, keeping our files"
+            exit 0
+          fi
+          
+          # Get list of conflicting files
+          CONFLICT_FILES=$(git merge-tree $(git merge-base HEAD upstream/dev) HEAD upstream/dev | grep "^<<<<<<< .mine" -B 1 | grep "^+" | cut -d' ' -f2)
+          
+          # Checkout only conflicting files from upstream
+          for file in $CONFLICT_FILES; do
+            git checkout upstream/dev -- "$file"
+            git add "$file"
+          done
+          
+          # Commit and push changes
+          git commit -m "sync: Update conflicting files from upstream"
+          git push origin dev
