@@ -94,7 +94,7 @@ function applyFilters() {
 
 // Fetch both files and combine the data
 Promise.all([
-  fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/.github/scripts/listings.json"),
+  fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev//workspaces/Summer2025-Internships/docs/analytics/cache/listings_parsed.json"),
   fetch("./analytics/cache/simplify/raw.json")
 ])
   .then(responses => Promise.all(responses.map(r => r.json())))
