@@ -65,9 +65,9 @@ function applyFilters() {
           const dateText = new Date(row.cells[4].textContent); // Updated index
           shouldDisplay = shouldDisplay && dateText >= fromDate && dateText <= toDate;
           break;
-        case "applied": // Change this to "applied" to match the new header
-          const isChecked = row.cells[5].querySelector("input").checked; // Updated index
-          shouldDisplay = shouldDisplay && ((filter.applied && isChecked) || (!filter.applied && !isChecked));
+        case "applied":
+          const isApplied = row.cells[5].querySelector(".status-btn").classList.contains("applied");
+          shouldDisplay = shouldDisplay && ((filter.applied && isApplied) || (!filter.applied && !isApplied));
           break;
         case "active":
           const isActive = row.cells[6].textContent.toLowerCase() === "active"; // Updated index
