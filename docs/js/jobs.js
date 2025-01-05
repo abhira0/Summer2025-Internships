@@ -230,6 +230,8 @@ Promise.all([
       { type: "not-equals", value: "uxbridge, uk" }
       ]
     });
+    activeFilters.push({ column: "hidden", hidden: false }); // Add not hidden filter
+    activeFilters.push({ column: "applied", applied: false }); // Add not applied filter
     updateActiveFilters();
     applyFilters();
 
