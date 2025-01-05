@@ -22,11 +22,20 @@ async function loadUserApplicationsFromServer() {
     }
 }
 
+// Update isJobApplied function
 function isJobApplied(jobId) {
     if (!currentUser || !userApplications.applications[currentUser]) {
         return false;
     }
-    return userApplications.applications[currentUser].includes(jobId);
+    return userApplications.applications[currentUser].applied?.includes(jobId) || false;
+}
+
+// Update isJobHidden function
+function isJobHidden(jobId) {
+    if (!currentUser || !userApplications.applications[currentUser]) {
+        return false;
+    }
+    return userApplications.applications[currentUser].hidden?.includes(jobId) || false;
 }
 
 function updateRowCount() {
@@ -64,9 +73,13 @@ function applyFilters() {
           const isActive = row.cells[6].textContent.toLowerCase() === "active"; // Updated index
           shouldDisplay = shouldDisplay && ((filter.active && isActive) || (!filter.active && !isActive));
           break;
+        case "hidden":
+          const isHidden = row.cells[7].querySelector(".status-btn").classList.contains("applied");
+          shouldDisplay = shouldDisplay && ((filter.hidden && isHidden) || (!filter.hidden && !isHidden));
+          break;
       }
 
-      if (filter.column !== "date" && filter.column !== "applied" && filter.column !== "active") {
+      if (filter.column !== "date" && filter.column !== "applied" && filter.column !== "active" && filter.column !== "hidden") {
         let conditionMet = false;
         if (filter.conditions) {
           if (filter.conditionType === "AND") {
@@ -124,7 +137,7 @@ Promise.all([
   fetch("./analytics/cache/simplify/raw.json"),
   loadUserApplicationsFromServer()
 ])
-  .then(([listingsResponse, trackerResponse, _]) => {
+  .then(([listingsResponse, trackerResponse]) => {
     return Promise.all([
       listingsResponse.json(),
       trackerResponse.json()
@@ -137,11 +150,14 @@ Promise.all([
 
     // Initialize user applications if not exists
     if (!userApplications.applications[currentUser]) {
-        userApplications.applications[currentUser] = [];
+        userApplications.applications[currentUser] = {
+            applied: [],
+            hidden: []
+        };
     }
 
     // Populate the table
-    listings.forEach((item, index) => {
+    listings.forEach((item) => {
       const row = document.createElement("tr");
       const date = new Date(item.date_updated * 1000);
       const formattedDate = date.toLocaleDateString("en-US", {
@@ -152,6 +168,7 @@ Promise.all([
 
       const isApplied = isJobApplied(item.id) || 
                        (tracker.some(t => t.job_posting_id === item.id));
+      const isHidden = isJobHidden(item.id);
       
       row.innerHTML = `
         <td>${item.company_name}</td>
@@ -174,7 +191,21 @@ Promise.all([
           </div>
         </td>
         <td>${item.active ? "Active" : "Inactive"}</td>
+        <td>
+            <div class="hide-status" data-job-id="${item.id}">
+                <button class="status-btn ${isHidden ? 'applied' : ''}" 
+                        onclick="toggleHideStatus('${item.id}', this)">
+                    ${isHidden ? 'Yes' : 'No'}
+                </button>
+            </div>
+        </td>
       `;
+
+      // Don't show row if it's hidden
+      if (isHidden) {
+          row.style.display = 'none';
+      }
+      
       table.appendChild(row);
     });
 
@@ -285,11 +316,11 @@ Promise.all([
           <label for="toDate">To:</label>
           <input type="date" id="toDate">
         `;
-      } else if (column === "applied" || column === "active") {
+      } else if (column === "applied" || column === "active" || column === "hidden") {
         filterOptions.innerHTML = `
           <select id="${column}Filter">
-            <option value="true">${column === "applied" ? "Applied" : "Active"}</option>
-            <option value="false">${column === "applied" ? "Not Applied" : "Inactive"}</option>
+            <option value="true">${column === "applied" ? "Applied" : column === "hidden" ? "Hidden" : "Active"}</option>
+            <option value="false">${column === "applied" ? "Not Applied" : column === "hidden" ? "Not Hidden" : "Inactive"}</option>
           </select>
         `;
       } else {
@@ -349,7 +380,7 @@ Promise.all([
       if (column === "date") {
         filter.fromDate = document.getElementById("fromDate").value;
         filter.toDate = document.getElementById("toDate").value;
-      } else if (column === "applied" || column === "active") {
+      } else if (column === "applied" || column === "active" || column === "hidden") {
         filter[column] = document.getElementById(`${column}Filter`).value === "true";
       } else {
         filter.conditions = [];
@@ -401,12 +432,12 @@ Promise.all([
             <span class="filter-value">${filter.fromDate || "Any"}</span>
             <span class="filter-condition">→</span>
             <span class="filter-value">${filter.toDate || "Any"}</span>`;
-        } else if (filter.column === "applied" || filter.column === "active") {
+        } else if (filter.column === "applied" || filter.column === "active" || filter.column === "hidden") {
           filterContent += `
             <span class="filter-condition">is</span>
             <span class="filter-value">${filter[filter.column] ? 
-            (filter.column === "applied" ? "Applied" : "Active") : 
-            (filter.column === "applied" ? "Not Applied" : "Inactive")}</span>`;
+            (filter.column === "applied" ? "Applied" : filter.column === "hidden" ? "Hidden" : "Active") : 
+            (filter.column === "applied" ? "Not Applied" : filter.column === "hidden" ? "Not Hidden" : "Inactive")}</span>`;
         } else {
           filter.conditions.forEach((condition, i) => {
             if (i > 0) {
@@ -449,7 +480,7 @@ Promise.all([
           if (filter.column === "date") {
             document.getElementById("fromDate").value = filter.fromDate;
             document.getElementById("toDate").value = filter.toDate;
-          } else if (filter.column === "applied" || filter.column === "active") {
+          } else if (filter.column === "applied" || filter.column === "active" || filter.column === "hidden") {
             document.getElementById(`${filter.column}Filter`).value = filter[filter.column] ? "true" : "false";
           } else {
             filter.conditions.forEach((condition, i) => {
@@ -604,7 +635,8 @@ Promise.all([
             location: 2,
             date: 4,        // Updated indices
             applied: 5,      // Updated indices
-            active: 6       // Updated indices
+            active: 6,       // Updated indices
+            hidden: 7
           }[sort.column];
 
           let aText = a.cells[columnIndex].textContent.toLowerCase();
@@ -613,9 +645,9 @@ Promise.all([
           if (sort.column === "date") {
             aText = new Date(aText);
             bText = new Date(bText);
-          } else if (sort.column === "applied" || sort.column === "active") {
-            aText = aText === "active" || aText === "applied";
-            bText = bText === "active" || bText === "applied";
+          } else if (sort.column === "applied" || sort.column === "active" || sort.column === "hidden") {
+            aText = aText === "active" || aText === "applied" || aText === "hidden";
+            bText = bText === "active" || bText === "applied" || bText === "hidden";
           }
 
           if (aText < bText) return sort.order === "asc" ? -1 : 1;
@@ -769,27 +801,31 @@ async function syncApplicationsToServer() {
 }
 
 // Update the toggleApplicationStatus function
-async function toggleApplicationStatus(jobId, button) {
+async function toggleStatus(jobId, button, type) {
     if (!currentUser) return;
 
     try {
         // Initialize if needed
         if (!userApplications.applications[currentUser]) {
-            userApplications.applications[currentUser] = [];
+            userApplications.applications[currentUser] = { applied: [], hidden: [] };
+        }
+        if (!userApplications.applications[currentUser][type]) {
+            userApplications.applications[currentUser][type] = [];
         }
 
-        const index = userApplications.applications[currentUser].indexOf(jobId);
-        const isCurrentlyApplied = index !== -1;
+        const statusArray = userApplications.applications[currentUser][type];
+        const index = statusArray.indexOf(jobId);
+        const isCurrentlySet = index !== -1;
 
-        // Toggle application status
-        if (isCurrentlyApplied) {
-            userApplications.applications[currentUser].splice(index, 1);
+        // Toggle status
+        if (isCurrentlySet) {
+            statusArray.splice(index, 1);
         } else {
-            userApplications.applications[currentUser].push(jobId);
+            statusArray.push(jobId);
         }
 
         // Update UI immediately
-        button.textContent = !isCurrentlyApplied ? 'Yes' : 'No';
+        button.textContent = !isCurrentlySet ? 'Yes' : 'No';
         button.classList.toggle('applied');
 
         // Save to localStorage first
@@ -801,13 +837,17 @@ async function toggleApplicationStatus(jobId, button) {
             console.warn('Changes saved locally but failed to sync with server');
         }
     } catch (error) {
-        console.error('Error updating application status:', error);
+        console.error('Error updating status:', error);
         // Revert UI changes on error
-        button.textContent = isCurrentlyApplied ? 'Yes' : 'No';
+        button.textContent = isCurrentlySet ? 'Yes' : 'No';
         button.classList.toggle('applied');
-        alert('Failed to update application status. Please try again.');
+        alert('Failed to update status. Please try again.');
     }
 }
+
+// Add these window functions for the onclick handlers
+window.toggleApplicationStatus = (jobId, button) => toggleStatus(jobId, button, 'applied');
+window.toggleHideStatus = (jobId, button) => toggleStatus(jobId, button, 'hidden');
 
 // Update the initial data loading to use localStorage
 Promise.all([
