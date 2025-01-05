@@ -2,6 +2,32 @@ let activeFilters = []; // Move this to the top
 const activeFiltersContainer = document.getElementById("activeFilters"); // Move this to the top
 let activeSorts = []; // Add this to the top
 const activeSortsContainer = document.getElementById("activeSorts"); // Add this to the top
+let currentUser = null;
+let userApplications = { applications: {} }; // Update initialization
+
+// Add these application management functions at the top
+async function loadUserApplicationsFromServer() {
+    try {
+        const response = await fetch(`${CONFIG.API_URL}/applications`);
+        if (!response.ok) {
+            throw new Error('Failed to load from server');
+        }
+        const data = await response.json();
+        userApplications = data;
+        saveUserApplicationsToStorage(); // Cache in localStorage
+        return data;
+    } catch (error) {
+        console.error('Error loading from server:', error);
+        return loadUserApplicationsFromStorage(); // Fallback to localStorage
+    }
+}
+
+function isJobApplied(jobId) {
+    if (!currentUser || !userApplications.applications[currentUser]) {
+        return false;
+    }
+    return userApplications.applications[currentUser].includes(jobId);
+}
 
 function updateRowCount() {
   const visibleRows = document.querySelectorAll("#internshipTable tbody tr:not([style*='display: none'])").length;
@@ -95,15 +121,24 @@ function applyFilters() {
 // Fetch both files and combine the data
 Promise.all([
   fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/listings_parsed.json"),
-  fetch("./analytics/cache/simplify/raw.json")
+  fetch("./analytics/cache/simplify/raw.json"),
+  loadUserApplicationsFromServer()
 ])
-  .then(responses => Promise.all(responses.map(r => r.json())))
+  .then(([listingsResponse, trackerResponse, _]) => {
+    return Promise.all([
+      listingsResponse.json(),
+      trackerResponse.json()
+    ]);
+  })
   .then(([listings, tracker]) => {
     const table = document.querySelector("#internshipTable tbody");
     const rowCount = document.getElementById("rowCount");
+    currentUser = JSON.parse(atob(localStorage.getItem('jwt_token').split('.')[1])).user;
 
-    // Create a Set of applied job IDs
-    const appliedJobIds = new Set(tracker.map(item => item.job_posting_id));
+    // Initialize user applications if not exists
+    if (!userApplications.applications[currentUser]) {
+        userApplications.applications[currentUser] = [];
+    }
 
     // Populate the table
     listings.forEach((item, index) => {
@@ -115,7 +150,8 @@ Promise.all([
         day: "2-digit"
       });
 
-      const isApplied = appliedJobIds.has(item.id);
+      const isApplied = isJobApplied(item.id) || 
+                       (tracker.some(t => t.job_posting_id === item.id));
       
       row.innerHTML = `
         <td>${item.company_name}</td>
@@ -131,7 +167,11 @@ Promise.all([
         </td>
         <td>${formattedDate}</td>
         <td>
-          <input type="checkbox" data-id="${index}" ${isApplied ? "checked" : ""}>
+          <div class="application-status" data-job-id="${item.id}">
+            <button class="status-btn ${isApplied ? 'applied' : ''}" onclick="toggleApplicationStatus('${item.id}', this)">
+              ${isApplied ? 'Yes' : 'No'}
+            </button>
+          </div>
         </td>
         <td>${item.active ? "Active" : "Inactive"}</td>
       `;
@@ -646,3 +686,166 @@ document.querySelector("#searchFiltered").addEventListener("change", () => {
     performSearch();
   }
 });
+
+const token = localStorage.getItem('jwt_token');
+if (token) {
+    currentUser = JSON.parse(atob(token.split('.')[1])).user;
+    if (!userApplications.applications[currentUser]) {
+        userApplications.applications[currentUser] = [];
+        saveUserApplicationsToStorage();
+    }
+}
+
+function loadUserApplicationsFromStorage() {
+    try {
+        const stored = localStorage.getItem('userApplications');
+        return stored ? JSON.parse(stored) : { applications: {} };
+    } catch (error) {
+        console.error('Error loading from storage:', error);
+        return { applications: {} };
+    }
+}
+
+function saveUserApplicationsToStorage() {
+    try {
+        localStorage.setItem('userApplications', JSON.stringify(userApplications));
+    } catch (error) {
+        console.error('Error saving to storage:', error);
+    }
+}
+
+// Initialize userApplications
+userApplications = loadUserApplicationsFromStorage();
+
+// Replace existing loadUserApplications function
+async function loadUserApplications() {
+    try {
+        // Try to load from localStorage first
+        userApplications = loadUserApplicationsFromStorage();
+        return userApplications[currentUser] || {};
+    } catch (error) {
+        console.error('Error loading user applications:', error);
+        return {};
+    }
+}
+
+// Replace existing saveUserApplications function
+async function saveUserApplications() {
+    try {
+        userApplications[currentUser] = userApplications[currentUser] || {};
+        saveUserApplicationsToStorage(userApplications);
+        
+        // Optional: Try to sync with GitHub (if implemented)
+        try {
+            await syncWithGitHub();
+        } catch (e) {
+            console.log('GitHub sync failed, using local storage only');
+        }
+    } catch (error) {
+        console.error('Error saving user applications:', error);
+    }
+}
+
+// Add this server sync function
+async function syncApplicationsToServer() {
+    try {
+        const response = await fetch(`${CONFIG.API_URL}/applications`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userApplications)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to save to server');
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Server sync failed:', error);
+        return false;
+    }
+}
+
+// Update the toggleApplicationStatus function
+async function toggleApplicationStatus(jobId, button) {
+    if (!currentUser) return;
+
+    try {
+        // Initialize if needed
+        if (!userApplications.applications[currentUser]) {
+            userApplications.applications[currentUser] = [];
+        }
+
+        const index = userApplications.applications[currentUser].indexOf(jobId);
+        const isCurrentlyApplied = index !== -1;
+
+        // Toggle application status
+        if (isCurrentlyApplied) {
+            userApplications.applications[currentUser].splice(index, 1);
+        } else {
+            userApplications.applications[currentUser].push(jobId);
+        }
+
+        // Update UI immediately
+        button.textContent = !isCurrentlyApplied ? 'Yes' : 'No';
+        button.classList.toggle('applied');
+
+        // Save to localStorage first
+        saveUserApplicationsToStorage();
+
+        // Then sync with server
+        const synced = await syncApplicationsToServer();
+        if (!synced) {
+            console.warn('Changes saved locally but failed to sync with server');
+        }
+    } catch (error) {
+        console.error('Error updating application status:', error);
+        // Revert UI changes on error
+        button.textContent = isCurrentlyApplied ? 'Yes' : 'No';
+        button.classList.toggle('applied');
+        alert('Failed to update application status. Please try again.');
+    }
+}
+
+// Update the initial data loading to use localStorage
+Promise.all([
+    fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/listings_parsed.json"),
+    fetch("./analytics/cache/simplify/raw.json"),
+    loadUserApplications()
+])
+.then(([listingsResponse, trackerResponse, userApps]) => {
+    // ...existing code...
+    
+    // When creating table rows, check localStorage
+    const isApplied = appliedJobIds.has(item.id) || 
+                      (userApplications[currentUser] && userApplications[currentUser][item.id]);
+    
+    // ...existing code...
+});
+
+const style = document.createElement('style');
+style.textContent = `
+    .status-btn {
+        padding: 5px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 1px solid #404040;
+        background: #333;
+        color: #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .status-btn.applied {
+        background: #2ecc71;
+        color: white;
+        border-color: #27ae60;
+    }
+
+    .application-status {
+        display: flex;
+        justify-content: center;
+    }
+`;
+document.head.appendChild(style);
