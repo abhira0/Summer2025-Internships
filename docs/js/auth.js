@@ -13,7 +13,7 @@ function generateToken(user) {
 function verifyToken() {
     const token = localStorage.getItem('jwt_token');
     if (!token) {
-        window.location.href = '/login.html';
+        window.location.href = 'index.html';
         return false;
     }
 
@@ -23,14 +23,19 @@ function verifyToken() {
         
         if (decodedPayload.exp < Date.now()) {
             localStorage.removeItem('jwt_token');
-            window.location.href = '/login.html';
+            window.location.href = 'index.html';
             return false;
         }
         return true;
     } catch (error) {
-        window.location.href = '/login.html';
+        window.location.href = 'index.html';
         return false;
     }
+}
+
+function logout() {
+    localStorage.removeItem('jwt_token');
+    window.location.href = 'index.html';
 }
 
 // Add this to the start of every protected page

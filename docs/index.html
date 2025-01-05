@@ -97,6 +97,32 @@
         margin: 20px 0;
         color: #666;
     }
+
+    .nav-menu {
+        background: #34495e;
+        padding: 10px 20px;
+        position: fixed;
+        top: 50px;
+        left: 0;
+        right: 0;
+        z-index: 999;
+    }
+
+    .nav-menu a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        margin-right: 10px;
+        border-radius: 4px;
+    }
+
+    .nav-menu a:hover, .nav-menu a.active {
+        background: rgba(255,255,255,0.1);
+    }
+
+    .main-content {
+        margin-top: 110px;
+    }
   </style>
 </head>
 <body>
@@ -105,6 +131,12 @@
             <span id="userName"></span>
             <button onclick="logout()">Logout</button>
         </div>
+    </div>
+
+    <!-- Add navigation menu -->
+    <div id="navMenu" class="nav-menu" style="display: none;">
+        <a href="jobs.html" class="active">Jobs</a>
+        <!-- Add more menu items here in the future -->
     </div>
 
     <div id="loginView" class="login-container">
@@ -121,102 +153,9 @@
         </div>
     </div>
 
-    <div id="mainContent" style="display: none;">
-        <div class="container">
-            <section class="search-section">
-              <h2>Search</h2>
-              <div class="search-controls">
-                <div class="search-input-group">
-                  <input type="text" id="search" placeholder="Search for internships...">
-                  <button id="searchButton"><i class="fas fa-search"></i></button>
-                  <button id="cancelSearch" class="cancel-btn"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="search-option">
-                  <input type="checkbox" id="searchFiltered" checked>
-                  <label for="searchFiltered">Search in filtered rows only</label>
-                </div>
-              </div>
-            </section>
-        
-            <section class="filter-section">
-              <h2>Filters</h2>
-              <div class="filter-grid">
-                <div class="filter-left">
-                  <button id="addFilter"><i class="fas fa-plus"></i> Add Filter</button>
-                </div>
-                <div class="filter-right" id="activeFilters"></div>
-              </div>
-            </section>
-        
-            <section class="sort-section">
-              <h2>Sort</h2>
-              <div class="sort-grid">
-                <div class="sort-left">
-                  <button id="addSort"><i class="fas fa-plus"></i> Add Sort</button>
-                </div>
-                <div class="sort-right" id="activeSorts"></div>
-              </div>
-            </section>
-        
-            <section class="table-section">
-              <div class="table-header">
-                <div id="rowCount" class="row-count">Total Rows: 0</div>
-              </div>
-              <table id="internshipTable">
-                <thead>
-                  <tr>
-                    <th>Company</th>
-                    <th>Role</th>
-                    <th>Location</th>
-                    <th>Apply</th>
-                    <th>Date Posted</th>
-                    <th>Applied</th>
-                    <th>Active</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </section>
-          </div>
-        
-          <div id="filterModal" class="modal">
-            <div class="modal-content">
-              <button class="close"><i class="fas fa-times"></i></button>
-              <label for="filterColumn">Column:</label>
-              <select id="filterColumn">
-                <option value="company">Company</option>
-                <option value="role">Role</option>
-                <option value="location">Location</option>
-                <option value="date">Date Posted</option>
-                <option value="applied">Applied</option>
-                <option value="active">Active</option>
-              </select>
-              <div id="filterOptions">
-                <!-- Filter options will be dynamically inserted here -->
-              </div>
-              <button id="applyGlobalFilter">Apply</button>
-            </div>
-          </div>
-          <div id="sortModal" class="modal">
-            <div class="modal-content">
-              <button class="close closeSort"><i class="fas fa-times"></i></button>
-              <label for="sortColumn">Column:</label>
-              <select id="sortColumn">
-                <option value="company">Company</option>
-                <option value="role">Role</option>
-                <option value="location">Location</option>
-                <option value="date">Date Posted</option>
-                <option value="applied">Applied</option>
-                <option value="active">Active</option>
-              </select>
-              <label for="sortOrder">Order:</label>
-              <select id="sortOrder">
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-              <button id="applySort">Apply</button>
-            </div>
-          </div>
+    <div id="mainContent" class="main-content" style="display: none;">
+        <h1>Welcome to Internship Tracker</h1>
+        <p>Select an option from the menu above to get started.</p>
     </div>
 
     <script src="app.js"></script>
@@ -232,6 +171,7 @@
             const loginView = document.getElementById('loginView');
             const mainContent = document.getElementById('mainContent');
             const authHeader = document.getElementById('authHeader');
+            const navMenu = document.getElementById('navMenu');
 
             if (token) {
                 const payload = JSON.parse(atob(token.split('.')[1]));
@@ -239,10 +179,16 @@
                 loginView.style.display = 'none';
                 mainContent.style.display = 'block';
                 authHeader.style.display = 'flex';
+                navMenu.style.display = 'block';
+                // Simplified redirect check - if we're on the index page, go to jobs
+                if (location.pathname.endsWith('index.html') || location.pathname.endsWith('/')) {
+                    window.location.href = 'jobs.html';
+                }
             } else {
                 loginView.style.display = 'flex';
                 mainContent.style.display = 'none';
                 authHeader.style.display = 'none';
+                navMenu.style.display = 'none';
             }
         }
 
@@ -262,7 +208,7 @@
                 if (user) {
                     const token = generateToken(user);
                     localStorage.setItem('jwt_token', token);
-                    updateAuthUI();
+                    window.location.href = 'jobs.html'; // Direct redirect after successful login
                 } else {
                     alert('Invalid credentials!');
                 }

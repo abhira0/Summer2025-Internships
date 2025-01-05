@@ -610,3 +610,44 @@ h2 {
 .cancel-btn:hover {
   background-color: #ff4d4d;
 }
+
+.auth-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 1000;
+}
+
+.nav-menu {
+  background: #34495e;
+  padding: 10px 20px;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.nav-menu a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+  margin-right: 10px;
+  border-radius: 4px;
+}
+
+.nav-menu a:hover, .nav-menu a.active {
+  background: rgba(255,255,255,0.1);
+}
+
+.main-content {
+  margin-top: 110px;
+  padding: 20px;
+}
