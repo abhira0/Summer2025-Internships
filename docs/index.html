@@ -7,39 +7,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
-    .auth-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        background: #2c3e50;
-        color: white;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        z-index: 1000;
-    }
-    
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-    
-    .user-info button {
-        padding: 5px 15px;
-        border: 1px solid white;
-        background: transparent;
-        color: white;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    
-    .user-info button:hover {
-        background: rgba(255,255,255,0.1);
-    }
-
     .login-container {
         display: flex;
         flex-direction: column;
@@ -48,85 +15,10 @@
         min-height: 100vh;
         background: #f5f6fa;
     }
-
-    .login-box {
-        background: white;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .login-box h1 {
-        margin-bottom: 20px;
-        color: #2c3e50;
-        text-align: center;
-    }
-
-    .login-box input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 16px;
-    }
-
-    .login-box button {
-        width: 100%;
-        padding: 12px;
-        background: #2c3e50;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    .login-box button:hover {
-        background: #34495e;
-    }
-
-    .container {
-        margin-top: 60px; /* Space for fixed header */
-    }
-
-    .welcome-message {
-        text-align: center;
-        margin: 20px 0;
-        color: #666;
-    }
-
-    .nav-menu {
-        background: #34495e;
-        padding: 10px 20px;
-        position: fixed;
-        top: 50px;
-        left: 0;
-        right: 0;
-        z-index: 999;
-    }
-
-    .nav-menu a {
-        color: white;
-        text-decoration: none;
-        padding: 8px 15px;
-        margin-right: 10px;
-        border-radius: 4px;
-    }
-
-    .nav-menu a:hover, .nav-menu a.active {
-        background: rgba(255,255,255,0.1);
-    }
-
-    .main-content {
-        margin-top: 110px;
-    }
   </style>
 </head>
 <body>
-    <div id="authHeader" class="auth-header" style="display: none;">
+    <div id="authHeader" class="auth-header">
         <div class="user-info">
             <span id="userName"></span>
             <button onclick="logout()">Logout</button>
@@ -134,9 +26,9 @@
     </div>
 
     <!-- Add navigation menu -->
-    <div id="navMenu" class="nav-menu" style="display: none;">
-        <a href="jobs.html" class="active">Jobs</a>
-        <!-- Add more menu items here in the future -->
+    <div id="navMenu" class="nav-menu">
+        <a href="jobs.html">Jobs</a>
+        <a href="analytics.html">Analytics</a>
     </div>
 
     <div id="loginView" class="login-container">
@@ -153,7 +45,7 @@
         </div>
     </div>
 
-    <div id="mainContent" class="main-content" style="display: none;">
+    <div id="mainContent" class="main-content">
         <h1>Welcome to Internship Tracker</h1>
         <p>Select an option from the menu above to get started.</p>
     </div>

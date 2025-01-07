@@ -10,6 +10,7 @@
     <!-- Add Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="style.css">
     <!-- Add compression library -->
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <style>
@@ -34,6 +35,33 @@
     </style>
 </head>
 <body class="bg-[#121212] text-[#FFFFFF]">
+    <!-- Add auth header -->
+    <div id="authHeader" class="auth-header">
+        <div class="user-info">
+            <span id="userName"></span>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Add navigation menu -->
+    <div id="navMenu" class="nav-menu">
+        <a href="jobs.html">Jobs</a>
+        <a href="analytics.html" class="active">Analytics</a>
+    </div>
+
+    <!-- Add auth verification script -->
+    <script>
+        // Protect the page
+        if (!verifyToken()) {
+            window.location.href = 'index.html';
+        } else {
+            // Update UI and show content
+            const token = localStorage.getItem('jwt_token');
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            document.getElementById('userName').textContent = `Welcome, ${payload.user}`;
+        }
+    </script>
+
     <!-- Replace existing login form with this new version -->
     <div class="flex justify-end p-4">
         <button id="toggleLoginForm" 
@@ -470,7 +498,7 @@
             let totalCount = 0;
 
             // Fetch locations data
-            const locationsResponse = await fetch('cache/locations.json');
+            const locationsResponse = await fetch('analytics/cache/locations.json');
             const locationsData = await locationsResponse.json();
 
             // Process job data
@@ -514,6 +542,7 @@
 
                     const popupContent = `
                         Locations: ${names}<br>
+</body>
                         Number of positions: ${count}<br>
                     `;
 
@@ -539,4 +568,6 @@
         }
     </script>
 </body>
+</html>
+
 </html>
