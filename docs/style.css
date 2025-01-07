@@ -625,6 +625,25 @@ h2 {
   z-index: 1000;
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info button {
+  padding: 5px 15px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.user-info button:hover {
+  background: rgba(255,255,255,0.1);
+}
+
 .nav-menu {
   background: #34495e;
   padding: 10px 20px;
@@ -649,5 +668,4 @@ h2 {
 
 .main-content {
   margin-top: 110px;
-  padding: 20px;
 }
