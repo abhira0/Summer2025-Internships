@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, '../docs')));
 // API routes
 app.use('/api/applications', applicationsRouter);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 32768;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
