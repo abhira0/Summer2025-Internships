@@ -126,57 +126,6 @@ class AddCoordinates:
                     logger.error(f"Error adding coordinates for {loc} : https://simplify.jobs/tracker?id={item['id']}")
             
         LOCATION_CACHE.save(location_cache)
-        #     for location in locations:
-        #         ...
-
-        #         if "remote" in location.lower():
-        #             location_coordinates[location] = [["remote", "remote", "remote"]]
-        #             continue
-        #         if "multiple" in location.lower():
-        #             location_coordinates[location] = [["multiple", "multiple", "multiple"]]
-        #             continue
-
-        #         split_markers = [" and ", " or ", " | ", ";", " • "]
-        #         processed = False
-                
-        #         for split_by in split_markers:
-        #             if split_by in location:
-        #                 location_coordinates[location] = process_split_locations(location, split_by, coord_getter)
-        #                 processed = True
-        #                 break
-                
-        #         if processed:
-        #             continue
-
-        #         clean_location = clean_location_string(location)
-        #         try:
-        #             if clean_location in PREDEFINED_MAPPING:
-        #                 location_coordinates[location] = [coord_getter(PREDEFINED_MAPPING[clean_location])]
-        #             else:
-        #                 location_coordinates[location] = [coord_getter(clean_location)]
-        #         except Exception as e:
-        #             errors.append(location)
-
-        # return location_coordinates, location_cache, errors
-
-
-
-# def process_split_locations(location: str, split_by: str, get_coord_func) -> List:
-#     locs = []
-#     for loc in location.split(split_by):
-#         if "more" in loc:
-#             continue
-#         coord = get_coord_func(loc)
-#         locs.append(coord)
-#     return locs
-
-# def clean_location_string(location: str) -> str:
-#     removals = ["Location pin icon ", "locations", "office", "Category"]
-#     clean_location = location
-#     for i in removals:
-#         clean_location = clean_location.replace(i, "")
-#     return clean_location
-
 
 
 def main():
