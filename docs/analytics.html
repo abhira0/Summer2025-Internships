@@ -165,7 +165,7 @@
 
         function createDailyApplicationsChart(data) {
             let chartInstance = null;
-            // const dateRangeSelect = document.getElementById('dateRange');
+            let processedData = null;
 
             const dateRangeButtons = document.querySelectorAll('.chart-controls button');
     
@@ -176,39 +176,44 @@
                 });
             });
 
-            function updateChart(days = 7) {
+            // Process all data once
+            function processAllData() {
+                if (processedData) return processedData;
+
                 const dailyStats = {};
-                
-                // Get current date and calculate date range
-                const now = new Date();
-                const minDate = days ? new Date(now - days * 24 * 60 * 60 * 1000) : null;
                 
                 // Process data to get daily counts
                 data.forEach(job => {
                     if (job.tracked_date) {
                         const date = new Date(job.tracked_date);
-                        if (!minDate || date >= minDate) {
-                            const dateStr = date.toISOString().split('T')[0];
-                            dailyStats[dateStr] = dailyStats[dateStr] || {
-                                totalApplications: 0,
-                                uniqueCompanies: new Set(),
-                                rejections: 0
-                            };
-                            dailyStats[dateStr].totalApplications++;
-                            dailyStats[dateStr].uniqueCompanies.add(job.company_id);
-                            // Check for rejections based on status_events
-                            console.log(job.status_events);
-                            if (job.status_events.some(event => event.status == "rejected")) {
-                                dailyStats[dateStr].rejections++;
+                        const dateStr = date.toISOString().split('T')[0];
+                        dailyStats[dateStr] = dailyStats[dateStr] || {
+                            totalApplications: 0,
+                            uniqueCompanies: new Set(),
+                            rejections: 0
+                        };
+                        dailyStats[dateStr].totalApplications++;
+                        dailyStats[dateStr].uniqueCompanies.add(job.company_id);
+                        
+                        job.status_events.forEach(event => {
+                            if (event.status == "rejected") {
+                                const rejectDate = new Date(event.timestamp).toISOString().split('T')[0];
+                                dailyStats[rejectDate] = dailyStats[rejectDate] || {
+                                    totalApplications: 0,
+                                    uniqueCompanies: new Set(),
+                                    rejections: 0
+                                };
+                                dailyStats[rejectDate].rejections++;
                             }
-                        }
+                        });
                     }
                 });
 
                 // Generate all dates in the range
                 const allDates = [];
-                const startDate = minDate ? new Date(minDate) : new Date(Math.min(...data.map(job => new Date(job.tracked_date || '9999-12-31'))));
-                const endDate = now;
+                const startDate = new Date(Math.min(...data.map(job => new Date(job.tracked_date || '9999-12-31'))));
+                const endDate = new Date();
+                
                 for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                     const dateStr = d.toISOString().split('T')[0];
                     allDates.push(dateStr);
@@ -216,17 +221,32 @@
                         dailyStats[dateStr] = {
                             totalApplications: 0,
                             uniqueCompanies: new Set(),
-                            rejections: 0  // Ensure rejection count exists
+                            rejections: 0
                         };
                     }
                 }
 
-                const sortedDates = allDates;
-                const uniqueCompanies = sortedDates.map(date => dailyStats[date].uniqueCompanies.size);
-                const additionalApps = sortedDates.map(date => 
+                return { dailyStats, allDates };
+            }
+
+            function updateChart(days = 7) {
+                if (!processedData) {
+                    processedData = processAllData();
+                }
+
+                const { dailyStats, allDates } = processedData;
+                
+                // Slice the data based on selected date range
+                const now = new Date();
+                const slicedDates = days 
+                    ? allDates.filter(date => new Date(date) >= new Date(now - days * 24 * 60 * 60 * 1000))
+                    : allDates;
+
+                const uniqueCompanies = slicedDates.map(date => dailyStats[date].uniqueCompanies.size);
+                const additionalApps = slicedDates.map(date => 
                     dailyStats[date].totalApplications - dailyStats[date].uniqueCompanies.size
                 );
-                const rejections = sortedDates.map(date => dailyStats[date].rejections);
+                const rejections = slicedDates.map(date => dailyStats[date].rejections);
 
                 if (chartInstance) {
                     chartInstance.destroy();
@@ -235,28 +255,30 @@
                 chartInstance = new Chart('dailyApplicationsChart', {
                     type: 'bar',
                     data: {
-                        labels: sortedDates,
+                        labels: slicedDates,
                         datasets: [
+                            {
+                                label: 'Rejections',
+                                data: rejections,
+                                type: 'line',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.0)',
+                                borderWidth: 2,
+                                order: 0  // Lower order means it will be drawn on top
+                            },
                             {
                                 label: 'Unique Companies',
                                 data: uniqueCompanies,
-                                backgroundColor: 'rgba(54, 162, 235, 0.8)', // Vibrant blue
-                                stack: 'Stack 0'
+                                backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                                stack: 'Stack 0',
+                                order: 1
                             },
                             {
                                 label: 'Additional Applications',
                                 data: additionalApps,
-                                backgroundColor: 'rgba(255, 159, 64, 0.8)', // Vibrant orange
-                                stack: 'Stack 0'
-                            },
-                            {
-                                label: 'Rejections',
-                                data: rejections,
-                                type: 'line',  // Specify as line chart
-                                borderColor: 'rgba(255, 99, 132, 1)', // Vibrant red
-                                backgroundColor: 'rgba(255, 99, 132, 0.0)',
-                                borderWidth: 2
-                                // Removed yAxisID to use the primary y-axis
+                                backgroundColor: 'rgba(255, 159, 64, 0.8)',
+                                stack: 'Stack 0',
+                                order: 1
                             }
                         ]
                     },
@@ -325,7 +347,7 @@
                 });
             }
 
-            updateChart(7);
+            updateChart();
         }
 
         async function createJobMap(data) {
