@@ -85,33 +85,57 @@ function applyFilters() {
           if (filter.conditionType === "AND") {
             // Use every() to implement AND logic between conditions
             conditionMet = filter.conditions.every(condition => {
-              switch (condition.type) {
-                case "contains":
-                  return cellText.includes(condition.value);
-                case "equals":
-                  return cellText === condition.value;
-                case "not-equals":
-                  return cellText !== condition.value;
-                case "not-contains":
-                  return !cellText.includes(condition.value);
-                default:
-                  return false;
+              try {
+                switch (condition.type) {
+                  case "contains":
+                    return cellText.includes(condition.value);
+                  case "equals":
+                    return cellText === condition.value;
+                  case "not-equals":
+                    return cellText !== condition.value;
+                  case "not-contains":
+                    return !cellText.includes(condition.value);
+                  case "regex":
+                    const regex = new RegExp(condition.value, 'i');
+                    return regex.test(cellText);
+                  case "not-regex":
+                    const notRegex = new RegExp(condition.value, 'i');
+                    return !notRegex.test(cellText);
+                  default:
+                    return false;
+                }
+              } catch (error) {
+                console.error('Filter error:', error);
+                // If regex is invalid, treat as no match
+                return condition.type.startsWith('not-');
               }
             });
           } else {
             // Use some() for OR logic (default behavior)
             conditionMet = filter.conditions.some(condition => {
-              switch (condition.type) {
-                case "contains":
-                  return cellText.includes(condition.value);
-                case "equals":
-                  return cellText === condition.value;
-                case "not-equals":
-                  return cellText !== condition.value;
-                case "not-contains":
-                  return !cellText.includes(condition.value);
-                default:
-                  return false;
+              try {
+                switch (condition.type) {
+                  case "contains":
+                    return cellText.includes(condition.value);
+                  case "equals":
+                    return cellText === condition.value;
+                  case "not-equals":
+                    return cellText !== condition.value;
+                  case "not-contains":
+                    return !cellText.includes(condition.value);
+                  case "regex":
+                    const regex = new RegExp(condition.value, 'i');
+                    return regex.test(cellText);
+                  case "not-regex":
+                    const notRegex = new RegExp(condition.value, 'i');
+                    return !notRegex.test(cellText);
+                  default:
+                    return false;
+                }
+              } catch (error) {
+                console.error('Filter error:', error);
+                // If regex is invalid, treat as no match
+                return condition.type.startsWith('not-');
               }
             });
           }
@@ -216,18 +240,10 @@ Promise.all([
       column: "location",
       conditionType: "AND",
       conditions: [
-      { type: "not-equals", value: "toronto, on, canada" },
-      { type: "not-equals", value: "toronto, canada" },
       { type: "not-equals", value: "canada" },
       { type: "not-equals", value: "remote in canada" },
-      { type: "not-equals", value: "mississauga, on, canada" },
-      { type: "not-equals", value: "montreal, qc, canada" },
-      { type: "not-equals", value: "vancouver, bc, canada" },
-      { type: "not-equals", value: "vancouver, canada" },
-      { type: "not-equals", value: "ottawa, canada" },
-      { type: "not-equals", value: "london, uk" },
-      { type: "not-equals", value: "cambridge, uk" },
-      { type: "not-equals", value: "uxbridge, uk" }
+      { type: "not-regex", value: "^(london|uxbridge|cambridge), uk$" },
+      { type: "not-regex", value: "^(toronto|vancouver|ottawa|montreal|mississauga|fredericton)(?:, [a-za-z]+)?, canada$" }
       ]
     });
     activeFilters.push({ column: "hidden", hidden: false }); // Add not hidden filter
@@ -339,6 +355,8 @@ Promise.all([
           <option value="equals">Equals</option>
           <option value="not-equals">Not Equals</option>
           <option value="not-contains">Not Contains</option>
+          <option value="regex">Regex</option>
+          <option value="not-regex">Not Regex</option>
         </select>
         <input type="text" class="filterValue">
         <button class="add-input">+</button>
@@ -415,6 +433,10 @@ Promise.all([
           return "≠";  // Standard not equals
         case "not-contains":
           return "∉";  // Not element of (more intuitive than not superset)
+        case "regex":
+          return "~";  // Using tilde to represent regex
+        case "not-regex":
+          return "≁";  // Using not tilde symbol for not-regex
         default:
           return type;
       }
