@@ -178,14 +178,18 @@ class ProcessSalary:
             sal = None
             salary_period = item["salary_period"]
             if item["salary_low"] and item["salary_high"]:
-                sal = int(item["salary_low"] + item["salary_high"])
+                sal = (item["salary_low"] + item["salary_high"])//2
             elif item["salary_low"] or item["salary_high"]:
                 sal = item["salary_low"] or item["salary_high"]
             if sal:
                 if salary_period > 1 and sal < 100:
                     logger.error(
-                        f"Change salary from anually to weekly ({sal}): https://simplify.jobs/tracker?id={item['id']}"
+                        f"Change salary from anually to hourly ({sal, item["salary_low"], item["salary_high"]}): https://simplify.jobs/tracker?id={item['id']}"
                     )
+                # if salary_period == 1 and sal > 80:
+                #     logger.error(
+                #         f"Somethings fishy ({sal, item["salary_low"], item["salary_high"]}): https://simplify.jobs/tracker?id={item['id']}"
+                #     )
                 if salary_period > 1:
                     sal = sal // hour_map[salary_period]
             item["salary"] = sal
