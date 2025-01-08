@@ -153,7 +153,6 @@ class StatusEvents:
         self.output = self.process()
 
     def process(self):
-        rejected = 0
         print(
             collections.Counter(
                 i["status"] for item in self.input.data for i in item["status_events"]
@@ -169,6 +168,8 @@ class StatusEvents:
                     status["status"] = "screen"
                 elif status["status"] == 23:
                     status["status"] = "rejected"
+
+        return SIMPLIFY_TRACKER_PARSED.save(self.input.data)
 
 
 def main():

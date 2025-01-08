@@ -89668,5 +89668,44 @@
     "company_url": "https://simplify.jobs/c/0985b121-88fd-4402-aea9-c0c55bfbbc99",
     "is_visible": true,
     "sponsorship": "Other"
+  },
+  {
+    "date_updated": 1736314226,
+    "url": "https://www.amazon.jobs/en/jobs/2858670/sde-intern-2025-computer-science",
+    "company_name": "Amazon",
+    "title": "SDE Intern 2025 - Computer Science",
+    "locations": [
+      "Toronto, Canada",
+      "Vancouver, Canada"
+    ],
+    "terms": [
+      "Summer 2025"
+    ],
+    "sponsorship": "Offers Sponsorship",
+    "active": true,
+    "source": "GaryZhous",
+    "id": "4aaaebcb-c5f2-42bb-9c75-907dc018ee9d",
+    "date_posted": 1736314226,
+    "company_url": "",
+    "is_visible": true
+  },
+  {
+    "date_updated": 1736314374,
+    "url": "https://jobs.ea.com/en_US/careers/JobDetail/206690",
+    "company_name": "Electronic Arts",
+    "title": "Software Engineer Intern",
+    "locations": [
+      "Austin, TX"
+    ],
+    "terms": [
+      "Summer 2025"
+    ],
+    "sponsorship": "Does Not Offer Sponsorship",
+    "active": true,
+    "source": "GaryZhous",
+    "id": "bc77bb70-4a9c-4605-a2eb-8cef984f69fc",
+    "date_posted": 1736314374,
+    "company_url": "",
+    "is_visible": true
   }
 ]

@@ -192,14 +192,13 @@
                             dailyStats[dateStr] = dailyStats[dateStr] || {
                                 totalApplications: 0,
                                 uniqueCompanies: new Set(),
-                                rejections: 0  // Initialize rejection count
+                                rejections: 0
                             };
                             dailyStats[dateStr].totalApplications++;
-                            if (job.company_id) {
-                                dailyStats[dateStr].uniqueCompanies.add(job.company_id);
-                            }
+                            dailyStats[dateStr].uniqueCompanies.add(job.company_id);
                             // Check for rejections based on status_events
-                            if (job.status_events && job.status_events.some(event => event.status === 23)) {
+                            console.log(job.status_events);
+                            if (job.status_events.some(event => event.status == "rejected")) {
                                 dailyStats[dateStr].rejections++;
                             }
                         }
@@ -330,8 +329,6 @@
         }
 
         async function createJobMap(data) {
-            console.log('Initializing map...');
-            
             const mapContainer = document.getElementById('jobMap');
             if (!mapContainer) {
                 console.error('Map container not found!');
@@ -375,10 +372,8 @@
                         for (let i = 0; i < coordinates.length; i += 1) {
                             const lng = parseFloat(coordinates[i][1]);
                             const lat = parseFloat(coordinates[i][0]);
-                            console.log(coordinates[i][0]);
 
                             if (isValidCoordinate(lat, lng)) {
-                                console.log(`Processing location: ${location}`);
                                 totalCount++;
                                 const key = `${lat},${lng}`;
                                 if (!locationCounts.has(key)) {
