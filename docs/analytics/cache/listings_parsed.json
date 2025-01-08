@@ -38038,7 +38038,7 @@
     "company_name": "Optiver",
     "id": "57c275c2-5d14-4fd0-a8ee-dd6d85562f01",
     "title": "Software Engineer Intern - Summer 2025 - Austin",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -41674,7 +41674,7 @@
     "company_name": "Jump Trading",
     "id": "d2abd211-c477-435e-aabc-5fbacfb31392",
     "title": "Campus UI Software Engineer \u2013 Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2024",
       "Winter 2025",
@@ -46741,7 +46741,7 @@
     "company_name": "Dun & Bradstreet",
     "id": "b57eaaa7-328e-48f2-987d-568d0d5a3805",
     "title": "2025 Summer Internship Program - Technology",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -48900,7 +48900,7 @@
     "company_name": "Vermeer",
     "id": "5c5bae76-a77b-4284-98cb-c5d83cb46149",
     "title": "Data Engineer Intern - Summer 2025",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -74716,7 +74716,7 @@
     "company_name": "Motorola",
     "id": "f08b0343-623f-4142-9a24-0e614785312b",
     "title": "2025 Summer Internship - Embedded Software Engineer",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -78274,7 +78274,7 @@
     "company_name": "Baxter International",
     "id": "cb6f57d9-db39-425e-a178-87683dcfa937",
     "title": "2025 Summer Internship-Data Science",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -79610,7 +79610,7 @@
     "company_name": "Crowdstrike",
     "id": "01a8541e-c755-4653-9a93-5b1ff6ce9f61",
     "title": "Data Science Intern - Summer 2025 - Remote",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -81162,7 +81162,7 @@
     "company_name": "Blue Yonder",
     "id": "de848a13-1f74-42e1-b86f-9c4d1245880d",
     "title": "Software Engineering",
-    "active": true,
+    "active": false,
     "terms": [
       "Winter 2025"
     ],
@@ -83063,7 +83063,7 @@
     "company_name": "Recursion Pharmaceuticals",
     "id": "6d7b1da3-a566-49a6-9d4f-1009fd737d59",
     "title": "Data Science Internship",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2024"
     ],
@@ -85316,7 +85316,7 @@
     "company_name": "WillowTree",
     "id": "fe9fc9ae-5239-4bae-b52b-72d05f800450",
     "title": "Analytics Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -87963,7 +87963,7 @@
     "company_name": "Centerfield",
     "id": "53fd96a7-0a5f-4831-b739-24b76cc2b671",
     "title": "Software Engineer Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -88257,7 +88257,7 @@
     "company_name": "Auctane",
     "id": "99ac0846-3f91-4246-ba3d-0130781443ff",
     "title": "Software Engineering Intern - Fullstack",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -89552,7 +89552,7 @@
     "company_name": "Instawork",
     "id": "6fba23a1-01e5-4dd8-876e-6f30609a54d0",
     "title": "Engineering Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -89745,6 +89745,122 @@
       "Fredericton, NB, Canada"
     ],
     "company_url": "https://simplify.jobs/c/PotentialMotors",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "MRI Software",
+    "id": "4d15a8cb-aa9f-4321-81b6-a2f60bf8d18c",
+    "title": "Spring Intern - Accounting Data Management",
+    "active": true,
+    "terms": [
+      "Spring 2025"
+    ],
+    "date_updated": 1736368108,
+    "date_posted": 1736368108,
+    "url": "https://mrisoftware.wd501.myworkdayjobs.com/External_CareerSite/job/US-Remote/Spring-Intern---Accounting-Data-Management_R-104438",
+    "locations": [
+      "Remote in USA"
+    ],
+    "company_url": "https://simplify.jobs/c/MRI-Software",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "S&P Global ",
+    "id": "c27d90e2-79bf-4f84-b051-bcaf0f4155e9",
+    "title": "Data Analysis Product Management Intern - Early Careers",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736367718,
+    "date_posted": 1736367718,
+    "url": "https://spgi.wd5.myworkdayjobs.com/en-US/SPGI_Careers/job/Michigan-US/Data-Analysis-Product-Management-Intern--Early-Careers-_310570-1",
+    "locations": [
+      "Southfield, MI"
+    ],
+    "company_url": "https://simplify.jobs/c/c7dad035-0ece-4bb3-a529-57e45f2c155c",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Found Energy",
+    "id": "4886739b-cd99-4bb9-980d-b35d57ed65f4",
+    "title": "Data Engineer Spring Co-op Summer/Fall",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736368769,
+    "date_posted": 1736368769,
+    "url": "https://job-boards.greenhouse.io/foundenergy/jobs/4432215006",
+    "locations": [
+      "Boston, MA"
+    ],
+    "company_url": "https://simplify.jobs/c/Found-Energy",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Bank of Montreal",
+    "id": "bb3c7281-2ac9-4121-94a9-5bd439df103a",
+    "title": "Junior Engineer \u2013 Co-op/Internship - Electronic Trading Infrastructure",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736368522,
+    "date_posted": 1736368522,
+    "url": "https://bmo.wd3.myworkdayjobs.com/External/job/REMOTETELETRAVAIL-ON-CAN/Junior-Engineer--Electronic-Trading-Infrastructure--Summer-2025--Co-op-Internship----4-months_R250000446-1",
+    "locations": [
+      "Remote in Canada"
+    ],
+    "company_url": "https://simplify.jobs/c/BMO",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Samsung",
+    "id": "5efeaf70-f9e1-4a82-8cee-bebf36a1fc47",
+    "title": "Intern \u2013 Gen AI Engineer",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736368280,
+    "date_posted": 1736368280,
+    "url": "https://job-boards.greenhouse.io/samsungsemiconductor/jobs/6313867003",
+    "locations": [
+      "San Jose, CA"
+    ],
+    "company_url": "https://simplify.jobs/c/Samsung",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "The Walt Disney Company",
+    "id": "17104ee8-08b0-498c-b150-28fe06c5b58b",
+    "title": "Hulu Analytics Experimentation Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736369432,
+    "date_posted": 1736369432,
+    "url": "https://disney.wd5.myworkdayjobs.com/en-US/disneycareer/job/Santa-Monica-CA-USA/Hulu-Analytics-Experimentation-Intern--Summer-2025_10108693",
+    "locations": [
+      "Santa Monica, CA"
+    ],
+    "company_url": "https://simplify.jobs/c/Disney",
     "is_visible": true,
     "sponsorship": "Other"
   }
