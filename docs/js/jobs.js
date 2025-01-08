@@ -134,7 +134,7 @@ function applyFilters() {
 // Fetch both files and combine the data
 Promise.all([
   fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/listings_parsed.json"),
-  fetch("./analytics/cache/simplify/raw.json"),
+  fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/simplify/parsed.json"),
   loadUserApplicationsFromServer()
 ])
   .then(([listingsResponse, trackerResponse]) => {
@@ -854,7 +854,7 @@ window.toggleHideStatus = (jobId, button) => toggleStatus(jobId, button, 'hidden
 // Update the initial data loading to use localStorage
 Promise.all([
     fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/listings_parsed.json"),
-    fetch("./analytics/cache/simplify/raw.json"),
+    fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/simplify/parsed.json"),
     loadUserApplications()
 ])
 .then(([listingsResponse, trackerResponse, userApps]) => {
