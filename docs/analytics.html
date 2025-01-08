@@ -254,8 +254,8 @@
 
         const avgSalary =
           data
-            .filter((job) => job.salary_low)
-            .reduce((sum, job) => sum + job.salary_low, 0) / jobsWithSalary;
+            .filter((job) => job.salary)
+            .reduce((sum, job) => sum + job.salary, 0) / jobsWithSalary;
 
         document.getElementById("summary-stats").innerHTML += `
                 <p>Total Jobs: ${totalJobs}</p>
@@ -285,7 +285,7 @@
             else salaryRangesAll["100+"]++;
 
             // Only add to hourly chart if salary_period is 1
-            if (job.salary_period === 1) {
+            if (job.salary_period <= 3) {
               if (job.salary <= 20) salaryRanges["0-20"]++;
               else if (job.salary <= 30) salaryRanges["21-30"]++;
               else if (job.salary <= 40) salaryRanges["31-40"]++;
@@ -296,6 +296,7 @@
               else if (job.salary <= 100) salaryRanges["81-100"]++;
               else salaryRanges["100+"]++;
             }
+            console.log(job.salary_period, job.salary);
           }
         });
 
@@ -437,9 +438,6 @@
           
           // Debug output to check data for today
           const todayStr = new Date().toISOString().split('T')[0];
-          console.log('Today:', todayStr);
-          console.log('Data for today:', dailyStats[todayStr]);
-          console.log('All dates with data:', Object.keys(dailyStats));
           // Generate all dates in the range
           const allDates = [];
           const startDate = new Date(
