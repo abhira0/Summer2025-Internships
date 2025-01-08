@@ -265,16 +265,24 @@
           "21-30": 0,
           "31-40": 0,
           "41-50": 0,
-          "51+": 0,
+          "51-60": 0,
+          "61-70": 0,
+          "71-80": 0,
+          "81-100": 0,
+          "100+": 0,
         };
 
         data.forEach((job) => {
-          if (job.salary_low) {
-            if (job.salary_low <= 20) salaryRanges["0-20"]++;
-            else if (job.salary_low <= 30) salaryRanges["21-30"]++;
-            else if (job.salary_low <= 40) salaryRanges["31-40"]++;
-            else if (job.salary_low <= 50) salaryRanges["41-50"]++;
-            else salaryRanges["51+"]++;
+          if (job.salary) {
+            if (job.salary <= 20) salaryRanges["0-20"]++;
+            else if (job.salary <= 30) salaryRanges["21-30"]++;
+            else if (job.salary <= 40) salaryRanges["31-40"]++;
+            else if (job.salary <= 50) salaryRanges["41-50"]++;
+            else if (job.salary <= 60) salaryRanges["51-60"]++;
+            else if (job.salary <= 70) salaryRanges["61-70"]++;
+            else if (job.salary <= 80) salaryRanges["71-80"]++;
+            else if (job.salary <= 100) salaryRanges["81-100"]++;
+            else salaryRanges["100+"]++;
           }
         });
 
