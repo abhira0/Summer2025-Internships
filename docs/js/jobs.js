@@ -966,21 +966,6 @@ async function toggleStatus(jobId, button, type) {
 window.toggleApplicationStatus = (jobId, button) => toggleStatus(jobId, button, 'applied');
 window.toggleHideStatus = (jobId, button) => toggleStatus(jobId, button, 'hidden');
 
-// Update the initial data loading to use localStorage
-Promise.all([
-    fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/listings_parsed.json"),
-    fetch("https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/simplify/parsed.json"),
-    loadUserApplications()
-])
-.then(([listingsResponse, trackerResponse, userApps]) => {
-    // ...existing code...
-    
-    // When creating table rows, check localStorage
-    const isApplied = appliedJobIds.has(item.id) || 
-                      (userApplications[currentUser] && userApplications[currentUser][item.id]);
-    
-    // ...existing code...
-});
 
 const style = document.createElement('style');
 style.textContent = `
@@ -1006,5 +991,3 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
-// ...existing code...
