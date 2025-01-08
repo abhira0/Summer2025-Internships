@@ -234,30 +234,10 @@ Promise.all([
     });
 
     // Apply default filters
-    activeFilters.push({ column: "date", fromDate: "2024-01-01", toDate: "" });
-    activeFilters.push({ column: "active", active: true });
-    activeFilters.push({
-      column: "location",
-      conditionType: "AND",
-      conditions: [
-      { type: "not-equals", value: "canada" },
-      { type: "not-equals", value: "remote in canada" },
-      { type: "not-regex", value: "^[a-zA-Z]+, uk$" },
-      { type: "not-regex", value: "^[a-zA-Z]+(?:, [a-za-z]+)?, canada$" }
-      ]
-    });
-    activeFilters.push({ column: "hidden", hidden: false }); // Add not hidden filter
-    activeFilters.push({ column: "applied", applied: false }); // Add not applied filter
-    updateActiveFilters();
-    applyFilters();
+    applyDefaultFilters()
 
     // Add default sort
-    activeSorts.push({ column: "date", order: "desc" });
-    updateActiveSorts();
-    sortTable();
-
-    // Update row count
-    updateRowCount();
+    applyDefaultSort();
 
     // Add event listeners for filter buttons
     document.querySelectorAll(".apply-filter").forEach((button, index) => {
@@ -688,6 +668,114 @@ Promise.all([
 
       rows.forEach(row => table.appendChild(row));
     }
+
+    // Add clear all functionality after the update functions are defined
+    function clearAllFilters() {
+      activeFilters = [];
+      updateActiveFilters();
+      applyFilters();
+    }
+
+    function clearAllSorts() {
+      activeSorts = [];
+      updateActiveSorts();
+      sortTable();
+    }
+
+    // Move button creation here after the functions are defined
+    const clearAllFiltersBtn = document.createElement('button');
+    clearAllFiltersBtn.innerHTML = '<i class="fas fa-trash"></i> Clear All Filters';
+    clearAllFiltersBtn.className = 'clear-all-btn';
+    clearAllFiltersBtn.onclick = clearAllFilters;
+    activeFiltersContainer.parentNode.insertBefore(clearAllFiltersBtn, activeFiltersContainer.nextSibling);
+
+    const clearAllSortsBtn = document.createElement('button');
+    clearAllSortsBtn.innerHTML = '<i class="fas fa-trash"></i> Clear All Sorts';
+    clearAllSortsBtn.className = 'clear-all-btn';
+    clearAllSortsBtn.onclick = clearAllSorts;
+    activeSortsContainer.parentNode.insertBefore(clearAllSortsBtn, activeSortsContainer.nextSibling);
+
+    // Add styles at the end
+    style.textContent += `
+      .clear-all-btn {
+        margin-left: 10px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        border: 1px solid #404040;
+        background: #333;
+        color: #e0e0e0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .clear-all-btn:hover {
+        background: #d63031;
+        border-color: #c0392b;
+      }
+    `;
+
+    // Add these functions after other filter/sort functions
+    function applyDefaultFilters() {
+      activeFilters = [
+        { column: "date", fromDate: "2024-01-01", toDate: "" },
+        { column: "active", active: true },
+        {
+          column: "location",
+          conditionType: "AND",
+          conditions: [
+            { type: "not-equals", value: "canada" },
+            { type: "not-equals", value: "remote in canada" },
+            { type: "not-regex", value: "^[a-zA-Z]+, uk$" },
+            { type: "not-regex", value: "^[a-zA-Z]+(?:, [a-za-z]+)?, canada$" }
+          ]
+        },
+        { column: "hidden", hidden: false },
+        { column: "applied", applied: false }
+      ];
+      updateActiveFilters();
+      applyFilters();
+    }
+
+    function applyDefaultSort() {
+      activeSorts = [
+        { column: "date", order: "desc" }
+      ];
+      updateActiveSorts();
+      sortTable();
+    }
+
+    // Add this after the clear buttons are created
+    const defaultFiltersBtn = document.createElement('button');
+    defaultFiltersBtn.innerHTML = '<i class="fas fa-sync"></i> Default Filters';
+    defaultFiltersBtn.className = 'default-preset-btn';
+    defaultFiltersBtn.onclick = applyDefaultFilters;
+    clearAllFiltersBtn.parentNode.insertBefore(defaultFiltersBtn, clearAllFiltersBtn);
+
+    const defaultSortBtn = document.createElement('button');
+    defaultSortBtn.innerHTML = '<i class="fas fa-sync"></i> Default Sort';
+    defaultSortBtn.className = 'default-preset-btn';
+    defaultSortBtn.onclick = applyDefaultSort;
+    clearAllSortsBtn.parentNode.insertBefore(defaultSortBtn, clearAllSortsBtn);
+
+    // Add these styles after existing styles
+    style.textContent += `
+      .default-preset-btn {
+        margin-left: 10px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        border: 1px solid #404040;
+        background: #2c3e50;
+        color: #e0e0e0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .default-preset-btn:hover {
+        background: #34495e;
+        border-color: #2c3e50;
+      }
+    `;
+
   })
   .catch(err => console.error(err));
 
@@ -918,3 +1006,5 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// ...existing code...
