@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internship Data Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Add Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <link rel="stylesheet" href="style.css">
-    <!-- Add compression library -->
-    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+    <!-- Remove compression library -->
     <style>
         #jobMap { 
             height: 500px;
@@ -35,71 +32,6 @@
     </style>
 </head>
 <body class="bg-[#121212] text-[#FFFFFF]">
-    <!-- Add auth header -->
-    <div id="authHeader" class="auth-header">
-        <div class="user-info">
-            <span id="userName"></span>
-            <button onclick="logout()">Logout</button>
-        </div>
-    </div>
-
-    <!-- Add navigation menu -->
-    <div id="navMenu" class="nav-menu">
-        <a href="jobs.html">Jobs</a>
-        <a href="analytics.html" class="active">Analytics</a>
-    </div>
-
-    <!-- Add auth verification script -->
-    <script>
-        // Protect the page
-        if (!verifyToken()) {
-            window.location.href = 'index.html';
-        } else {
-            // Update UI and show content
-            const token = localStorage.getItem('jwt_token');
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            document.getElementById('userName').textContent = `Welcome, ${payload.user}`;
-        }
-    </script>
-
-    <!-- Replace existing login form with this new version -->
-    <div class="flex justify-end p-4">
-        <button id="toggleLoginForm" 
-                class="bg-[#4A5568] text-white px-4 py-2 rounded-lg hover:bg-[#2D3748] transition-colors">
-            Show Login Form
-        </button>
-        <button id="refreshData" 
-                class="bg-[#7C3AED] text-white px-4 py-2 rounded-lg hover:bg-[#6D28D9] ml-4 transition-colors">
-            Refresh Data
-        </button>
-    </div>
-
-    <div id="loginForm" class="hidden w-full max-w-2xl mx-auto p-5 my-8 bg-[#1E1E1E] rounded shadow-lg border border-[#3E3E3E]">
-        <h2 class="text-2xl font-semibold mb-4 text-center">Simplify.jobs Data Import</h2>
-        <div class="flex flex-col gap-4">
-            <div>
-                <p class="text-sm mb-2 text-gray-300">Instructions:</p>
-                <ol class="text-sm text-gray-300 list-decimal ml-4 mb-4">
-                    <li>Go to simplify.jobs and login</li>
-                    <li>Open DevTools (F12 or right-click -> Inspect)</li>
-                    <li>Go to Console tab and type: document.cookie</li>
-                    <li>Copy the entire output (including quotes) and paste below</li>
-                </ol>
-            </div>
-            <textarea id="cookiesInput" 
-                      class="w-full p-4 mb-2 bg-[#282828] text-white rounded font-mono text-sm"
-                      placeholder="Paste your cookies here..." 
-                      rows="5"></textarea>
-            <div class="flex justify-center">
-                <button id="loginBtn" 
-                        class="bg-[#7C3AED] text-white px-8 py-3 rounded-lg hover:bg-[#6D28D9] font-semibold transition-colors">
-                    Load Data
-                </button>
-            </div>
-            <p id="loginStatus" class="mt-2 text-sm text-center text-gray-300"></p>
-        </div>
-    </div>
-
     <h1 class="text-3xl font-bold text-center my-8 text-[#FFFFFF]">Internship Data Analytics Dashboard</h1>
     
     <div class="full-width-chart">
@@ -132,128 +64,26 @@
     </div>
 
     <script>
-        // Add these new functions near the top of your script
-        function toggleLoginForm() {
-            const form = document.getElementById('loginForm');
-            const button = document.getElementById('toggleLoginForm');
-            const isHidden = form.classList.contains('hidden');
-            
-            form.classList.toggle('hidden');
-            button.textContent = isHidden ? 'Hide Login Form' : 'Show Login Form';
-        }
-
-        // Modify the existing login handler to handle refresh
-        async function handleDataLoad(cookies = null) {
-            const statusEl = document.getElementById('loginStatus');
-            statusEl.textContent = 'Fetching data...';
-            
+        // Simplified data loading
+        async function loadData() {
             try {
-                // If cookies provided, fetch new data, otherwise use existing cookies
-                const fullData = cookies ? 
-                    await fetchSimplifyData(cookies) : 
-                    await fetchSimplifyData(document.getElementById('cookiesInput').value);
-
-                if (!storeData('simplifyData', fullData)) {
-                    statusEl.textContent = 'Warning: Could not save data for future sessions';
-                } else {
-                    statusEl.textContent = 'Data loaded and saved successfully!';
-                }
+                const response = await fetch('https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/simplify/parsed.json');
+                const data = await response.json();
                 
-                // Clear existing stats and charts
-                document.getElementById('summary-stats').innerHTML = '<h2 class="text-2xl font-semibold mb-4 text-[#FFFFFF]">Summary Statistics</h2>';
-                
-                // Refresh the charts
-                displaySummaryStats(fullData);
-                createSalaryChart(fullData);
-                createDailyApplicationsChart(fullData);
-                createJobMap(fullData);
-                
+                // Initialize all visualizations
+                displaySummaryStats(data);
+                createSalaryChart(data);
+                createDailyApplicationsChart(data);
+                createJobMap(data);
             } catch (error) {
-                statusEl.textContent = 'Error loading data: ' + error.message;
+                console.error('Error loading data:', error);
             }
         }
 
-        // Add event listeners
-        document.getElementById('toggleLoginForm').addEventListener('click', toggleLoginForm);
-        document.getElementById('refreshData').addEventListener('click', () => handleDataLoad());
-        document.getElementById('loginBtn').addEventListener('click', async () => {
-            await handleDataLoad(document.getElementById('cookiesInput').value);
-            toggleLoginForm(); // Hide the form after successful login
-        });
+        // Load data when page loads
+        window.addEventListener('load', loadData);
 
-        // Modify initial load to hide refresh button if no data
-        const savedData = loadData('simplifyData');
-        if (savedData) {
-            displaySummaryStats(savedData);
-            createSalaryChart(savedData);
-            createDailyApplicationsChart(savedData);
-            createJobMap(savedData);
-            document.getElementById('loginForm').classList.add('hidden');
-        } else {
-            document.getElementById('refreshData').classList.add('hidden');
-        }
-
-        // Replace the fetchSimplifyData function with this simpler version
-        async function fetchSimplifyData(cookies) {
-            try {
-                const response = await fetch('https://134.209.34.125:12979/fetch', {
-                    method: 'GET',
-                    headers: {
-                        'cookies': cookies,
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                return await response.json();
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                throw error;
-            }
-        }
-
-        // Add compression utilities
-        function storeData(key, data) {
-            try {
-                // Only keep essential fields
-                const minimizedData = minimizeData(data);
-                const compressed = LZString.compressToUTF16(JSON.stringify(minimizedData));
-                localStorage.setItem(key, compressed);
-                return true;
-            } catch (e) {
-                console.error('Storage error:', e);
-                return false;
-            }
-        }
-
-        function loadData(key) {
-            try {
-                const compressed = localStorage.getItem(key);
-                if (!compressed) return null;
-                return JSON.parse(LZString.decompressFromUTF16(compressed));
-            } catch (e) {
-                console.error('Load error:', e);
-                return null;
-            }
-        }
-
-        // Add this function to filter and minimize data
-        function minimizeData(data) {
-            return data.map(job => ({
-                tracked_date: job.tracked_date,
-                company_id: job.company_id,
-                salary_low: job.salary_low,
-                salary_high: job.salary_high,
-                job_posting_location: job.job_posting_location,
-                status_events: job.status_events ? job.status_events.map(event => ({
-                    status: event.status
-                })) : []
-            }));
-        }
-
+        // Keep existing visualization functions
         function displaySummaryStats(data) {
             const totalJobs = data.length;
             const jobsWithSalary = data.filter(job => job.salary_low || job.salary_high).length;
@@ -497,14 +327,10 @@
             let hybridCount = 0;
             let totalCount = 0;
 
-            // Fetch locations data
-            const locationsResponse = await fetch('analytics/cache/locations.json');
-            const locationsData = await locationsResponse.json();
-
             // Process job data
             data.forEach(job => {
                 const location = job.job_posting_location;
-
+                const coordinates = job.coordinates;
 
                 if (location.toLowerCase().includes('remote')) {
                     remoteCount++;
@@ -515,15 +341,13 @@
                     return;
                 }
 
-                if (locationsData[location]) {
+                if (coordinates && coordinates.length === 2) {
                     totalCount++;
-                    locationsData[location].forEach(coords => {
-                        const key = `${coords[0]},${coords[1]}`;
-                        if (!locationCounts.has(key)) {
-                            locationCounts.set(key, { count: 0, names: coords[2] });
-                        }
-                        locationCounts.get(key).count++;
-                    });
+                    const key = `${coordinates[0]},${coordinates[1]}`;
+                    if (!locationCounts.has(key)) {
+                        locationCounts.set(key, { count: 0, names: location });
+                    }
+                    locationCounts.get(key).count++;
                 }
             });
 
@@ -541,8 +365,7 @@
                     }).addTo(map);
 
                     const popupContent = `
-                        Locations: ${names}<br>
-</body>
+                        Location: ${names}<br>
                         Number of positions: ${count}<br>
                     `;
 
@@ -568,6 +391,4 @@
         }
     </script>
 </body>
-</html>
-
 </html>
