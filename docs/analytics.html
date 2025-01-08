@@ -15,6 +15,8 @@
             height: 500px;
             width: 100%;
             margin: 20px 0;
+            background: #2e2e2e; /* Visual indicator that container exists */
+            border: 1px solid #666; /* Makes container visible */
         }
         .map-container {
             padding: 20px;
@@ -316,78 +318,126 @@
         }
 
         async function createJobMap(data) {
-            const map = L.map('jobMap').setView([39.8283, -98.5795], 4); // Center of USA
+            console.log('Initializing map...');
             
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
+            const mapContainer = document.getElementById('jobMap');
+            if (!mapContainer) {
+                console.error('Map container not found!');
+                return;
+            }
 
-            const locationCounts = new Map();
-            let remoteCount = 0;
-            let hybridCount = 0;
-            let totalCount = 0;
+            try {
+                const map = L.map('jobMap', {
+                    center: [39.8283, -98.5795],
+                    zoom: 4,
+                    worldCopyJump: true
+                });
 
-            // Process job data
-            data.forEach(job => {
-                const location = job.job_posting_location;
-                const coordinates = job.coordinates;
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
 
-                if (location.toLowerCase().includes('remote')) {
-                    remoteCount++;
-                    return;
-                }
-                if (location.toLowerCase().includes('hybrid')) {
-                    hybridCount++;
-                    return;
-                }
+                const locationCounts = new Map();
+                let remoteCount = 0;
+                let hybridCount = 0;
+                let totalCount = 0;
 
-                if (coordinates && coordinates.length === 2) {
-                    totalCount++;
-                    const key = `${coordinates[0]},${coordinates[1]}`;
-                    if (!locationCounts.has(key)) {
-                        locationCounts.set(key, { count: 0, names: location });
+                // Process locations with multiple coordinates
+                data.forEach(job => {
+                    const location = job.job_posting_location;
+                    const coordinates = job.coordinates;
+
+                    if (!location) return;
+
+                    if (location.toLowerCase().includes('remote')) {
+                        remoteCount++;
+                        return;
                     }
-                    locationCounts.get(key).count++;
-                }
-            });
+                    if (location.toLowerCase().includes('hybrid')) {
+                        hybridCount++;
+                        return;
+                    }
 
-            // Add bubbles to map
-            for (const [coordKey, { count, names }] of locationCounts) {
-                const [lat, lon] = coordKey.split(',').map(Number);
-                if (!isNaN(lat) && !isNaN(lon)) {
-                    const radius = Math.sqrt(count) * 20000; // Adjust size based on count
+                    if (coordinates) {
+                        // Handle array of coordinate pairs
+                        for (let i = 0; i < coordinates.length; i += 1) {
+                            const lng = parseFloat(coordinates[i][1]);
+                            const lat = parseFloat(coordinates[i][0]);
+                            console.log(coordinates[i][0]);
 
-                    const circle = L.circle([lat, lon], {
+                            if (isValidCoordinate(lat, lng)) {
+                                console.log(`Processing location: ${location}`);
+                                totalCount++;
+                                const key = `${lat},${lng}`;
+                                if (!locationCounts.has(key)) {
+                                    locationCounts.set(key, { 
+                                        count: 0, 
+                                        names: new Set(),
+                                        coords: [lat, lng]
+                                    });
+                                }
+                                locationCounts.get(key).count++;
+                                locationCounts.get(key).names.add(location);
+                                console.log(`Added location: ${location} at [${lat}, ${lng}]`);
+                            }
+                        }
+                    }
+                });
+
+                // Calculate max count for scaling
+                const maxCount = Math.max(...Array.from(locationCounts.values()).map(loc => loc.count));
+
+                // Add circles to map
+                locationCounts.forEach(({count, names, coords}) => {
+                    const radius = Math.sqrt(count / maxCount) * 50000;
+                    
+                    const circle = L.circle(coords, {
                         color: '#7C3AED',
                         fillColor: '#7C3AED',
-                        fillOpacity: 0.5,
-                        radius: radius
+                        fillOpacity: 0.6,
+                        radius: radius,
+                        weight: 1
                     }).addTo(map);
 
                     const popupContent = `
-                        Location: ${names}<br>
-                        Number of positions: ${count}<br>
+                        <div style="color: black;">
+                            <strong>Locations:</strong><br>
+                            ${Array.from(names).join('<br>')}<br>
+                            <strong>Number of positions:</strong> ${count}
+                        </div>
                     `;
 
                     circle.bindPopup(popupContent);
-
                     circle.on('mouseover', function (e) {
+                        this.setStyle({ fillOpacity: 0.8, weight: 2 });
                         this.openPopup();
                     });
-
                     circle.on('mouseout', function (e) {
+                        this.setStyle({ fillOpacity: 0.6, weight: 1 });
                         this.closePopup();
                     });
-                }
-            }
+                });
 
-            // Update stats
-            document.getElementById('locationStats').innerHTML = `
-                <p>Remote Positions: ${remoteCount}</p>
-                <p>Hybrid Positions: ${hybridCount}</p>
-                <p>Unique Locations: ${locationCounts.size}</p>
-                <p>Total Positions: ${totalCount}</p>
-            `;
+                document.getElementById('locationStats').innerHTML = `
+                    <p>Remote Positions: ${remoteCount}</p>
+                    <p>Hybrid Positions: ${hybridCount}</p>
+                    <p>Unique Locations: ${locationCounts.size}</p>
+                    <p>Total In-Person Positions: ${totalCount}</p>
+                `;
+
+                setTimeout(() => map.invalidateSize(true), 100);
+
+            } catch (error) {
+                console.error('Error creating map:', error);
+            }
+        }
+
+        // Update coordinate validation to be more lenient
+        function isValidCoordinate(lat, lng) {
+            return !isNaN(lat) && 
+                   !isNaN(lng) && 
+                   Math.abs(lat) <= 90 && 
+                   Math.abs(lng) <= 180;
         }
     </script>
 </body>
