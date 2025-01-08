@@ -8,7 +8,7 @@ let userApplications = { applications: {} }; // Update initialization
 // Add these application management functions at the top
 async function loadUserApplicationsFromServer() {
     try {
-        const response = await fetch(`${CONFIG.API_URL}/applications`);
+        const response = await fetch(`api/applications`);
         if (!response.ok) {
             throw new Error('Failed to load from server');
         }
@@ -783,7 +783,7 @@ async function saveUserApplications() {
 // Add this server sync function
 async function syncApplicationsToServer() {
     try {
-        const response = await fetch(`${CONFIG.API_URL}/applications`, {
+        const response = await fetch(`api/applications`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
