@@ -153,11 +153,13 @@ class StatusEvents:
         self.output = self.process()
 
     def process(self):
-        print(
+        x =(
             collections.Counter(
-                i["status"] for item in self.input.data for i in item["status_events"]
+                i["timestamp"][:10] for item in self.input.data for i in item["status_events"] if i["status"] == 23
             )
         )
+        import pprint
+        pprint.pprint(sorted(x.items(), key=lambda x: x[0], reverse=True))
         for item in self.input.data:
             for status in item["status_events"]:
                 if status["status"] == 1:
