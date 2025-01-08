@@ -83,7 +83,7 @@ class AddCoordinates:
     def get_coord(self, location: str, location_cache: Dict, geolocator: Nominatim) -> List:
         location = location.strip()
         if "remote" in location.lower():
-            location_cache[location] = [["remote", "remote", "remote"]]
+            location_cache[location] = ["remote", "remote", "remote"]
         elif not location_cache.get(location) is not None:
             logger.debug(f"API Call! for {location}")
             time.sleep(1)
@@ -91,7 +91,7 @@ class AddCoordinates:
             loc = geolocator.geocode(location)
             assert loc, f"Location not found, {loc.raw}"
             
-            location_cache[location] = [[loc.latitude, loc.longitude, loc.address]]
+            location_cache[location] = [loc.latitude, loc.longitude, loc.address]
         return location_cache[location]
     
     def get_all_locations(self, locations:str):
@@ -118,9 +118,10 @@ class AddCoordinates:
             locations = self.get_all_locations(item['job_posting_location'])
             if not locations:
                 logger.error(f"No locations found for {item['job_posting_location']}")
+            item['coordinates'] = []
             for loc in locations:
                 try:
-                    item['coordinates'] = self.get_coord(loc, location_cache, geolocator)
+                    item['coordinates'].append(self.get_coord(loc, location_cache, geolocator))
                     # logger.info(f"Coordinates for {loc} is {item['coordinates']}")
                 except Exception as e:
                     errors.append(loc)
