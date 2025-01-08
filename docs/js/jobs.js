@@ -242,8 +242,8 @@ Promise.all([
       conditions: [
       { type: "not-equals", value: "canada" },
       { type: "not-equals", value: "remote in canada" },
-      { type: "not-regex", value: "^(london|uxbridge|cambridge), uk$" },
-      { type: "not-regex", value: "^(toronto|vancouver|ottawa|montreal|mississauga|fredericton)(?:, [a-za-z]+)?, canada$" }
+      { type: "not-regex", value: "^[a-zA-Z]+, uk$" },
+      { type: "not-regex", value: "^[a-zA-Z]+(?:, [a-za-z]+)?, canada$" }
       ]
     });
     activeFilters.push({ column: "hidden", hidden: false }); // Add not hidden filter
