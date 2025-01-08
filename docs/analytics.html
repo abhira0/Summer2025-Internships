@@ -15,15 +15,19 @@
         height: 500px;
         width: 100%;
         margin: 20px 0;
-        background: #2e2e2e; /* Visual indicator that container exists */
-        border: 1px solid #666; /* Makes container visible */
+        background: #2e2e2e;
+        /* Visual indicator that container exists */
+        border: 1px solid #666;
+        /* Makes container visible */
       }
+
       .map-container {
         padding: 20px;
         background: #1e1e1e;
         margin: 20px;
         border-radius: 8px;
       }
+
       .location-stats {
         color: #ffffff;
         margin-top: 10px;
@@ -33,6 +37,7 @@
       }
     </style>
   </head>
+
   <body class="bg-[#121212] text-[#FFFFFF]">
     <div id="authHeader" class="auth-header">
       <div class="user-info">
@@ -49,6 +54,67 @@
     <h1 class="text-3xl font-bold text-center my-8 text-[#FFFFFF]">
       Internship Data Analytics Dashboard
     </h1>
+
+    <div
+      class="stats-container clear-both p-5 m-5 bg-[#1E1E1E] rounded"
+      id="summary-stats"
+    >
+      <h2 class="text-2xl font-semibold mb-4 text-[#FFFFFF]">
+        Summary Statistics
+      </h2>
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 bg-[#282828] border-b border-[#404040]"></th>
+            <th class="py-2 px-4 bg-[#282828] border-b border-[#404040]">
+              Today
+            </th>
+            <th class="py-2 px-4 bg-[#282828] border-b border-[#404040]">
+              Total
+            </th>
+          </tr>
+        </thead>
+        <tbody id="statsTable">
+          <tr>
+            <td class="py-2 px-4 border-b border-[#404040]">
+              Total Applications
+            </td>
+            <td class="py-2 px-4 border-b border-[#404040]" id="todayApps">
+              -
+            </td>
+            <td class="py-2 px-4 border-b border-[#404040]" id="totalApps">
+              -
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 px-4 border-b border-[#404040]">
+              Unique Companies
+            </td>
+            <td class="py-2 px-4 border-b border-[#404040]" id="todayCompanies">
+              -
+            </td>
+            <td class="py-2 px-4 border-b border-[#404040]" id="totalCompanies">
+              -
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 px-4 border-b border-[#404040]">Rejections</td>
+            <td
+              class="py-2 px-4 border-b border-[#404040]"
+              id="todayRejections"
+            >
+              -
+            </td>
+            <td
+              class="py-2 px-4 border-b border-[#404040]"
+              id="totalRejections"
+            >
+              -
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="full-width-chart">
       <h2 class="text-2xl font-semibold mb-4 text-[#FFFFFF]">
@@ -100,15 +166,6 @@
     </div>
 
     <div
-      class="stats-container clear-both p-5 m-5 bg-[#1E1E1E] rounded"
-      id="summary-stats"
-    >
-      <h2 class="text-2xl font-semibold mb-4 text-[#FFFFFF]">
-        Summary Statistics
-      </h2>
-    </div>
-
-    <div
       class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]"
     >
       <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">
@@ -141,6 +198,50 @@
 
       // Keep existing visualization functions
       function displaySummaryStats(data) {
+        const today = new Date().toISOString().split("T")[0];
+
+        // Calculate applications
+        const totalApps = data.length;
+        const todayApps = data.filter(
+          (job) => job.tracked_date && job.tracked_date.startsWith(today)
+        ).length;
+
+        // Calculate unique companies
+        const totalCompanies = new Set(data.map((job) => job.company_id)).size;
+        const todayCompanies = new Set(
+          data
+            .filter(
+              (job) => job.tracked_date && job.tracked_date.startsWith(today)
+            )
+            .map((job) => job.company_id)
+        ).size;
+
+        // Calculate rejections
+        let totalRejections = 0;
+        let todayRejections = 0;
+
+        data.forEach((job) => {
+          job.status_events?.forEach((event) => {
+            if (event.status === "rejected") {
+              totalRejections++;
+              if (event.timestamp && event.timestamp.startsWith(today)) {
+                todayRejections++;
+              }
+            }
+          });
+        });
+
+        // Update table cells
+        document.getElementById("todayApps").textContent = todayApps;
+        document.getElementById("totalApps").textContent = totalApps;
+        document.getElementById("todayCompanies").textContent = todayCompanies;
+        document.getElementById("totalCompanies").textContent = totalCompanies;
+        document.getElementById("todayRejections").textContent =
+          todayRejections;
+        document.getElementById("totalRejections").textContent =
+          totalRejections;
+
+        // ...rest of the existing summary stats code...
         const totalJobs = data.length;
         const jobsWithSalary = data.filter(
           (job) => job.salary_low || job.salary_high
