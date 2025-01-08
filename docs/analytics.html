@@ -169,9 +169,14 @@
       class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]"
     >
       <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">
-        Salary Distribution
+        Salary Distribution (Hourly Only)
       </h2>
       <canvas id="salaryChart"></canvas>
+    </div>
+
+    <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
+      <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Salary Distribution (All)</h2>
+      <canvas id="salaryChartAll"></canvas>
     </div>
 
     <script>
@@ -261,64 +266,120 @@
 
       function createSalaryChart(data) {
         const salaryRanges = {
-          "0-20": 0,
-          "21-30": 0,
-          "31-40": 0,
-          "41-50": 0,
-          "51-60": 0,
-          "61-70": 0,
-          "71-80": 0,
-          "81-100": 0,
-          "100+": 0,
+          "0-20": 0, "21-30": 0, "31-40": 0, "41-50": 0,
+          "51-60": 0, "61-70": 0, "71-80": 0, "81-100": 0, "100+": 0,
         };
+        const salaryRangesAll = { ...salaryRanges };
 
         data.forEach((job) => {
           if (job.salary) {
-            if (job.salary <= 20) salaryRanges["0-20"]++;
-            else if (job.salary <= 30) salaryRanges["21-30"]++;
-            else if (job.salary <= 40) salaryRanges["31-40"]++;
-            else if (job.salary <= 50) salaryRanges["41-50"]++;
-            else if (job.salary <= 60) salaryRanges["51-60"]++;
-            else if (job.salary <= 70) salaryRanges["61-70"]++;
-            else if (job.salary <= 80) salaryRanges["71-80"]++;
-            else if (job.salary <= 100) salaryRanges["81-100"]++;
-            else salaryRanges["100+"]++;
+            // Add to "All" chart unconditionally
+            if (job.salary <= 20) salaryRangesAll["0-20"]++;
+            else if (job.salary <= 30) salaryRangesAll["21-30"]++;
+            else if (job.salary <= 40) salaryRangesAll["31-40"]++;
+            else if (job.salary <= 50) salaryRangesAll["41-50"]++;
+            else if (job.salary <= 60) salaryRangesAll["51-60"]++;
+            else if (job.salary <= 70) salaryRangesAll["61-70"]++;
+            else if (job.salary <= 80) salaryRangesAll["71-80"]++;
+            else if (job.salary <= 100) salaryRangesAll["81-100"]++;
+            else salaryRangesAll["100+"]++;
+
+            // Only add to hourly chart if salary_period is 1
+            if (job.salary_period === 1) {
+              if (job.salary <= 20) salaryRanges["0-20"]++;
+              else if (job.salary <= 30) salaryRanges["21-30"]++;
+              else if (job.salary <= 40) salaryRanges["31-40"]++;
+              else if (job.salary <= 50) salaryRanges["41-50"]++;
+              else if (job.salary <= 60) salaryRanges["51-60"]++;
+              else if (job.salary <= 70) salaryRanges["61-70"]++;
+              else if (job.salary <= 80) salaryRanges["71-80"]++;
+              else if (job.salary <= 100) salaryRanges["81-100"]++;
+              else salaryRanges["100+"]++;
+            }
           }
         });
 
-        new Chart("salaryChart", {
+        // Add debug logging
+        console.log('Hourly only counts:', Object.values(salaryRanges).reduce((a, b) => a + b, 0));
+        console.log('All salary counts:', Object.values(salaryRangesAll).reduce((a, b) => a + b, 0));
+
+        // Calculate totals
+        const hourlyTotal = Object.values(salaryRanges).reduce((a, b) => a + b, 0);
+        const allTotal = Object.values(salaryRangesAll).reduce((a, b) => a + b, 0);
+
+        const chartConfig = {
           type: "bar",
-          data: {
-            labels: Object.keys(salaryRanges),
-            datasets: [
-              {
-                label: "Number of Jobs",
-                data: Object.values(salaryRanges),
-                backgroundColor: "rgba(54, 162, 235, 0.8)", // More vibrant blue
-              },
-            ],
-          },
           options: {
             responsive: true,
             scales: {
               y: {
                 beginAtZero: true,
                 ticks: { color: "#FFFFFF" },
-                grid: { color: "rgba(255, 255, 255, 0.2)" }, // Lighter grid lines
+                grid: { color: "rgba(255, 255, 255, 0.2)" },
               },
               x: {
                 ticks: { color: "#FFFFFF" },
-                grid: { color: "rgba(255, 255, 255, 0.2)" }, // Lighter grid lines
+                grid: { color: "rgba(255, 255, 255, 0.2)" },
               },
             },
             plugins: {
               legend: {
-                labels: {
-                  color: "#FFFFFF", // Set legend text color
-                },
+                labels: { color: "#FFFFFF" },
               },
+              title: {
+                display: true,
+                color: "#FFFFFF",
+                text: '', // Will be set per chart
+                padding: 10,
+              }
             },
           },
+        };
+
+        // Hourly rates chart
+        new Chart("salaryChart", {
+          ...chartConfig,
+          data: {
+            labels: Object.keys(salaryRanges),
+            datasets: [{
+              label: `Hourly Jobs (Total: ${hourlyTotal})`,
+              data: Object.values(salaryRanges),
+              backgroundColor: "rgba(54, 162, 235, 0.8)",
+            }],
+          },
+          options: {
+            ...chartConfig.options,
+            plugins: {
+              ...chartConfig.options.plugins,
+              title: {
+                ...chartConfig.options.plugins.title,
+                text: `Hourly Pay Distribution (${hourlyTotal} jobs)`
+              }
+            }
+          }
+        });
+
+        // All salary data chart
+        new Chart("salaryChartAll", {
+          ...chartConfig,
+          data: {
+            labels: Object.keys(salaryRangesAll),
+            datasets: [{
+              label: `All Jobs (Total: ${allTotal})`,
+              data: Object.values(salaryRangesAll),
+              backgroundColor: "rgba(75, 192, 192, 0.8)",
+            }],
+          },
+          options: {
+            ...chartConfig.options,
+            plugins: {
+              ...chartConfig.options.plugins,
+              title: {
+                ...chartConfig.options.plugins.title,
+                text: `All Pay Periods Distribution (${allTotal} jobs)`
+              }
+            }
+          }
         });
       }
 
