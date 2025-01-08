@@ -57,6 +57,7 @@ class JSONFile:
 LISTINGS_RAW = JSONFile('.github/scripts/listings.json', auto_save=False)
 LISTINGS_PARSED = JSONFile('docs/analytics/cache/listings_parsed.json')
 SIMPLIFY_TRACKER = JSONFile('docs/analytics/cache/simplify/raw.json', auto_save=False)
+SIMPLIFY_TRACKER_PARSED = JSONFile('docs/analytics/cache/simplify/parsed.json', auto_save=False)
 LOCATION_CACHE = JSONFile('docs/analytics/cache/locations.json')
 
 PREDEFINED_MAPPING = {"Austin, Texas Metropolitan Area": "Austin, Texas, USA"}
@@ -126,6 +127,7 @@ class AddCoordinates:
                     logger.error(f"Error adding coordinates for {loc} : https://simplify.jobs/tracker?id={item['id']}")
             
         LOCATION_CACHE.save(location_cache)
+        return SIMPLIFY_TRACKER_PARSED.save(self.input.data)
 
 
 def main():
