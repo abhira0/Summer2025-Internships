@@ -343,14 +343,14 @@
         // Process all data once
         function processAllData() {
           if (processedData) return processedData;
-
           const dailyStats = {};
 
           // Process data to get daily counts
           data.forEach((job) => {
             if (job.tracked_date) {
+              // Ensure consistent timezone handling
               const date = new Date(job.tracked_date);
-              const dateStr = date.toISOString().split("T")[0];
+              const dateStr = date.toISOString().split('T')[0];
               dailyStats[dateStr] = dailyStats[dateStr] || {
                 totalApplications: 0,
                 uniqueCompanies: new Set(),
@@ -359,11 +359,10 @@
               dailyStats[dateStr].totalApplications++;
               dailyStats[dateStr].uniqueCompanies.add(job.company_id);
 
-              job.status_events.forEach((event) => {
-                if (event.status == "rejected") {
-                  const rejectDate = new Date(event.timestamp)
-                    .toISOString()
-                    .split("T")[0];
+              // Handle rejections with consistent timezone
+              job.status_events?.forEach((event) => {
+                if (event.status === "rejected" && event.timestamp) {
+                  const rejectDate = new Date(event.timestamp).toISOString().split('T')[0];
                   dailyStats[rejectDate] = dailyStats[rejectDate] || {
                     totalApplications: 0,
                     uniqueCompanies: new Set(),
@@ -374,7 +373,12 @@
               });
             }
           });
-
+          
+          // Debug output to check data for today
+          const todayStr = new Date().toISOString().split('T')[0];
+          console.log('Today:', todayStr);
+          console.log('Data for today:', dailyStats[todayStr]);
+          console.log('All dates with data:', Object.keys(dailyStats));
           // Generate all dates in the range
           const allDates = [];
           const startDate = new Date(
@@ -411,13 +415,28 @@
           const { dailyStats, allDates } = processedData;
 
           // Slice the data based on selected date range
-          const now = new Date();
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Set to start of today
+          const todayStr = today.toISOString().split('T')[0];
+          
           const slicedDates = days
-            ? allDates.filter(
-                (date) =>
-                  new Date(date) >= new Date(now - days * 24 * 60 * 60 * 1000)
-              )
+            ? allDates.filter(date => {
+                const dateObj = new Date(date);
+                dateObj.setHours(0, 0, 0, 0);
+                return dateObj >= new Date(today - (days - 1) * 24 * 60 * 60 * 1000) && 
+                       dateObj <= today;
+              }).sort()
             : allDates;
+
+          // Make sure today is included even if no data
+          if (!slicedDates.includes(todayStr)) {
+            slicedDates.push(todayStr);
+            dailyStats[todayStr] = {
+              totalApplications: 0,
+              uniqueCompanies: new Set(),
+              rejections: 0
+            };
+          }
 
           const uniqueCompanies = slicedDates.map(
             (date) => dailyStats[date].uniqueCompanies.size
