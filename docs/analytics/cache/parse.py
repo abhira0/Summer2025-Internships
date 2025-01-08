@@ -173,7 +173,7 @@ class ProcessSalary:
         self.output = self.process()
 
     def process(self):
-        hour_map = {2: 168, 3: 744, 4: 8784}
+        hour_map = {2: 40, 3: 40*4.33, 4: 40*52.142}
         for item in self.input.data:
             sal = None
             salary_period = item["salary_period"]
@@ -182,12 +182,12 @@ class ProcessSalary:
             elif item["salary_low"] or item["salary_high"]:
                 sal = item["salary_low"] or item["salary_high"]
             if sal:
-                if salary_period > 1:
-                    sal = sal // hour_map[salary_period]
                 if salary_period > 1 and sal < 100:
                     logger.error(
-                        f"Change salary from anually to weekly: https://simplify.jobs/tracker?id={item['id']}"
+                        f"Change salary from anually to weekly ({sal}): https://simplify.jobs/tracker?id={item['id']}"
                     )
+                if salary_period > 1:
+                    sal = sal // hour_map[salary_period]
             item["salary"] = sal
 
         return SIMPLIFY_TRACKER_PARSED.save(self.input.data)
