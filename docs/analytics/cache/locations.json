@@ -8622,5 +8622,222 @@
       -117.162772,
       "San Diego, San Diego County, California, United States"
     ]
+  ],
+  "WI Milwaukee Innovation": [
+    [
+      43.0387,
+      -87.9030758,
+      "Wisconn Valley Innovation Center, 611, East Wisconsin Avenue, Historic Financial District, Juneautown, Downtown, Milwaukee, Milwaukee County, Wisconsin, 53202, United States"
+    ]
+  ],
+  "Technology Center, USA": [
+    [
+      45.5118958,
+      -122.66535917202563,
+      "Technology Center, 1510, Hosford-Abernethy, Portland, Multnomah County, Oregon, 97214, United States"
+    ]
+  ],
+  "Lehi, UT, USA": [
+    [
+      40.3881114,
+      -111.8486019,
+      "Lehi, Utah County, Utah, 84043, United States"
+    ]
+  ],
+  "Lewisville, TX": [
+    [
+      33.046233,
+      -96.994174,
+      "Lewisville, Denton County, Texas, United States"
+    ]
+  ],
+  "Lehi, Utah": [
+    [
+      40.3881114,
+      -111.8486019,
+      "Lehi, Utah County, Utah, 84043, United States"
+    ]
+  ],
+  "Seattle, Washington": [
+    [
+      47.6038321,
+      -122.330062,
+      "Seattle, King County, Washington, United States"
+    ]
+  ],
+  "San Jose,": [
+    [
+      37.3361663,
+      -121.890591,
+      "San Jose, Santa Clara County, California, United States"
+    ]
+  ],
+  "Cranberry Township, Pennsylvania, United States": [
+    [
+      40.7099343,
+      -80.1060506,
+      "Cranberry Township, Butler County, Pennsylvania, 16066, United States"
+    ]
+  ],
+  "Boulder, Color": [
+    [
+      45.0645471,
+      -117.4141972,
+      "Boulder Park Resort Airstrip, Two Color-Eagle Creek Road, Baker County, Oregon, United States"
+    ]
+  ],
+  "South San Francisco": [
+    [
+      37.6535403,
+      -122.4168664,
+      "South San Francisco, San Mateo County, California, United States"
+    ]
+  ],
+  "Missouri - St. Louis": [
+    [
+      38.6280278,
+      -90.1910154,
+      "Saint Louis, Missouri, United States"
+    ]
+  ],
+  "Purchase, NY": [
+    [
+      41.0409305,
+      -73.7145746,
+      "Purchase, Town/Village of Harrison, Westchester County, New York, 10577, United States"
+    ]
+  ],
+  "USA - Massachusetts - Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "USA - New Hampshire - Remote": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Boston, Massachusetts, USA": [
+    [
+      42.3554334,
+      -71.060511,
+      "Boston, Suffolk County, Massachusetts, United States"
+    ]
+  ],
+  "Phoenix": [
+    [
+      33.4484367,
+      -112.074141,
+      "Phoenix, Maricopa County, Arizona, United States"
+    ]
+  ],
+  "Scottsdale, Arizona": [
+    [
+      33.4942189,
+      -111.926018,
+      "Scottsdale, Maricopa County, Arizona, United States"
+    ]
+  ],
+  "Phoenix, AZ.": [
+    [
+      33.4484367,
+      -112.074141,
+      "Phoenix, Maricopa County, Arizona, United States"
+    ]
+  ],
+  "Ontario": [
+    [
+      50.000678,
+      -86.000977,
+      "Ontario, Canada"
+    ]
+  ],
+  "PALO ALTO, California": [
+    [
+      37.4443293,
+      -122.1598465,
+      "Palo Alto, Santa Clara County, California, United States"
+    ]
+  ],
+  "Shoreview, MN, USA": [
+    [
+      45.0722056,
+      -93.1282878,
+      "Shoreview, Ramsey County, Minnesota, 55126, United States"
+    ]
+  ],
+  "US-DE-New Castle": [
+    [
+      39.6159851,
+      -75.662956,
+      "New Castle County, Delaware, United States"
+    ]
+  ],
+  "Denver, CO, USA": [
+    [
+      39.7392364,
+      -104.984862,
+      "Denver, Colorado, United States"
+    ]
+  ],
+  "Lafayette, CO, USA": [
+    [
+      39.9935959,
+      -105.089705,
+      "Lafayette, Boulder County, Colorado, 80026, United States"
+    ]
+  ],
+  "Boston, MA USA": [
+    [
+      42.3554334,
+      -71.060511,
+      "Boston, Suffolk County, Massachusetts, United States"
+    ]
+  ],
+  "USA-Boston, MA, USA": [
+    [
+      42.3816752,
+      -71.085484,
+      "WBIX-AM Nossa Radio Boston, 85, Washington Street, Brickbottom, Somerville, Middlesex County, Massachusetts, 02143, United States"
+    ]
+  ],
+  "Morrisville, North Carolina": [
+    [
+      35.824341,
+      -78.8300321,
+      "Morrisville, Wake County, North Carolina, 27650, United States"
+    ]
+  ],
+  "Cary": [
+    [
+      35.7882893,
+      -78.7812081,
+      "Cary, Wake County, North Carolina, United States"
+    ]
+  ],
+  "Austin, TX USA": [
+    [
+      30.2711286,
+      -97.7436995,
+      "Austin, Travis County, Texas, United States"
+    ]
+  ],
+  "Fremont, CA, USA": [
+    [
+      37.5482697,
+      -121.988571,
+      "Fremont, Alameda County, California, United States"
+    ]
+  ],
+  "Topeka, KS": [
+    [
+      39.049011,
+      -95.677556,
+      "Topeka, Shawnee County, Kansas, United States"
+    ]
   ]
 }
