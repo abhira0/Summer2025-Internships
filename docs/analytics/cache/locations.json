@@ -5984,5 +5984,25 @@
     "remote",
     "remote",
     "remote"
+  ],
+  "Southlake, Texas": [
+    32.9412363,
+    -97.1341783,
+    "Southlake, Tarrant County, Texas, 76092, United States"
+  ],
+  "Santa Monica": [
+    34.0194704,
+    -118.491227,
+    "Santa Monica, Los Angeles County, California, United States"
+  ],
+  "Sherman Oaks": [
+    34.1508718,
+    -118.448986,
+    "Sherman Oaks Neighborhood Council District, Los Angeles, Los Angeles County, California, United States"
+  ],
+  "B": [
+    53.2668455,
+    22.8525787,
+    "wojew\u00f3dztwo podlaskie, Polska"
   ]
 }
