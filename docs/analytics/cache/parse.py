@@ -153,13 +153,6 @@ class StatusEvents:
         self.output = self.process()
 
     def process(self):
-        x =(
-            collections.Counter(
-                i["timestamp"][:10] for item in self.input.data for i in item["status_events"] if i["status"] == 23
-            )
-        )
-        import pprint
-        pprint.pprint(sorted(x.items(), key=lambda x: x[0], reverse=True))
         for item in self.input.data:
             for status in item["status_events"]:
                 if status["status"] == 1:
@@ -174,6 +167,33 @@ class StatusEvents:
         return SIMPLIFY_TRACKER_PARSED.save(self.input.data)
 
 
+class ProcessSalary:
+    def __init__(self, input):
+        self.input = input
+        self.output = self.process()
+
+    def process(self):
+        hour_map = {2: 168, 3: 744, 4: 8784}
+        ans = []
+        for item in self.input.data:
+            sal = None
+            salary_period = item["salary_period"]
+            if item["salary_low"] and item["salary_high"]:
+                sal = int(item["salary_low"] + item["salary_high"])
+            elif item["salary_low"] or item["salary_high"]:
+                sal = item["salary_low"] or item["salary_high"]
+            if sal:
+                if salary_period > 1:
+                    sal = sal // hour_map[salary_period]
+                if salary_period > 1 and sal < 100:
+                    logger.error(
+                        f"Change salary from anually to weekly: https://simplify.jobs/tracker?id={item['id']}"
+                    )
+            item["salary"] = sal
+
+        return SIMPLIFY_TRACKER_PARSED.save(self.input.data)
+
+
 def main():
     # Simplify Listings
     data = LISTINGS_RAW
@@ -183,6 +203,7 @@ def main():
     data = SIMPLIFY_TRACKER
     data = AddCoordinates(data).output
     data = StatusEvents(data).output
+    data = ProcessSalary(data).output
 
 
 if __name__ == "__main__":

@@ -433,11 +433,13 @@
               labels: slicedDates,
               datasets: [
                 {
-                  label: "Total Applications",
-                  data: totalApps,
-                  backgroundColor: "rgba(255, 159, 64, 0.8)",
-                  stack: "Stack 0",
-                  order: 1,
+                  label: "Rejections",
+                  data: rejections,
+                  type: "line",
+                  borderColor: "rgba(255, 99, 132, 1)",
+                  backgroundColor: "rgba(255, 99, 132, 0.0)",
+                  borderWidth: 2,
+                  order: 0, // Lower order means it will be drawn on top
                 },
                 {
                   label: "Unique Companies",
@@ -447,13 +449,11 @@
                   order: 1,
                 },
                 {
-                  label: "Rejections",
-                  data: rejections,
-                  type: "line",
-                  borderColor: "rgba(255, 99, 132, 1)",
-                  backgroundColor: "rgba(255, 99, 132, 0.0)",
-                  borderWidth: 2,
-                  order: 0, // Lower order means it will be drawn on top
+                  label: "Total Applications",
+                  data: totalApps,
+                  backgroundColor: "rgba(255, 159, 64, 0.8)",
+                  stack: "Stack 0",
+                  order: 1,
                 },
               ],
             },
