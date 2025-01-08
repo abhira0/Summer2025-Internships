@@ -174,7 +174,6 @@ class ProcessSalary:
 
     def process(self):
         hour_map = {2: 168, 3: 744, 4: 8784}
-        ans = []
         for item in self.input.data:
             sal = None
             salary_period = item["salary_period"]
