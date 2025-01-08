@@ -44654,7 +44654,7 @@
     "company_name": "NVIDIA",
     "id": "b9b4e75e-9aa8-4526-aac7-15efa7ae7c97",
     "title": "NVIDIA 2025 Internships: Software Engineering",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -44694,7 +44694,7 @@
     "company_name": "NVIDIA",
     "id": "09160c63-5372-4624-9c59-0f5b24dd2458",
     "title": "NVIDIA 2025 Internships: Deep Learning Computer Architecture",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -49516,7 +49516,7 @@
     "company_name": "Booz Allen",
     "id": "20a15b1d-7aa8-4238-88d0-1df25e9c79ae",
     "title": "2025 Cyber Internship",
-    "active": false,
+    "active": true,
     "terms": [
       "Winter 2025",
       "Spring 2025",
@@ -51619,7 +51619,7 @@
     "company_name": "Walmart",
     "id": "90661bd1-fac3-49c8-bbbd-d11b3596c568",
     "title": "2025 Summer Intern: Software Engineer II",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -53710,7 +53710,7 @@
     "company_name": "Rockwell Automation",
     "id": "a1ca3650-9cbb-45f6-b2eb-751d77844565",
     "title": "Co-op \u2013 Software Engineering",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2024",
       "Summer 2024",
@@ -71538,7 +71538,7 @@
     "company_name": "Major League Baseball",
     "id": "4859eb19-7f86-48dd-8ade-e1948ffe74b7",
     "title": "2025 Summer Intern - Technology",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -75332,7 +75332,7 @@
     "company_name": "d-Matrix",
     "id": "7fd12644-6f02-4db6-858b-75fb59d7178d",
     "title": "Machine Learning Software Engineering Intern",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -77383,7 +77383,7 @@
     "company_name": "AEG",
     "id": "1c8c015c-106a-4b59-8e46-872220424c38",
     "title": "Spring Intern - Data Engineer-LA Kings",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2024"
     ],
@@ -78858,7 +78858,7 @@
     "company_name": "Rockwell Automation",
     "id": "e961a7d4-60e7-4084-b281-a30530b0dbb6",
     "title": "Intern \u2013 Software Engineering",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2024",
       "Summer 2024"
@@ -82762,7 +82762,7 @@
     "company_name": "Nelnet",
     "id": "fdb35003-694c-4f30-b941-7a0066a7b003",
     "title": "Data Analyst I",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -83578,7 +83578,7 @@
     "company_name": "Xylem",
     "id": "8dfcee5b-c4da-4ecb-9061-327e71328137",
     "title": "Software Engineering Intern",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -86657,7 +86657,7 @@
     "company_name": "MSD",
     "id": "d61f097f-5e09-408f-b02b-60d3f9326e3e",
     "title": "Business Development Analytics Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -86731,7 +86731,7 @@
     "company_name": "MSD",
     "id": "4adea94e-d339-4db9-adee-fc7c34b9ccd0",
     "title": "Business Insights & Analytics Internship",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -89379,7 +89379,7 @@
     "company_name": "Cloudflare",
     "id": "32a00a47-9d8b-40c4-8869-521a2ca03b91",
     "title": "Software Engineer Intern - Business Intelligence",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -89432,5 +89432,241 @@
     "date_posted": 1736284306,
     "company_url": "",
     "is_visible": true
+  },
+  {
+    "source": "Simplify",
+    "company_name": "SageSure",
+    "id": "410b742b-66e4-436c-afc6-950abfc1cd9d",
+    "title": "Intern \u2013 Data Management",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736295352,
+    "date_posted": 1736295352,
+    "url": "https://www.sagesure.com/careers/current-job-openings/?gh_jid=4430999006",
+    "locations": [
+      "NYC"
+    ],
+    "company_url": "https://simplify.jobs/c/SageSure-Insurance-Managers",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "SageSure",
+    "id": "1768f54a-bf0f-4690-92fb-a23f0faf78be",
+    "title": "Intern \u2013 Data Science",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736295351,
+    "date_posted": 1736295351,
+    "url": "https://www.sagesure.com/careers/current-job-openings/?gh_jid=4430988006",
+    "locations": [
+      "NYC"
+    ],
+    "company_url": "https://simplify.jobs/c/SageSure-Insurance-Managers",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "SageSure",
+    "id": "18c4ad7b-369c-4814-984b-79a603496c26",
+    "title": "Intern \u2013 Software - Design",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736295354,
+    "date_posted": 1736295354,
+    "url": "https://www.sagesure.com/careers/current-job-openings/?gh_jid=4430864006",
+    "locations": [
+      "NYC"
+    ],
+    "company_url": "https://simplify.jobs/c/SageSure-Insurance-Managers",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "SageSure",
+    "id": "891a4c15-816a-4fbd-ae39-bf4c3b33d522",
+    "title": "Intern \u2013 Software - Engineering",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736295352,
+    "date_posted": 1736295352,
+    "url": "https://www.sagesure.com/careers/current-job-openings/?gh_jid=4430861006",
+    "locations": [
+      "NYC"
+    ],
+    "company_url": "https://simplify.jobs/c/SageSure-Insurance-Managers",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Auctane",
+    "id": "45ce2575-a094-4e3a-b6b6-8fa0b55607ef",
+    "title": "Data Engineering Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736295141,
+    "date_posted": 1736295141,
+    "url": "https://job-boards.greenhouse.io/auctane/jobs/6305418003",
+    "locations": [
+      "Austin, TX"
+    ],
+    "company_url": "https://simplify.jobs/c/Auctane",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Visa",
+    "id": "632ae902-01c1-4a3e-a298-cbdafcd3cae1",
+    "title": "Data Engineer \u2013 Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736295004,
+    "date_posted": 1736295004,
+    "url": "https://jobs.smartrecruiters.com/Visa/744000035247015",
+    "locations": [
+      "Austin, TX"
+    ],
+    "company_url": "https://simplify.jobs/c/Visa",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Instawork",
+    "id": "6fba23a1-01e5-4dd8-876e-6f30609a54d0",
+    "title": "Engineering Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736294946,
+    "date_posted": 1736294946,
+    "url": "https://boards.greenhouse.io/instawork/jobs/4431894006",
+    "locations": [
+      "SF"
+    ],
+    "company_url": "https://simplify.jobs/c/Instawork",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Capital One",
+    "id": "330002ab-26d2-4d44-a2d9-9cddd6b9b01c",
+    "title": "Data Analytics Engineering Intern",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025"
+    ],
+    "date_updated": 1736296173,
+    "date_posted": 1736296173,
+    "url": "https://capitalone.wd12.myworkdayjobs.com/Capital_One/job/Toronto-ON/Data-Analytics-Engineering-Intern--Spring-Summer-2025-_R205265",
+    "locations": [
+      "Toronto, ON, Canada"
+    ],
+    "company_url": "https://simplify.jobs/c/Capital-One",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Capital One",
+    "id": "20efb746-339e-49aa-b11b-53dfd725d12d",
+    "title": "Data Scientist \u2013 Intern",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025"
+    ],
+    "date_updated": 1736296175,
+    "date_posted": 1736296175,
+    "url": "https://capitalone.wd12.myworkdayjobs.com/Capital_One/job/Toronto-ON/Data-Scientist--Intern--Spring-Summer-2025-_R205268",
+    "locations": [
+      "Toronto, ON, Canada"
+    ],
+    "company_url": "https://simplify.jobs/c/Capital-One",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Samsara",
+    "id": "1187cabd-e54a-4a2e-9824-9acc17369572",
+    "title": "Co-op Operations Data Analyst",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025",
+      "Winter 2026"
+    ],
+    "date_updated": 1736296037,
+    "date_posted": 1736296037,
+    "url": "https://www.samsara.com/company/careers/roles/6440097?gh_jid=6440097",
+    "locations": [
+      "Remote in USA"
+    ],
+    "company_url": "https://simplify.jobs/c/Samsara",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Samsara",
+    "id": "a16227ec-fc7e-4d45-9341-6e1127d8f607",
+    "title": "Co-op Operations Data Analyst",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025",
+      "Winter 2026"
+    ],
+    "date_updated": 1736296035,
+    "date_posted": 1736296035,
+    "url": "https://www.samsara.com/company/careers/roles/6512594?gh_jid=6512594",
+    "locations": [
+      "Remote in Canada"
+    ],
+    "company_url": "https://simplify.jobs/c/Samsara",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Lumentum",
+    "id": "2ac15ee1-3548-40a4-9094-eb912e926bdd",
+    "title": "Optical Algorithms and Analytics Engineering Co-op/Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736295586,
+    "date_posted": 1736295586,
+    "url": "https://lumentum.wd5.myworkdayjobs.com/en-US/LITE/job/Canada---Ottawa-Bill-Leathem/Optical-Algorithms-and-Analytics-Engineering-Co-op-Intern_20241638",
+    "locations": [
+      "Ottawa, ON, Canada"
+    ],
+    "company_url": "https://simplify.jobs/c/0985b121-88fd-4402-aea9-c0c55bfbbc99",
+    "is_visible": true,
+    "sponsorship": "Other"
   }
 ]

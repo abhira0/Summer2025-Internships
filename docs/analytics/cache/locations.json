@@ -8839,5 +8839,173 @@
       -95.677556,
       "Topeka, Shawnee County, Kansas, United States"
     ]
+  ],
+  "Remote California, USA": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "USA, MA, Westborough": [
+    [
+      42.2694308,
+      -71.6129907,
+      "Westborough, Worcester County, Massachusetts, 01581, United States"
+    ]
+  ],
+  "Blue Bell, USA": [
+    [
+      40.147809,
+      -75.27278098877919,
+      "Blue Bell, Whitpain Township, Montgomery County, Pennsylvania, 19422, United States"
+    ]
+  ],
+  "Vilnius": [
+    [
+      54.6870458,
+      25.2829111,
+      "Vilnius, Vilniaus miesto savivaldyb\u0117, Vilniaus apskritis, Lietuva"
+    ]
+  ],
+  "Fremont": [
+    [
+      37.5482697,
+      -121.988571,
+      "Fremont, Alameda County, California, United States"
+    ]
+  ],
+  "SAN JOSE, USA": [
+    [
+      37.3361663,
+      -121.890591,
+      "San Jose, Santa Clara County, California, United States"
+    ]
+  ],
+  "Washington - Spokane Valley, USA": [
+    [
+      47.6558471,
+      -117.1978515,
+      "Mattress Depot USA, 15412, East Sprague Avenue, Veradale, Spokane Valley, Spokane County, Washington, 99037, United States"
+    ]
+  ],
+  "Chanhassen, USA": [
+    [
+      44.8618403,
+      -93.5307207,
+      "Chanhassen, Carver County, Minnesota, 55317, United States"
+    ]
+  ],
+  "New York City": [
+    [
+      40.7127281,
+      -74.0060152,
+      "City of New York, New York, United States"
+    ]
+  ],
+  "Full Time Remote - North Carolina, USA": [
+    [
+      "remote",
+      "remote",
+      "remote"
+    ]
+  ],
+  "Birmingham, AL, USA": [
+    [
+      33.5206824,
+      -86.8024326,
+      "Birmingham, Jefferson County, Alabama, United States"
+    ]
+  ],
+  "Wakefield, MA, USA": [
+    [
+      42.506484,
+      -71.0728306,
+      "Wakefield, Middlesex County, Massachusetts, United States"
+    ]
+  ],
+  "New Jersey, USA": [
+    [
+      40.0757384,
+      -74.4041622,
+      "New Jersey, United States"
+    ]
+  ],
+  "Glenview, IL": [
+    [
+      42.0700662,
+      -87.8114044,
+      "Glenview, Northfield Township, Cook County, Illinois, United States"
+    ]
+  ],
+  "Rhode Island, USA": [
+    [
+      41.7962409,
+      -71.5992372,
+      "Rhode Island, United States"
+    ]
+  ],
+  "Lake Forest, California, USA": [
+    [
+      33.6469261,
+      -117.6859213,
+      "Lake Forest, Orange County, California, United States"
+    ]
+  ],
+  "Santa Monica, CA, USA": [
+    [
+      34.0194704,
+      -118.491227,
+      "Santa Monica, Los Angeles County, California, United States"
+    ]
+  ],
+  "Palo Alto, CA , USA": [
+    [
+      37.4443293,
+      -122.1598465,
+      "Palo Alto, Santa Clara County, California, United States"
+    ]
+  ],
+  "Bala Cynwyd, Pennsylvania, United States": [
+    [
+      40.0076125,
+      -75.2340695,
+      "Bala Cynwyd, Lower Merion Township, Montgomery County, Pennsylvania, 19004, United States"
+    ]
+  ],
+  "Vancouver, Washington": [
+    [
+      45.6306954,
+      -122.6744557,
+      "Vancouver, Clark County, Washington, United States"
+    ]
+  ],
+  "Boise, Idaho": [
+    [
+      43.6166163,
+      -116.200886,
+      "Boise, Ada County, Idaho, United States"
+    ]
+  ],
+  "Spring, Texas": [
+    [
+      30.0795707,
+      -95.4187924,
+      "Spring, Harris County, Texas, 77373, United States"
+    ]
+  ],
+  "Fort Collins": [
+    [
+      40.5871782,
+      -105.0770113,
+      "Fort Collins, Larimer County, Colorado, United States"
+    ]
+  ],
+  "Allen, Texas": [
+    [
+      33.1031744,
+      -96.6705503,
+      "Allen, Collin County, Texas, United States"
+    ]
   ]
 }
