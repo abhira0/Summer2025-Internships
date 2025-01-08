@@ -372,13 +372,11 @@
                                 if (!locationCounts.has(key)) {
                                     locationCounts.set(key, { 
                                         count: 0, 
-                                        names: new Set(),
+                                        name: coordinates[i][2],
                                         coords: [lat, lng]
                                     });
                                 }
                                 locationCounts.get(key).count++;
-                                locationCounts.get(key).names.add(location);
-                                console.log(`Added location: ${location} at [${lat}, ${lng}]`);
                             }
                         }
                     }
@@ -388,21 +386,20 @@
                 const maxCount = Math.max(...Array.from(locationCounts.values()).map(loc => loc.count));
 
                 // Add circles to map
-                locationCounts.forEach(({count, names, coords}) => {
-                    const radius = Math.sqrt(count / maxCount) * 50000;
+                locationCounts.forEach(({count, name, coords}) => {
+                    const radius = Math.sqrt(count / maxCount) * 100000;
                     
                     const circle = L.circle(coords, {
                         color: '#7C3AED',
                         fillColor: '#7C3AED',
-                        fillOpacity: 0.6,
+                        fillOpacity: 0.1,
                         radius: radius,
                         weight: 1
                     }).addTo(map);
 
                     const popupContent = `
                         <div style="color: black;">
-                            <strong>Locations:</strong><br>
-                            ${Array.from(names).join('<br>')}<br>
+                            <strong>Location:</strong>${name}<br>
                             <strong>Number of positions:</strong> ${count}
                         </div>
                     `;
@@ -413,7 +410,7 @@
                         this.openPopup();
                     });
                     circle.on('mouseout', function (e) {
-                        this.setStyle({ fillOpacity: 0.6, weight: 1 });
+                        this.setStyle({ fillOpacity: 0.1, weight: 1 });
                         this.closePopup();
                     });
                 });
