@@ -507,6 +507,11 @@ Promise.all([
           } else if (filter.column === "applied" || filter.column === "active" || filter.column === "hidden") {
             document.getElementById(`${filter.column}Filter`).value = filter[filter.column] ? "true" : "false";
           } else {
+            // Set the condition type before adding inputs
+            if (document.getElementById("conditionType")) {
+              document.getElementById("conditionType").value = filter.conditionType || "OR";
+            }
+            
             filter.conditions.forEach((condition, i) => {
               if (i > 0) {
                 addFilterInput();
