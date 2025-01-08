@@ -169,7 +169,7 @@
       class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]"
     >
       <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">
-        Salary Distribution (Hourly Only)
+        Salary Distribution (Non Yearly)
       </h2>
       <canvas id="salaryChart"></canvas>
     </div>
@@ -301,7 +301,7 @@
         });
 
         // Add debug logging
-        console.log('Hourly only counts:', Object.values(salaryRanges).reduce((a, b) => a + b, 0));
+        console.log('Non Yearly counts:', Object.values(salaryRanges).reduce((a, b) => a + b, 0));
         console.log('All salary counts:', Object.values(salaryRangesAll).reduce((a, b) => a + b, 0));
 
         // Calculate totals
