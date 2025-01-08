@@ -165,18 +165,9 @@
       <div class="location-stats" id="locationStats"></div>
     </div>
 
-    <div
-      class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]"
-    >
-      <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">
-        Salary Distribution (Non Yearly)
-      </h2>
-      <canvas id="salaryChart"></canvas>
-    </div>
-
     <div class="chart-container w-1/2 m-5 p-4 border border-[#282828] rounded bg-[#1E1E1E]">
-      <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Salary Distribution (All)</h2>
-      <canvas id="salaryChartAll"></canvas>
+      <h2 class="text-xl font-semibold mb-2 text-[#FFFFFF]">Salary Distribution</h2>
+      <canvas id="salaryChart"></canvas>
     </div>
 
     <script>
@@ -273,7 +264,7 @@
 
         data.forEach((job) => {
           if (job.salary) {
-            // Add to "All" chart unconditionally
+            // Add to "All" dataset
             if (job.salary <= 20) salaryRangesAll["0-20"]++;
             else if (job.salary <= 30) salaryRangesAll["21-30"]++;
             else if (job.salary <= 40) salaryRangesAll["31-40"]++;
@@ -284,7 +275,7 @@
             else if (job.salary <= 100) salaryRangesAll["81-100"]++;
             else salaryRangesAll["100+"]++;
 
-            // Only add to hourly chart if salary_period is 1
+            // Only add to hourly dataset if salary_period is 1-3
             if (job.salary_period <= 3) {
               if (job.salary <= 20) salaryRanges["0-20"]++;
               else if (job.salary <= 30) salaryRanges["21-30"]++;
@@ -296,20 +287,29 @@
               else if (job.salary <= 100) salaryRanges["81-100"]++;
               else salaryRanges["100+"]++;
             }
-            console.log(job.salary_period, job.salary);
           }
         });
 
-        // Add debug logging
-        console.log('Non Yearly counts:', Object.values(salaryRanges).reduce((a, b) => a + b, 0));
-        console.log('All salary counts:', Object.values(salaryRangesAll).reduce((a, b) => a + b, 0));
-
-        // Calculate totals
         const hourlyTotal = Object.values(salaryRanges).reduce((a, b) => a + b, 0);
         const allTotal = Object.values(salaryRangesAll).reduce((a, b) => a + b, 0);
 
-        const chartConfig = {
+        new Chart("salaryChart", {
           type: "bar",
+          data: {
+            labels: Object.keys(salaryRanges),
+            datasets: [
+              {
+                label: `Non-Yearly Jobs (${hourlyTotal} jobs)`,
+                data: Object.values(salaryRanges),
+                backgroundColor: "rgba(54, 162, 235, 0.8)",
+              },
+              {
+                label: `All Pay Periods (${allTotal} jobs)`,
+                data: Object.values(salaryRangesAll),
+                backgroundColor: "rgba(75, 192, 192, 0.8)",
+              }
+            ],
+          },
           options: {
             responsive: true,
             scales: {
@@ -330,59 +330,13 @@
               title: {
                 display: true,
                 color: "#FFFFFF",
-                text: '', // Will be set per chart
+                text: 'Salary Distribution by Pay Period Type',
                 padding: 10,
               }
             },
           },
-        };
-
-        // Hourly rates chart
-        new Chart("salaryChart", {
-          ...chartConfig,
-          data: {
-            labels: Object.keys(salaryRanges),
-            datasets: [{
-              label: `Hourly Jobs (Total: ${hourlyTotal})`,
-              data: Object.values(salaryRanges),
-              backgroundColor: "rgba(54, 162, 235, 0.8)",
-            }],
-          },
-          options: {
-            ...chartConfig.options,
-            plugins: {
-              ...chartConfig.options.plugins,
-              title: {
-                ...chartConfig.options.plugins.title,
-                text: `Hourly Pay Distribution (${hourlyTotal} jobs)`
-              }
-            }
-          }
         });
-
-        // All salary data chart
-        new Chart("salaryChartAll", {
-          ...chartConfig,
-          data: {
-            labels: Object.keys(salaryRangesAll),
-            datasets: [{
-              label: `All Jobs (Total: ${allTotal})`,
-              data: Object.values(salaryRangesAll),
-              backgroundColor: "rgba(75, 192, 192, 0.8)",
-            }],
-          },
-          options: {
-            ...chartConfig.options,
-            plugins: {
-              ...chartConfig.options.plugins,
-              title: {
-                ...chartConfig.options.plugins.title,
-                text: `All Pay Periods Distribution (${allTotal} jobs)`
-              }
-            }
-          }
-        });
-      }
+    }
 
       function createDailyApplicationsChart(data) {
         let chartInstance = null;
