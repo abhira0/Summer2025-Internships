@@ -1,14 +1,26 @@
 // src/components/jobs/SearchBar.jsx
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function SearchBar({
-  value,
-  onChange,
+  onSearch,
   searchInFiltered,
   setSearchInFiltered
 }) {
-  const handleSearchClear = () => {
-    onChange('');
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSearch = () => {
+    onSearch(inputValue);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleClear = () => {
+    setInputValue('');
+    onSearch('');
   };
 
   return (
@@ -17,14 +29,21 @@ export default function SearchBar({
         <div className="flex-1 relative">
           <input
             type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
             placeholder="Search for internships..."
             className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <button
-          onClick={handleSearchClear}
+          onClick={handleSearch}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Search
+        </button>
+        <button
+          onClick={handleClear}
           className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
         >
           Clear

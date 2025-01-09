@@ -1,56 +1,77 @@
 // src/components/jobs/JobsTable.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useApplications } from '../../context/ApplicationContext';
-import { useAuth } from '../../context/AuthContext';
 
-const JobsTable = ({ jobs }) => {
-  const { applications, updateApplication } = useApplications();
-  const { user } = useAuth();
+const ITEMS_PER_PAGE = 25;
 
-  const toggleStatus = async (jobId, type) => {
-    if (!user) return;
-    
-    const currentStatus = applications.applications[user.username]?.[type]?.includes(jobId);
-    await updateApplication(user.username, jobId, type, !currentStatus);
-  };
+export default function JobsTable({ jobs }) {
+  const { getApplicationStatus, updateApplication } = useApplications();
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const isJobMarked = (jobId, type) => {
-    return applications.applications[user?.username]?.[type]?.includes(jobId) || false;
+  const totalPages = Math.ceil(jobs.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedJobs = jobs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handleStatusToggle = async (jobId, type) => {
+    const currentStatus = getApplicationStatus(jobId, type);
+    await updateApplication(jobId, type, !currentStatus);
   };
 
   return (
-    <div className="mt-8 flex flex-col">
-      <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="inline-block min-w-full py-2 align-middle">
+    <div className="flex flex-col space-y-4">
+      <div className="overflow-x-hidden border border-gray-700 rounded-lg">
+        <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-700">
             <thead className="bg-gray-800">
               <tr>
-                <th className="px-3 py-3.5 text-left text-sm font-semibold text-white">Company</th>
-                <th className="px-3 py-3.5 text-left text-sm font-semibold text-white">Role</th>
-                <th className="px-3 py-3.5 text-left text-sm font-semibold text-white">Location</th>
-                <th className="px-3 py-3.5 text-left text-sm font-semibold text-white">Apply</th>
-                <th className="px-3 py-3.5 text-left text-sm font-semibold text-white">Date Posted</th>
-                <th className="px-3 py-3.5 text-center text-sm font-semibold text-white">Applied</th>
-                <th className="px-3 py-3.5 text-center text-sm font-semibold text-white">Active</th>
-                <th className="px-3 py-3.5 text-center text-sm font-semibold text-white">Hide</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6">
+                  Company
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6">
+                  Role
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/6">
+                  Location
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/12">
+                  Apply
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/12">
+                  Date
+                </th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider w-1/12">
+                  Applied
+                </th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider w-1/12">
+                  Active
+                </th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider w-1/12">
+                  Hide
+                </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-700 bg-gray-800">
-              {jobs.map((job) => (
+            <tbody className="bg-gray-900 divide-y divide-gray-700">
+              {paginatedJobs.map((job) => (
                 <tr 
                   key={job.id}
-                  className={isJobMarked(job.id, 'hidden') ? 'hidden' : 'hover:bg-gray-700'}
+                  className={getApplicationStatus(job.id, 'hidden') ? 'hidden' : 'hover:bg-gray-800'}
                 >
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-200">{job.company_name}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-200">{job.title}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-200">{job.locations}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-200">
+                  <td className="px-4 py-3 text-sm text-gray-200 truncate max-w-[200px]">
+                    {job.company_name}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-200 truncate max-w-[200px]">
+                    {job.title}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-200 truncate max-w-[200px]">
+                    {job.locations}
+                  </td>
+                  <td className="px-4 py-3 text-sm whitespace-nowrap">
                     <div className="flex items-center space-x-2">
                       <a
                         href={job.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
                       >
                         Apply
                       </a>
@@ -58,42 +79,44 @@ const JobsTable = ({ jobs }) => {
                         href={`https://simplify.jobs/p/${job.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700"
                       >
-                        <img
-                          src="/simplify-logo.png"
-                          alt="Simplify"
-                          className="h-6 w-6"
-                          title="See on Simplify"
-                        />
+                        Simplify
                       </a>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-200">{job.date_updated}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-center">
+                  <td className="px-4 py-3 text-sm text-gray-200 whitespace-nowrap">
+                    {job.date_updated}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-center">
                     <button
-                      onClick={() => toggleStatus(job.id, 'applied')}
-                      className={`px-4 py-1 rounded ${
-                        isJobMarked(job.id, 'applied')
+                      onClick={() => handleStatusToggle(job.id, 'applied')}
+                      className={`px-2 py-1 text-xs rounded w-16 ${
+                        getApplicationStatus(job.id, 'applied')
                           ? 'bg-green-600 text-white'
                           : 'bg-gray-600 text-gray-200'
                       }`}
                     >
-                      {isJobMarked(job.id, 'applied') ? 'Yes' : 'No'}
+                      {getApplicationStatus(job.id, 'applied') ? 'Yes' : 'No'}
                     </button>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-center text-gray-200">
-                    {job.active ? 'Active' : 'Inactive'}
+                  <td className="px-4 py-3 text-sm text-center whitespace-nowrap">
+                    <span className={`px-2 py-1 text-xs rounded ${
+                      job.active ? 'bg-green-600' : 'bg-gray-600'
+                    }`}>
+                      {job.active ? 'Active' : 'Inactive'}
+                    </span>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-center">
+                  <td className="px-4 py-3 text-sm text-center">
                     <button
-                      onClick={() => toggleStatus(job.id, 'hidden')}
-                      className={`px-4 py-1 rounded ${
-                        isJobMarked(job.id, 'hidden')
+                      onClick={() => handleStatusToggle(job.id, 'hidden')}
+                      className={`px-2 py-1 text-xs rounded w-16 ${
+                        getApplicationStatus(job.id, 'hidden')
                           ? 'bg-red-600 text-white'
                           : 'bg-gray-600 text-gray-200'
                       }`}
                     >
-                      {isJobMarked(job.id, 'hidden') ? 'Yes' : 'No'}
+                      {getApplicationStatus(job.id, 'hidden') ? 'Yes' : 'No'}
                     </button>
                   </td>
                 </tr>
@@ -102,8 +125,32 @@ const JobsTable = ({ jobs }) => {
           </table>
         </div>
       </div>
+
+      {/* Pagination */}
+      <div className="flex justify-between items-center bg-gray-800 px-4 py-3 rounded-lg">
+        <div className="text-sm text-gray-400">
+          Showing {startIndex + 1} to {Math.min(startIndex + ITEMS_PER_PAGE, jobs.length)} of {jobs.length} results
+        </div>
+        <div className="flex space-x-2">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          <span className="px-3 py-1 text-sm text-gray-400">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default JobsTable;
+}

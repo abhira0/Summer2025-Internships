@@ -2,21 +2,24 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 
-const SortModal = ({
+export default function SortModal({
   isOpen,
   onClose,
   activeSorts,
   setActiveSorts,
   editingSort
-}) => {
-  const [column, setColumn] = useState('company');
-  const [order, setOrder] = useState('asc');
+}) {
+  const [column, setColumn] = useState('date');
+  const [order, setOrder] = useState('desc');
 
   useEffect(() => {
     if (editingSort) {
       const { sort } = editingSort;
       setColumn(sort.column);
       setOrder(sort.order);
+    } else {
+      setColumn('date');
+      setOrder('desc');
     }
   }, [editingSort]);
 
@@ -35,37 +38,45 @@ const SortModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Add Sort">
+    <Modal 
+      isOpen={isOpen} 
+      onClose={onClose}
+      title={editingSort ? 'Edit Sort' : 'Add Sort'}
+    >
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-200">Column</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1">
+            Column
+          </label>
           <select
             value={column}
             onChange={(e) => setColumn(e.target.value)}
-            className="mt-1 block w-full rounded bg-gray-700 border-gray-600 text-white"
+            className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
-            <option value="company">Company</option>
-            <option value="role">Role</option>
-            <option value="location">Location</option>
-            <option value="date">Date Posted</option>
+            <option value="company_name">Company</option>
+            <option value="title">Role</option>
+            <option value="locations">Location</option>
+            <option value="date_updated">Date Posted</option>
             <option value="applied">Applied</option>
             <option value="active">Active</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-200">Order</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1">
+            Order
+          </label>
           <select
             value={order}
             onChange={(e) => setOrder(e.target.value)}
-            className="mt-1 block w-full rounded bg-gray-700 border-gray-600 text-white"
+            className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
         </div>
 
-        <div className="flex justify-end space-x-2">
+        <div className="flex justify-end gap-2 pt-4">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
@@ -76,12 +87,10 @@ const SortModal = ({
             onClick={handleApply}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
-            Apply
+            {editingSort ? 'Update' : 'Add'}
           </button>
         </div>
       </div>
     </Modal>
   );
-};
-
-export default SortModal;
+}

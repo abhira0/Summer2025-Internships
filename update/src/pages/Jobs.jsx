@@ -1,5 +1,5 @@
 // src/pages/Jobs.jsx
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Layout from '../components/layout/Layout';
 import JobsTable from '../components/jobs/JobsTable';
 import SearchBar from '../components/jobs/SearchBar';
@@ -17,6 +17,26 @@ export default function Jobs() {
   const [activeSorts, setActiveSorts] = useState(config.defaults.sorts);
   const [searchInFiltered, setSearchInFiltered] = useState(true);
 
+  // Memoize filtered and sorted jobs
+  const processedJobs = useMemo(() => {
+    let result = applyFilters(jobs, activeFilters);
+    result = applySorts(result, activeSorts);
+    
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(job => {
+        const searchText = [
+          job.company_name,
+          job.title,
+          job.locations,
+        ].join(' ').toLowerCase();
+        return searchText.includes(query);
+      });
+    }
+    
+    return result;
+  }, [jobs, activeFilters, activeSorts, searchQuery]);
+
   if (loading) {
     return (
       <Layout>
@@ -27,37 +47,19 @@ export default function Jobs() {
     );
   }
 
-  // Apply filters and sorts
-  let filteredJobs = applyFilters(jobs, activeFilters);
-  filteredJobs = applySorts(filteredJobs, activeSorts);
-
-  // Apply search
-  if (searchQuery) {
-    const query = searchQuery.toLowerCase();
-    filteredJobs = filteredJobs.filter(job => {
-      const searchText = [
-        job.company_name,
-        job.title,
-        job.locations,
-      ].join(' ').toLowerCase();
-      return searchText.includes(query);
-    });
-  }
-
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <section className="bg-gray-800 rounded-lg p-6 mb-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <section className="bg-gray-800 rounded-lg p-6">
           <h2 className="text-xl font-bold text-white mb-4">Search</h2>
           <SearchBar
-            value={searchQuery}
-            onChange={setSearchQuery}
+            onSearch={setSearchQuery}
             searchInFiltered={searchInFiltered}
             setSearchInFiltered={setSearchInFiltered}
           />
         </section>
 
-        <section className="bg-gray-800 rounded-lg p-6 mb-6">
+        <section className="bg-gray-800 rounded-lg p-6">
           <h2 className="text-xl font-bold text-white mb-4">Filters</h2>
           <FilterSection
             activeFilters={activeFilters}
@@ -65,7 +67,7 @@ export default function Jobs() {
           />
         </section>
 
-        <section className="bg-gray-800 rounded-lg p-6 mb-6">
+        <section className="bg-gray-800 rounded-lg p-6">
           <h2 className="text-xl font-bold text-white mb-4">Sort</h2>
           <SortSection
             activeSorts={activeSorts}
@@ -77,10 +79,10 @@ export default function Jobs() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-white">Internships</h2>
             <div className="text-gray-400">
-              Total Results: {filteredJobs.length}
+              Total Results: {processedJobs.length}
             </div>
           </div>
-          <JobsTable jobs={filteredJobs} />
+          <JobsTable jobs={processedJobs} />
         </section>
       </div>
     </Layout>
