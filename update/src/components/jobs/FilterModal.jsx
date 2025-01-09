@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 
-const FilterModal = ({
+export default function FilterModal({
   isOpen,
   onClose,
   activeFilters,
   setActiveFilters,
   editingFilter
-}) => {
+}) {
   const [column, setColumn] = useState('company');
   const [conditions, setConditions] = useState([{ type: 'contains', value: '' }]);
   const [conditionType, setConditionType] = useState('OR');
@@ -20,13 +20,20 @@ const FilterModal = ({
       const { filter } = editingFilter;
       setColumn(filter.column);
       if (filter.column === 'date') {
-        setDateRange({ fromDate: filter.fromDate, toDate: filter.toDate });
+        setDateRange({ fromDate: filter.fromDate || '', toDate: filter.toDate || '' });
       } else if (['applied', 'active', 'hidden'].includes(filter.column)) {
         setBooleanValue(filter[filter.column]);
       } else if (filter.conditions) {
         setConditions(filter.conditions);
         setConditionType(filter.conditionType || 'OR');
       }
+    } else {
+      // Reset form when adding new filter
+      setColumn('company');
+      setConditions([{ type: 'contains', value: '' }]);
+      setConditionType('OR');
+      setDateRange({ fromDate: '', toDate: '' });
+      setBooleanValue(true);
     }
   }, [editingFilter]);
 
@@ -53,15 +60,31 @@ const FilterModal = ({
     onClose();
   };
 
+  const addCondition = () => {
+    setConditions([...conditions, { type: 'contains', value: '' }]);
+  };
+
+  const removeCondition = (index) => {
+    setConditions(conditions.filter((_, i) => i !== index));
+  };
+
+  const updateCondition = (index, field, value) => {
+    const newConditions = [...conditions];
+    newConditions[index] = { ...newConditions[index], [field]: value };
+    setConditions(newConditions);
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Add Filter">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-200">Column</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1">
+            Column
+          </label>
           <select
             value={column}
             onChange={(e) => setColumn(e.target.value)}
-            className="mt-1 block w-full rounded bg-gray-700 border-gray-600 text-white"
+            className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm"
           >
             <option value="company">Company</option>
             <option value="role">Role</option>
@@ -74,61 +97,70 @@ const FilterModal = ({
         </div>
 
         {column === 'date' ? (
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-200">From Date</label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">
+                From Date
+              </label>
               <input
                 type="date"
                 value={dateRange.fromDate}
-                onChange={(e) => setDateRange({ ...dateRange, fromDate: e.target.value })}
-                className="mt-1 block w-full rounded bg-gray-700 border-gray-600 text-white"
+                onChange={(e) =>
+                  setDateRange({ ...dateRange, fromDate: e.target.value })
+                }
+                className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-200">To Date</label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">
+                To Date
+              </label>
               <input
                 type="date"
                 value={dateRange.toDate}
-                onChange={(e) => setDateRange({ ...dateRange, toDate: e.target.value })}
-                className="mt-1 block w-full rounded bg-gray-700 border-gray-600 text-white"
+                onChange={(e) =>
+                  setDateRange({ ...dateRange, toDate: e.target.value })
+                }
+                className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm"
               />
             </div>
           </div>
         ) : ['applied', 'active', 'hidden'].includes(column) ? (
           <div>
-            <label className="block text-sm font-medium text-gray-200">Value</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">
+              Value
+            </label>
             <select
-              value={booleanValue}
+              value={booleanValue.toString()}
               onChange={(e) => setBooleanValue(e.target.value === 'true')}
-              className="mt-1 block w-full rounded bg-gray-700 border-gray-600 text-white"
+              className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm"
             >
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-200">Condition Type</label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">
+                Condition Type
+              </label>
               <select
                 value={conditionType}
                 onChange={(e) => setConditionType(e.target.value)}
-                className="mt-1 block w-full rounded bg-gray-700 border-gray-600 text-white"
+                className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm"
               >
                 <option value="OR">OR</option>
                 <option value="AND">AND</option>
               </select>
             </div>
+
             {conditions.map((condition, index) => (
-              <div key={index} className="flex space-x-2">
+              <div key={index} className="flex gap-2">
                 <select
                   value={condition.type}
-                  onChange={(e) => {
-                    const newConditions = [...conditions];
-                    newConditions[index].type = e.target.value;
-                    setConditions(newConditions);
-                  }}
-                  className="flex-1 rounded bg-gray-700 border-gray-600 text-white"
+                  onChange={(e) => updateCondition(index, 'type', e.target.value)}
+                  className="flex-1 bg-gray-700 border-gray-600 text-white rounded-md shadow-sm"
                 >
                   <option value="contains">Contains</option>
                   <option value="equals">Equals</option>
@@ -140,23 +172,21 @@ const FilterModal = ({
                 <input
                   type="text"
                   value={condition.value}
-                  onChange={(e) => {
-                    const newConditions = [...conditions];
-                    newConditions[index].value = e.target.value;
-                    setConditions(newConditions);
-                  }}
-                  className="flex-1 rounded bg-gray-700 border-gray-600 text-white px-2 py-1"
+                  onChange={(e) =>
+                    updateCondition(index, 'value', e.target.value)
+                  }
+                  className="flex-1 bg-gray-700 border-gray-600 text-white rounded-md shadow-sm"
                 />
                 <button
-                  onClick={() => setConditions([...conditions, { type: 'contains', value: '' }])}
-                  className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                  onClick={() => addCondition()}
+                  className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
                 >
                   +
                 </button>
                 {conditions.length > 1 && (
                   <button
-                    onClick={() => setConditions(conditions.filter((_, i) => i !== index))}
-                    className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                    onClick={() => removeCondition(index)}
+                    className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
                   >
                     -
                   </button>
@@ -165,8 +195,8 @@ const FilterModal = ({
             ))}
           </div>
         )}
-        
-        <div className="flex justify-end space-x-2 mt-4">
+
+        <div className="flex justify-end gap-2 pt-4">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
