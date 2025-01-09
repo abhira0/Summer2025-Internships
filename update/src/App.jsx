@@ -57,7 +57,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/" element={<Navigate to="/jobs" replace />} />
+            <Route path="/" element={<Navigate to="/profile" replace />} />
           </Routes>
         </ApplicationProvider>
       </AuthProvider>

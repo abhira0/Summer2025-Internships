@@ -1,9 +1,7 @@
 // src/utils/filters.js
-export const applyFilters = (jobs, activeFilters) => {
+export const applyFilters = (jobs, activeFilters, getApplicationStatus, username) => {
     return jobs.filter(job => {
       return activeFilters.every(filter => {
-        const value = job[filter.column];
-  
         switch (filter.column) {
           case 'date':
             const jobDate = new Date(job.date_updated);
@@ -12,8 +10,10 @@ export const applyFilters = (jobs, activeFilters) => {
             return jobDate >= fromDate && jobDate <= toDate;
   
           case 'applied':
+            return filter.applied === getApplicationStatus(job.id, 'applied');
+  
           case 'hidden':
-            return filter[filter.column] === value;
+            return filter.hidden === getApplicationStatus(job.id, 'hidden');
   
           case 'active':
             return filter.active === job.active;
@@ -21,19 +21,15 @@ export const applyFilters = (jobs, activeFilters) => {
           default:
             if (!filter.conditions) return true;
             
-            const text = String(value).toLowerCase();
+            const text = String(job[filter.column] || '').toLowerCase();
             const evaluateCondition = (condition) => {
               const conditionValue = condition.value.toLowerCase();
               
               switch (condition.type) {
-                case 'contains':
-                  return text.includes(conditionValue);
-                case 'equals':
-                  return text === conditionValue;
-                case 'not-equals':
-                  return text !== conditionValue;
-                case 'not-contains':
-                  return !text.includes(conditionValue);
+                case 'contains': return text.includes(conditionValue);
+                case 'equals': return text === conditionValue;
+                case 'not-equals': return text !== conditionValue;
+                case 'not-contains': return !text.includes(conditionValue);
                 case 'regex':
                   try {
                     return new RegExp(conditionValue, 'i').test(text);
@@ -58,4 +54,3 @@ export const applyFilters = (jobs, activeFilters) => {
       });
     });
   };
-  

@@ -8,7 +8,6 @@ export function ApplicationProvider({ children }) {
   const [applications, setApplications] = useState({ applications: {} });
   const { user } = useAuth();
 
-  // Load applications from localStorage on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem('userApplications');
@@ -20,7 +19,6 @@ export function ApplicationProvider({ children }) {
     }
   }, []);
 
-  // Save applications to localStorage whenever they change
   useEffect(() => {
     try {
       localStorage.setItem('userApplications', JSON.stringify(applications));
@@ -29,8 +27,13 @@ export function ApplicationProvider({ children }) {
     }
   }, [applications]);
 
+  const getApplicationStatus = (jobId, type) => {
+    if (!user?.username || !applications.applications[user.username]) return false;
+    return applications.applications[user.username][type]?.includes(jobId) || false;
+  };
+
   const updateApplication = async (jobId, type, value) => {
-    if (!user) return;
+    if (!user?.username) return;
 
     try {
       const newApplications = { ...applications };
@@ -38,7 +41,7 @@ export function ApplicationProvider({ children }) {
         newApplications.applications[user.username] = { applied: [], hidden: [] };
       }
       
-      const typeArray = newApplications.applications[user.username][type];
+      const typeArray = newApplications.applications[user.username][type] || [];
       const index = typeArray.indexOf(jobId);
       
       if (value && index === -1) {
@@ -47,6 +50,7 @@ export function ApplicationProvider({ children }) {
         typeArray.splice(index, 1);
       }
 
+      newApplications.applications[user.username][type] = typeArray;
       setApplications(newApplications);
 
       // Optional: sync with server
@@ -68,14 +72,13 @@ export function ApplicationProvider({ children }) {
     }
   };
 
-  const getApplicationStatus = (jobId, type) => {
-    if (!user || !applications.applications[user.username]) return false;
-    return applications.applications[user.username][type]?.includes(jobId) || false;
-  };
-
   return (
     <ApplicationContext.Provider 
-      value={{ applications, updateApplication, getApplicationStatus }}
+      value={{ 
+        applications, 
+        updateApplication, 
+        getApplicationStatus 
+      }}
     >
       {children}
     </ApplicationContext.Provider>

@@ -28,24 +28,67 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
     setActiveFilters([]);
   };
 
+  const getFilterSymbol = (type) => {
+    switch (type) {
+      case 'contains': return '⊇';  // Contains (superset)
+      case 'equals': return '=';    // Equals
+      case 'not-equals': return '≠'; // Not equals
+      case 'not-contains': return '⊉'; // Does not contain
+      case 'regex': return '~';     // Matches regex
+      case 'not-regex': return '≁'; // Does not match regex
+      default: return type;
+    }
+  };
+  
   const getFilterDisplay = (filter) => {
     switch (filter.column) {
       case 'date':
-        return `${filter.column}: ${filter.fromDate || 'Any'} → ${filter.toDate || 'Any'}`;
+        return (
+          <span className="font-mono">
+            <span className="text-blue-400">{filter.column}</span>
+            <span className="text-gray-400"> ∈ [</span>
+            <span className="text-green-400">{filter.fromDate || '-∞'}</span>
+            <span className="text-gray-400">, </span>
+            <span className="text-green-400">{filter.toDate || '∞'}</span>
+            <span className="text-gray-400">]</span>
+          </span>
+        );
       
       case 'applied':
       case 'active':
       case 'hidden':
-        return `${filter.column}: ${filter[filter.column] ? 'Yes' : 'No'}`;
+        return (
+          <span className="font-mono">
+            <span className="text-blue-400">{filter.column}</span>
+            <span className="text-gray-400"> = </span>
+            <span className="text-green-400">{filter[filter.column] ? '✓' : '✗'}</span>
+          </span>
+        );
       
       default:
         if (!filter.conditions) return filter.column;
         
-        const conditions = filter.conditions.map(c => 
-          `${c.type} "${c.value}"`
-        ).join(` ${filter.conditionType} `);
+        const conditions = filter.conditions.map((c, i) => (
+          <span key={i}>
+            {i > 0 && (
+              <span className="text-yellow-400">
+                {' '}
+                {filter.conditionType === 'AND' ? '∧' : '∨'}
+                {' '}
+              </span>
+            )}
+            <span className="text-gray-400">{getFilterSymbol(c.type)}</span>
+            <span className="text-green-400"> "{c.value}"</span>
+          </span>
+        ));
         
-        return `${filter.column}: ${conditions}`;
+        return (
+          <span className="font-mono">
+            <span className="text-blue-400">{filter.column}</span>
+            {' '}
+            {conditions}
+          </span>
+        );
     }
   };
 
