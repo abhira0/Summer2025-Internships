@@ -25,6 +25,14 @@ def strip_rich_tags(text: str) -> str:
     return text
 
 
+def get_line_count(file_path: str) -> int:
+    """
+    Get the number of lines in a file.
+    """
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return sum(1 for _ in f)
+
+
 def generate_tree(directory: str, ignore_patterns: List[str]) -> Tree:
     """
     Generate a tree-like structure for the given directory, ignoring files and directories
@@ -43,7 +51,12 @@ def generate_tree(directory: str, ignore_patterns: List[str]) -> Tree:
         if root != directory:
             branch = branch.add(f"[bold cyan]{os.path.basename(root)}/[/bold cyan]")
         for file in files:
-            branch.add(file)
+            file_path = os.path.join(root, file)
+            if file.endswith(('.py', '.js', '.java', '.cpp', '.c', '.cs', '.ts', '.go', '.rb', '.php', '.html', '.css', 'jsx', '.env', '.json')):
+                line_count = get_line_count(file_path)
+                branch.add(f"{file} ({line_count} lines)")
+            else:
+                branch.add(file)
     return tree
 
 
