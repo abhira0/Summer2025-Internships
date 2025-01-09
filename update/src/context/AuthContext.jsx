@@ -1,10 +1,18 @@
-// src/context/AuthContext.js
-import React, { createContext, useState, useContext, useEffect } from 'react';
+// src/context/AuthContext.jsx
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { verifyToken } from '../utils/auth';
 
 const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
+
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -12,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('jwt_token');
     if (token && verifyToken()) {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      setUser({ username: payload.user, role: payload.role });
+      setUser({ username: payload.user });
     }
     setLoading(false);
   }, []);
@@ -31,12 +39,6 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export default AuthContext;

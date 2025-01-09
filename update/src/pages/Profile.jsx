@@ -1,6 +1,6 @@
 // src/pages/Profile.jsx
 import React from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import { useApplications } from '../hooks/useApplications';
 import { useJobs } from '../hooks/useJobs';
 import Layout from '../components/layout/Layout';

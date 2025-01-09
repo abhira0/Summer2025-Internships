@@ -2,7 +2,7 @@
 import React from 'react';
 import { useJobs } from '../hooks/useJobs';
 import { useApplications } from '../hooks/useApplications';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import Layout from '../components/layout/Layout';
 import {
   BarChart,
