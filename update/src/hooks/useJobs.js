@@ -1,5 +1,6 @@
 // src/hooks/useJobs.js
 import { useState, useEffect } from 'react';
+import config from '../config';
 
 export function useJobs() {
   const [jobs, setJobs] = useState([]);
@@ -11,8 +12,8 @@ export function useJobs() {
       try {
         setLoading(true);
         const [listingsResponse, trackerResponse] = await Promise.all([
-          fetch('https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/listings_parsed.json'),
-          fetch('https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/docs/analytics/cache/simplify/parsed.json')
+          fetch(config.api.listings),
+          fetch(config.api.tracker)
         ]);
 
         if (!listingsResponse.ok || !trackerResponse.ok) {
