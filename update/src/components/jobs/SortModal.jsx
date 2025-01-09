@@ -9,8 +9,8 @@ export default function SortModal({
   setActiveSorts,
   editingSort
 }) {
-  const [column, setColumn] = useState('date');
-  const [order, setOrder] = useState('desc');
+  const [column, setColumn] = useState('company_name');
+  const [order, setOrder] = useState('asc');
 
   useEffect(() => {
     if (editingSort) {
@@ -18,8 +18,8 @@ export default function SortModal({
       setColumn(sort.column);
       setOrder(sort.order);
     } else {
-      setColumn('date');
-      setOrder('desc');
+      setColumn('company_name');
+      setOrder('asc');
     }
   }, [editingSort]);
 
@@ -53,12 +53,11 @@ export default function SortModal({
             onChange={(e) => setColumn(e.target.value)}
             className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
-            <option value="company_name">Company</option>
-            <option value="title">Role</option>
+            <option value="company_name">Company Name</option>
+            <option value="title">Job Title</option>
             <option value="locations">Location</option>
-            <option value="date_updated">Date Posted</option>
-            <option value="applied">Applied</option>
-            <option value="active">Active</option>
+            <option value="date_updated">Date Updated</option>
+            <option value="active">Status</option>
           </select>
         </div>
 
