@@ -200,7 +200,7 @@ class ProcessSalary:
 def main():
     # Simplify Listings
     data = LISTINGS_RAW
-    data = FilterByDate(data, cutoff_date=datetime.datetime(2024, 1, 1)).output
+    data = FilterByDate(data, cutoff_date=datetime.datetime(2004, 1, 1)).output
 
     # Simplify Tracker Data
     data = SIMPLIFY_TRACKER
