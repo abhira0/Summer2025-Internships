@@ -16,6 +16,7 @@ export default function Jobs() {
   const {
     paginatedData,
     pageSize,
+    setPageSize,
     page,
     totalPages,
     nextPage,

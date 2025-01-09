@@ -109,7 +109,10 @@ export function useTableManager(initialData, config) {
     page,
     pageSize,
     totalPages,
-    setPageSize,
+    setPageSize: (newSize) => {
+      setPageSize(newSize);
+      setPage(1); // Reset to first page when changing page size
+    },
     goToPage,
     nextPage,
     prevPage,
