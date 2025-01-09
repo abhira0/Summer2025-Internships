@@ -1,6 +1,8 @@
 // src/components/jobs/FilterSection.jsx
 import React, { useState } from 'react';
 import FilterModal from './FilterModal';
+import { IconButton } from '../common/IconButton';
+import { Icons } from '../common/Icons';
 import config from '../../config';
 
 export default function FilterSection({ activeFilters, setActiveFilters }) {
@@ -30,16 +32,16 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
 
   const getFilterSymbol = (type) => {
     switch (type) {
-      case 'contains': return '⊇';  // Contains (superset)
-      case 'equals': return '=';    // Equals
-      case 'not-equals': return '≠'; // Not equals
-      case 'not-contains': return '⊉'; // Does not contain
-      case 'regex': return '~';     // Matches regex
-      case 'not-regex': return '≁'; // Does not match regex
+      case 'contains': return '⊇';
+      case 'equals': return '=';
+      case 'not-equals': return '≠';
+      case 'not-contains': return '⊉';
+      case 'regex': return '~';
+      case 'not-regex': return '≁';
       default: return type;
     }
   };
-  
+
   const getFilterDisplay = (filter) => {
     switch (filter.column) {
       case 'date':
@@ -94,30 +96,36 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
-        <button
-          onClick={() => {
-            setEditingFilter(null);
-            setIsModalOpen(true);
-          }}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Add Filter
-        </button>
-        <button
-          onClick={resetToDefault}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-        >
-          Reset to Default
-        </button>
-        {activeFilters.length > 0 && (
-          <button
-            onClick={clearAll}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Clear All
-          </button>
-        )}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold text-white flex items-center">
+          <Icons.Filter className="w-6 h-6 mr-2" />
+          Filters
+        </h2>
+        <div className="flex gap-2">
+          <IconButton
+            icon={<Icons.Add />}
+            label="Add Filter"
+            onClick={() => {
+              setEditingFilter(null);
+              setIsModalOpen(true);
+            }}
+            variant="primary"
+          />
+          <IconButton
+            icon={<Icons.Reset />}
+            label="Reset to Default"
+            onClick={resetToDefault}
+            variant="success"
+          />
+          {activeFilters.length > 0 && (
+            <IconButton
+              icon={<Icons.Clear />}
+              label="Clear All"
+              onClick={clearAll}
+              variant="danger"
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -133,27 +141,21 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
                 className="text-blue-400 hover:text-blue-300"
                 title="Edit"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
+                <Icons.Edit className="w-4 h-4" />
               </button>
               <button
                 onClick={() => duplicateFilter(filter)}
                 className="text-green-400 hover:text-green-300"
                 title="Duplicate"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
+                <Icons.Duplicate className="w-4 h-4" />
               </button>
               <button
                 onClick={() => removeFilter(index)}
                 className="text-red-400 hover:text-red-300"
                 title="Remove"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+                <Icons.Delete className="w-4 h-4" />
               </button>
             </div>
           </div>

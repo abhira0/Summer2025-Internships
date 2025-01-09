@@ -1,6 +1,8 @@
 // src/components/jobs/SortSection.jsx
 import React, { useState } from 'react';
 import SortModal from './SortModal';
+import { IconButton } from '../common/IconButton';
+import { Icons } from '../common/Icons';
 import config from '../../config';
 
 export default function SortSection({ activeSorts, setActiveSorts }) {
@@ -53,30 +55,36 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
-        <button
-          onClick={() => {
-            setEditingSort(null);
-            setIsModalOpen(true);
-          }}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Add Sort
-        </button>
-        <button
-          onClick={resetToDefault}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-        >
-          Reset to Default
-        </button>
-        {activeSorts.length > 0 && (
-          <button
-            onClick={clearAll}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Clear All
-          </button>
-        )}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold text-white flex items-center">
+          <Icons.Sort className="w-6 h-6 mr-2" />
+          Sort
+        </h2>
+        <div className="flex gap-2">
+          <IconButton
+            icon={<Icons.Add />}
+            label="Add Sort"
+            onClick={() => {
+              setEditingSort(null);
+              setIsModalOpen(true);
+            }}
+            variant="primary"
+          />
+          <IconButton
+            icon={<Icons.Reset />}
+            label="Reset to Default"
+            onClick={resetToDefault}
+            variant="success"
+          />
+          {activeSorts.length > 0 && (
+            <IconButton
+              icon={<Icons.Clear />}
+              label="Clear All"
+              onClick={clearAll}
+              variant="danger"
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -102,18 +110,14 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
                 className="text-blue-400 hover:text-blue-300"
                 title="Edit"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
+                <Icons.Edit className="w-4 h-4" />
               </button>
               <button
                 onClick={() => removeSort(index)}
                 className="text-red-400 hover:text-red-300"
                 title="Remove"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+                <Icons.Delete className="w-4 h-4" />
               </button>
             </div>
           </div>

@@ -50,29 +50,6 @@ export default function Jobs() {
     );
   }
 
-  const renderActions = (type) => (
-    <div className="flex items-center space-x-2">
-      <IconButton
-        icon={<Icons.Add />}
-        label={`Add ${type}`}
-        onClick={() => {/* Add handler */}}
-        variant="primary"
-      />
-      <IconButton
-        icon={<Icons.Reset />}
-        label={`Reset ${type}`}
-        onClick={type === 'Filter' ? resetFilters : resetSorts}
-        variant="success"
-      />
-      <IconButton
-        icon={<Icons.Clear />}
-        label={`Clear ${type}`}
-        onClick={type === 'Filter' ? () => setActiveFilters([]) : () => setActiveSorts([])}
-        variant="danger"
-      />
-    </div>
-  );
-
   return (
     <Layout>
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
@@ -97,13 +74,6 @@ export default function Jobs() {
 
         {/* Filter Section */}
         <section className="bg-gray-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white flex items-center">
-              <Icons.Filter className="w-6 h-6 mr-2" />
-              Filters
-            </h2>
-            {renderActions('Filter')}
-          </div>
           <FilterSection
             activeFilters={activeFilters}
             setActiveFilters={setActiveFilters}
@@ -119,13 +89,6 @@ export default function Jobs() {
 
         {/* Sort Section */}
         <section className="bg-gray-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white flex items-center">
-              <Icons.Sort className="w-6 h-6 mr-2" />
-              Sort
-            </h2>
-            {renderActions('Sort')}
-          </div>
           <SortSection
             activeSorts={activeSorts}
             setActiveSorts={setActiveSorts}

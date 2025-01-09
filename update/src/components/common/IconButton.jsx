@@ -1,5 +1,6 @@
 // src/components/common/IconButton.jsx
 import React from 'react';
+import { Tooltip } from './Tooltip';
 
 export const IconButton = ({ 
   icon, 
@@ -7,7 +8,8 @@ export const IconButton = ({
   onClick, 
   variant = 'default',
   size = 'md',
-  className = '' 
+  className = '',
+  disabled = false
 }) => {
   const baseClasses = 'inline-flex items-center justify-center rounded-full focus:outline-none transition-colors duration-150 ease-in-out';
   
@@ -24,14 +26,29 @@ export const IconButton = ({
     lg: 'p-3'
   };
 
-  return (
+  const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
+
+  const buttonClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${disabledClasses} ${className}`;
+
+  const button = (
     <button
-      onClick={onClick}
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
-      title={label}
+      onClick={disabled ? undefined : onClick}
+      className={buttonClasses}
+      disabled={disabled}
+      type="button"
       aria-label={label}
     >
       {icon}
     </button>
   );
+
+  if (label) {
+    return (
+      <Tooltip content={label}>
+        {button}
+      </Tooltip>
+    );
+  }
+
+  return button;
 };
