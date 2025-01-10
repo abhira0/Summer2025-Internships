@@ -40,9 +40,9 @@ export default function Jobs() {
   } = useTableManager(jobs, config);
 
   // Collapsible sections state
-  const [isSearchOpen, setIsSearchOpen] = useState(true);
-  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
-  const [isSortsOpen, setIsSortsOpen] = useState(true);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [isSortsOpen, setIsSortsOpen] = useState(false);
   
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [sortModalOpen, setSortModalOpen] = useState(false);
