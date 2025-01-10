@@ -88283,6 +88283,7 @@
     "id": "57c275c2-5d14-4fd0-a8ee-dd6d85562f01",
     "title": "Software Engineer Intern - Summer 2025 - Austin",
     "active": false,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -94166,7 +94167,7 @@
     "company_name": "DV Trading",
     "id": "2a49cf78-6b4f-4f55-9daa-cd4d1b2493fa",
     "title": "2025 Summer Internship - Trader - DV Energy",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -95342,7 +95343,7 @@
     "company_name": "Atomic Semi",
     "id": "62e0787a-abd2-444a-bcc8-38de407c81f5",
     "title": "Embedded SWE Intern - Summer",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2024"
     ],
@@ -98929,7 +98930,7 @@
     "company_name": "Symbotic",
     "id": "e07bd8f5-b3c5-4838-863c-5f631eb21099",
     "title": "Intern \u2013 Back End Software Engineer",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2024",
       "Spring 2025",
@@ -101863,7 +101864,7 @@
     "company_name": "Walmart",
     "id": "90661bd1-fac3-49c8-bbbd-d11b3596c568",
     "title": "2025 Summer Intern: Software Engineer II",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -102290,7 +102291,7 @@
     "company_name": "Gilead Sciences",
     "id": "0ac1dd04-d0fc-4d07-a32c-1e4e371036e2",
     "title": "Intern \u2013 IT - Machine Learning Engineer / Data Scientist",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2024",
       "Summer 2024"
@@ -102428,7 +102429,7 @@
     "company_name": "Lyft",
     "id": "57aab2fe-2784-4d5f-a5cf-3556a023ba17",
     "title": "Data Science Intern - Decisions Product - Toronto - Summer 2025",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -106268,7 +106269,7 @@
     "company_name": "Amazon",
     "id": "8c9f42dc-4728-4ad8-9e1f-c20b8c372c10",
     "title": "Software Development Engineer - Artificial General Intelligence",
-    "active": false,
+    "active": true,
     "terms": [],
     "date_updated": 1727305952,
     "date_posted": 1727305952,
@@ -109182,7 +109183,7 @@
     "company_name": "Shamrock Trading",
     "id": "5fe00066-f3ec-42e1-b9c7-e82846f10958",
     "title": "Software Developer Intern",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -114737,7 +114738,7 @@
     "company_name": "Aurora Innovation",
     "id": "9ae4317b-f6fc-4eaa-849b-bf6c5b3cf972",
     "title": "Software Engineering Internship - Summer 2025",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -116999,7 +117000,7 @@
     "company_name": "FHLBank Chicago",
     "id": "a2ef90da-a8e1-49b4-b3c4-eda90bcaae96",
     "title": "Summer Internship - Modern Engineering",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2024"
     ],
@@ -121666,7 +121667,7 @@
     "company_name": "Coinbase",
     "id": "be3f43ab-df9c-4bb6-b0e6-d78f32290394",
     "title": "Data Science Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -124270,7 +124271,7 @@
     "company_name": "Rivian",
     "id": "6c70703f-e752-42a4-88f0-a6ea65b04cf1",
     "title": "Software Engineering Intern - Data Applications - Machine Learning",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -124327,7 +124328,7 @@
     "company_name": "Rivian",
     "id": "d8cae233-62ed-4545-aae6-ff721569e780",
     "title": "Software Engineering Intern - Data Operations - Machine Learning",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -124346,7 +124347,7 @@
     "company_name": "Rivian",
     "id": "5d2eeac2-407b-489a-90b0-ded3d03a32b8",
     "title": "Software Engineering Intern - Data Operations - Machine Learning",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -125864,7 +125865,7 @@
     "company_name": "Citigroup",
     "id": "12cc3d2b-6857-42ed-b0ce-f4f0ae3b6e80",
     "title": "Technology \u2013 Summer Analyst - Software Development - Irving 2025",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2024"
     ],
@@ -126485,7 +126486,7 @@
     "company_name": "Rakuten International",
     "id": "c3a40a95-cfbc-4e39-b505-29a2b7599880",
     "title": "Intern \u2013 Software Engineer - AI User Experience",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -128079,7 +128080,7 @@
     "company_name": "Wisk",
     "id": "1452453e-8baa-41a0-bed4-935005979db7",
     "title": "Software Engineering Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -128947,7 +128948,7 @@
     "company_name": "Cleric",
     "id": "e5590f9a-0c56-4a0d-b7c4-dd56d660bba7",
     "title": "Software Engineer \u2013 Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -131846,7 +131847,7 @@
     "company_name": "Blue Yonder",
     "id": "1b6c4ad6-f2dc-4440-aab0-f043c043a241",
     "title": "Software Engineering Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Winter 2025"
     ],
@@ -132873,7 +132874,7 @@
     "company_name": "MFS",
     "id": "08f18038-138f-424d-b5a6-78c8b089f9a9",
     "title": "Quant Research Associate Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -133006,7 +133007,7 @@
     "company_name": "Nelnet",
     "id": "fdb35003-694c-4f30-b941-7a0066a7b003",
     "title": "Data Analyst I",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -133746,7 +133747,7 @@
     "company_name": "Cadence Design Systems",
     "id": "325b2cdf-00bd-4aa2-8c40-f35c24d41772",
     "title": "Software Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2024"
     ],
@@ -135541,7 +135542,7 @@
     "company_name": "Crowdstrike",
     "id": "df3bdf23-e286-45fb-b09e-aca8e1dd5180",
     "title": "Software Engineering Intern",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -135903,7 +135904,7 @@
     "company_name": "Rivian",
     "id": "e857172f-2cc8-44ca-af2e-1aa9a51321e9",
     "title": "Intern - Embedded Systems Software Engineer",
-    "active": true,
+    "active": false,
     "terms": [
       "Fall 2024",
       "Spring 2025",
@@ -136491,7 +136492,7 @@
     "company_name": "Sarepta",
     "id": "10684374-a667-4c9d-b455-a58c07b11510",
     "title": "Patient Affairs Analytics Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2025",
       "Summer 2025"
@@ -136709,7 +136710,7 @@
     "company_name": "Element Biosciences",
     "id": "1fdc5971-8b90-41a0-a247-2e27d0df6c1f",
     "title": "Software Development Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -137051,7 +137052,7 @@
     "company_name": "MSD",
     "id": "1afb14a9-5a10-4113-b5db-a95a13177b8d",
     "title": "Data Science Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -137283,7 +137284,7 @@
     "company_name": "Samsung Research America",
     "id": "e982e3fe-5486-4965-897e-5f7e30d0b345",
     "title": "2025 Summer Intern - Open Innovation - Partnerships",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -138972,7 +138973,7 @@
     "company_name": "Yodlee",
     "id": "d921b9c2-9765-4261-97f0-495399edea7b",
     "title": "Software Engineering Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -138991,7 +138992,7 @@
     "company_name": "Yodlee",
     "id": "e870080f-4439-4c89-9edb-1ea0732eef61",
     "title": "Software Engineering Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -139107,7 +139108,7 @@
     "company_name": "Leidos",
     "id": "191b675c-724f-477f-90f7-412ea5bdef8c",
     "title": "Software Engineer Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -139899,7 +139900,7 @@
     "company_name": "Lumentum",
     "id": "2ac15ee1-3548-40a4-9094-eb912e926bdd",
     "title": "Optical Algorithms and Analytics Engineering Co-op/Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -139989,122 +139990,6 @@
       "Fredericton, NB, Canada"
     ],
     "company_url": "https://simplify.jobs/c/PotentialMotors",
-    "is_visible": true,
-    "sponsorship": "Other"
-  },
-  {
-    "source": "Simplify",
-    "company_name": "MRI Software",
-    "id": "4d15a8cb-aa9f-4321-81b6-a2f60bf8d18c",
-    "title": "Spring Intern - Accounting Data Management",
-    "active": true,
-    "terms": [
-      "Spring 2025"
-    ],
-    "date_updated": 1736368108,
-    "date_posted": 1736368108,
-    "url": "https://mrisoftware.wd501.myworkdayjobs.com/External_CareerSite/job/US-Remote/Spring-Intern---Accounting-Data-Management_R-104438",
-    "locations": [
-      "Remote in USA"
-    ],
-    "company_url": "https://simplify.jobs/c/MRI-Software",
-    "is_visible": true,
-    "sponsorship": "Other"
-  },
-  {
-    "source": "Simplify",
-    "company_name": "S&P Global ",
-    "id": "c27d90e2-79bf-4f84-b051-bcaf0f4155e9",
-    "title": "Data Analysis Product Management Intern - Early Careers",
-    "active": true,
-    "terms": [
-      "Summer 2025"
-    ],
-    "date_updated": 1736367718,
-    "date_posted": 1736367718,
-    "url": "https://spgi.wd5.myworkdayjobs.com/en-US/SPGI_Careers/job/Michigan-US/Data-Analysis-Product-Management-Intern--Early-Careers-_310570-1",
-    "locations": [
-      "Southfield, MI"
-    ],
-    "company_url": "https://simplify.jobs/c/c7dad035-0ece-4bb3-a529-57e45f2c155c",
-    "is_visible": true,
-    "sponsorship": "Other"
-  },
-  {
-    "source": "Simplify",
-    "company_name": "Found Energy",
-    "id": "4886739b-cd99-4bb9-980d-b35d57ed65f4",
-    "title": "Data Engineer Spring Co-op Summer/Fall",
-    "active": true,
-    "terms": [
-      "Spring 2025",
-      "Summer 2025",
-      "Fall 2025"
-    ],
-    "date_updated": 1736368769,
-    "date_posted": 1736368769,
-    "url": "https://job-boards.greenhouse.io/foundenergy/jobs/4432215006",
-    "locations": [
-      "Boston, MA"
-    ],
-    "company_url": "https://simplify.jobs/c/Found-Energy",
-    "is_visible": true,
-    "sponsorship": "Other"
-  },
-  {
-    "source": "Simplify",
-    "company_name": "Bank of Montreal",
-    "id": "bb3c7281-2ac9-4121-94a9-5bd439df103a",
-    "title": "Junior Engineer \u2013 Co-op/Internship - Electronic Trading Infrastructure",
-    "active": true,
-    "terms": [
-      "Summer 2025"
-    ],
-    "date_updated": 1736368522,
-    "date_posted": 1736368522,
-    "url": "https://bmo.wd3.myworkdayjobs.com/External/job/REMOTETELETRAVAIL-ON-CAN/Junior-Engineer--Electronic-Trading-Infrastructure--Summer-2025--Co-op-Internship----4-months_R250000446-1",
-    "locations": [
-      "Remote in Canada"
-    ],
-    "company_url": "https://simplify.jobs/c/BMO",
-    "is_visible": true,
-    "sponsorship": "Other"
-  },
-  {
-    "source": "Simplify",
-    "company_name": "Samsung",
-    "id": "5efeaf70-f9e1-4a82-8cee-bebf36a1fc47",
-    "title": "Intern \u2013 Gen AI Engineer",
-    "active": true,
-    "terms": [
-      "Summer 2025"
-    ],
-    "date_updated": 1736368280,
-    "date_posted": 1736368280,
-    "url": "https://job-boards.greenhouse.io/samsungsemiconductor/jobs/6313867003",
-    "locations": [
-      "San Jose, CA"
-    ],
-    "company_url": "https://simplify.jobs/c/Samsung",
-    "is_visible": true,
-    "sponsorship": "Other"
-  },
-  {
-    "source": "Simplify",
-    "company_name": "The Walt Disney Company",
-    "id": "17104ee8-08b0-498c-b150-28fe06c5b58b",
-    "title": "Hulu Analytics Experimentation Intern",
-    "active": true,
-    "terms": [
-      "Summer 2025"
-    ],
-    "date_updated": 1736369432,
-    "date_posted": 1736369432,
-    "url": "https://disney.wd5.myworkdayjobs.com/en-US/disneycareer/job/Santa-Monica-CA-USA/Hulu-Analytics-Experimentation-Intern--Summer-2025_10108693",
-    "locations": [
-      "Santa Monica, CA"
-    ],
-    "company_url": "https://simplify.jobs/c/Disney",
     "is_visible": true,
     "sponsorship": "Other"
   }
