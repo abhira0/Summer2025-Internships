@@ -14,8 +14,10 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: `http://${process.env.CODESPACE_NAME}-5174.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`,
         changeOrigin: true,
+        secure: false,
+        ws: true
       }
     }
   }

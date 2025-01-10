@@ -2,6 +2,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 
+const BACKEND_URL = window.location.hostname.includes('github.dev') 
+  ? `https://${window.location.hostname.replace('5173', '5174')}`
+  : 'http://localhost:5174';
+
 const ApplicationContext = createContext(null);
 
 export function ApplicationProvider({ children }) {
@@ -9,28 +13,27 @@ export function ApplicationProvider({ children }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('userApplications');
-      if (stored) {
-        setApplications(JSON.parse(stored));
+    const fetchApplications = async () => {
+      try {
+        // Fetch configuration
+const fetchConfig = {
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  }
+};
+
+const response = await fetch(`${BACKEND_URL}/api/applications`, fetchConfig);
+        if (!response.ok) throw new Error('Failed to fetch applications');
+        const data = await response.json();
+        setApplications(data);
+      } catch (error) {
+        console.error('Error loading applications:', error);
       }
-    } catch (error) {
-      console.error('Error loading applications:', error);
-    }
+    };
+
+    fetchApplications();
   }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('userApplications', JSON.stringify(applications));
-    } catch (error) {
-      console.error('Error saving applications:', error);
-    }
-  }, [applications]);
-
-  const getApplicationStatus = (jobId, type) => {
-    if (!user?.username || !applications.applications[user.username]) return false;
-    return applications.applications[user.username][type]?.includes(jobId) || false;
-  };
 
   const updateApplication = async (jobId, type, value) => {
     if (!user?.username) return;
@@ -51,25 +54,26 @@ export function ApplicationProvider({ children }) {
       }
 
       newApplications.applications[user.username][type] = typeArray;
+      
+      const response = await fetch(`${BACKEND_URL}/api/applications`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newApplications)
+      });
+
+      if (!response.ok) throw new Error('Failed to sync with server');
+      
       setApplications(newApplications);
-
-      // Optional: sync with server
-      try {
-        const response = await fetch('/api/applications', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newApplications)
-        });
-        if (!response.ok) throw new Error('Failed to sync with server');
-      } catch (error) {
-        console.warn('Failed to sync with server:', error);
-      }
-
       return newApplications;
     } catch (error) {
       console.error('Error updating application:', error);
       throw error;
     }
+  };
+
+  const getApplicationStatus = (jobId, type) => {
+    if (!user?.username || !applications.applications[user.username]) return false;
+    return applications.applications[user.username][type]?.includes(jobId) || false;
   };
 
   return (
