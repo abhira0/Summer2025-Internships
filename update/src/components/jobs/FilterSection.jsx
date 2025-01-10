@@ -1,6 +1,7 @@
-// src/components/jobs/FilterSection.jsx
 import React, { useState } from 'react';
 import FilterModal from './FilterModal';
+import { Icons } from '../common/Icons';
+import { IconButton } from '../common/IconButton';
 
 export default function FilterSection({ activeFilters, setActiveFilters, filteredCount, totalCount }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,48 +87,38 @@ export default function FilterSection({ activeFilters, setActiveFilters, filtere
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        {activeFilters.map((filter, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg text-sm"
-          >
-            <span className="text-gray-200">{getFilterDisplay(filter)}</span>
-            <div className="flex gap-1">
-              <button
-                onClick={() => editFilter(filter, index)}
-                className="text-blue-400 hover:text-blue-300"
-                title="Edit"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => duplicateFilter(filter)}
-                className="text-green-400 hover:text-green-300"
-                title="Duplicate"
-              >
-                Copy
-              </button>
-              <button
-                onClick={() => removeFilter(index)}
-                className="text-red-400 hover:text-red-300"
-                title="Remove"
-              >
-                Remove
-              </button>
-            </div>
+      {activeFilters.map((filter, index) => (
+        <div
+          key={index}
+          className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg text-sm"
+        >
+          <span className="text-gray-200">{getFilterDisplay(filter)}</span>
+          <div className="flex gap-1">
+            <IconButton
+              icon={<Icons.Edit />}
+              label="Edit"
+              onClick={() => editFilter(filter, index)}
+              variant="primary"
+              size="sm"
+            />
+            <IconButton
+              icon={<Icons.Duplicate />}
+              label="Duplicate"
+              onClick={() => duplicateFilter(filter)}
+              variant="success"
+              size="sm"
+            />
+            <IconButton
+              icon={<Icons.Delete />}
+              label="Remove"
+              onClick={() => removeFilter(index)}
+              variant="danger"
+              size="sm"
+            />
           </div>
-        ))}
+        </div>
+      ))}
       </div>
-
-      <button
-        onClick={() => {
-          setEditingFilter(null);
-          setIsModalOpen(true);
-        }}
-        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-      >
-        Add Filter
-      </button>
 
       <FilterModal
         isOpen={isModalOpen}

@@ -9,6 +9,7 @@ import { Icons } from '../components/common/Icons';
 import { useJobs } from '../hooks/useJobs';
 import { useTableManager } from '../hooks/useTableManager';
 import config from '../config';
+import { IconButton } from '../components/common/IconButton';
 
 export default function Jobs() {
   const { jobs, loading } = useJobs();
@@ -123,8 +124,38 @@ export default function Jobs() {
                 </span>
               )}
             </h2>
-            <div className="flex items-center gap-4">
-              {renderActions('Filter')}
+            <div className="flex items-center gap-2">
+              <IconButton
+                icon={<Icons.Add />}
+                label="Add Filter"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditingFilter(null);
+                  setFilterModalOpen(true);
+                }}
+                variant="primary"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Reset />}
+                label="Reset Filters"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  resetFilters();
+                }}
+                variant="default"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Clear />}
+                label="Clear Filters"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveFilters([]);
+                }}
+                variant="default"
+                size="sm"
+              />
               <Icons.ChevronRight 
                 className={`w-5 h-5 text-gray-400 transform transition-transform ${isFiltersOpen ? 'rotate-90' : ''}`}
               />
@@ -157,8 +188,38 @@ export default function Jobs() {
                 </span>
               )}
             </h2>
-            <div className="flex items-center gap-4">
-              {renderActions('Sort')}
+            <div className="flex items-center gap-2">
+              <IconButton
+                icon={<Icons.Add />}
+                label="Add Sort"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditingSort(null);
+                  setSortModalOpen(true);
+                }}
+                variant="primary"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Reset />}
+                label="Reset Sorts"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  resetSorts();
+                }}
+                variant="default"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Clear />}
+                label="Clear Sorts"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveSorts([]);
+                }}
+                variant="default"
+                size="sm"
+              />
               <Icons.ChevronRight 
                 className={`w-5 h-5 text-gray-400 transform transition-transform ${isSortsOpen ? 'rotate-90' : ''}`}
               />

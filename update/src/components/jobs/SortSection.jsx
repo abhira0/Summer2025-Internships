@@ -1,6 +1,8 @@
 // src/components/jobs/SortSection.jsx
 import React, { useState } from 'react';
 import SortModal from './SortModal';
+import { Icons } from '../common/Icons';
+import { IconButton } from '../common/IconButton';
 
 export default function SortSection({ activeSorts, setActiveSorts }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,35 +64,25 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
               </span>
             </div>
             <div className="flex gap-1">
-              <button
+              <IconButton
+                icon={<Icons.Edit />}
+                label="Edit"
                 onClick={() => editSort(sort, index)}
-                className="text-blue-400 hover:text-blue-300"
-                title="Edit"
-              >
-                Edit
-              </button>
-              <button
+                variant="primary"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Delete />}
+                label="Remove"
                 onClick={() => removeSort(index)}
-                className="text-red-400 hover:text-red-300"
-                title="Remove"
-              >
-                Remove
-              </button>
+                variant="danger"
+                size="sm"
+              />
             </div>
           </div>
         ))}
       </div>
-
-      <button
-        onClick={() => {
-          setEditingSort(null);
-          setIsModalOpen(true);
-        }}
-        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-      >
-        Add Sort
-      </button>
-
+      
       <SortModal
         isOpen={isModalOpen}
         onClose={() => {
