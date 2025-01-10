@@ -1,7 +1,7 @@
 ### Directory Structure
 
 ```
-update
+update/
 ├── tailwind.config.js (12 lines)
 │   ├── public/
 │   │   ├── simplify-logo.png
@@ -9,12 +9,12 @@ update
 │   │   │   │   ├── VirtualTable.jsx (56 lines)
 │   │   │   │   ├── ActionButton.jsx (55 lines)
 │   │   │   │   ├── SectionHeader.jsx (58 lines)
-│   │   │   │   ├── FilterSection.jsx (177 lines)
+│   │   │   │   ├── FilterSection.jsx (135 lines)
 │   │   │   │   ├── FilterModal.jsx (216 lines)
-│   │   │   │   ├── SortSection.jsx (139 lines)
-│   │   │   │   ├── JobsTable.jsx (182 lines)
-│   │   │   │   ├── SearchBar.jsx (66 lines)
-│   │   │   │   └── SortModal.jsx (96 lines)
+│   │   │   │   ├── SortSection.jsx (98 lines)
+│   │   │   │   ├── JobsTable.jsx (199 lines)
+│   │   │   │   ├── SearchBar.jsx (76 lines)
+│   │   │   │   └── SortModal.jsx (95 lines)
 │   │   │   ├── common/
 │   │   │   │   ├── Icons.jsx (75 lines)
 │   │   │   │   ├── TableHeader.jsx (34 lines)
@@ -31,7 +31,7 @@ update
 │   │   ├── data/
 │   │   │   └── users.json (14 lines)
 │   │   ├── pages/
-│   │   │   ├── Jobs.jsx (210 lines)
+│   │   │   ├── Jobs.jsx (300 lines)
 │   │   │   ├── Home.jsx (15 lines)
 │   │   │   ├── Profile.jsx (129 lines)
 │   │   │   ├── Login.jsx (90 lines)
@@ -39,7 +39,7 @@ update
 │   │   ├── config/
 │   │   │   └── index.js (33 lines)
 │   │   ├── hooks/
-│   │   │   ├── useTableManager.js (141 lines)
+│   │   │   ├── useTableManager.js (144 lines)
 │   │   │   ├── useJobs.js (56 lines)
 │   │   │   ├── useDragAndDrop.js (31 lines)
 │   │   │   └── useApplications.js (62 lines)
@@ -3535,23 +3535,24 @@ export default App;
 
 ```
 // src/pages/Jobs.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
 import JobsTable from '../components/jobs/JobsTable';
 import SearchBar from '../components/jobs/SearchBar';
 import FilterSection from '../components/jobs/FilterSection';
 import SortSection from '../components/jobs/SortSection';
-import { IconButton } from '../components/common/IconButton';
 import { Icons } from '../components/common/Icons';
 import { useJobs } from '../hooks/useJobs';
 import { useTableManager } from '../hooks/useTableManager';
 import config from '../config';
+import { IconButton } from '../components/common/IconButton';
 
 export default function Jobs() {
   const { jobs, loading } = useJobs();
   const {
     paginatedData,
     pageSize,
+    setPageSize,
     page,
     totalPages,
     nextPage,
@@ -3569,9 +3570,13 @@ export default function Jobs() {
     resetSorts,
     clearAll,
     totalCount,
-    filteredCount,
-    displayedCount
+    searchedData
   } = useTableManager(jobs, config);
+
+  // Collapsible sections state
+  const [isSearchOpen, setIsSearchOpen] = useState(true);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
+  const [isSortsOpen, setIsSortsOpen] = useState(true);
 
   if (loading) {
     return (
@@ -3586,26 +3591,23 @@ export default function Jobs() {
     );
   }
 
+  // Header actions
   const renderActions = (type) => (
     <div className="flex items-center space-x-2">
-      <IconButton
-        icon={<Icons.Add />}
-        label={`Add ${type}`}
-        onClick={() => {/* Add handler */}}
-        variant="primary"
-      />
-      <IconButton
-        icon={<Icons.Reset />}
-        label={`Reset ${type}`}
+      <button
         onClick={type === 'Filter' ? resetFilters : resetSorts}
-        variant="success"
-      />
-      <IconButton
-        icon={<Icons.Clear />}
-        label={`Clear ${type}`}
+        className="p-2 text-gray-400 hover:text-white rounded-full hover:bg-gray-700"
+        title={`Reset ${type}`}
+      >
+        <Icons.Reset className="w-5 h-5" />
+      </button>
+      <button
         onClick={type === 'Filter' ? () => setActiveFilters([]) : () => setActiveSorts([])}
-        variant="danger"
-      />
+        className="p-2 text-gray-400 hover:text-white rounded-full hover:bg-gray-700"
+        title={`Clear ${type}`}
+      >
+        <Icons.Clear className="w-5 h-5" />
+      </button>
     </div>
   );
 
@@ -3613,59 +3615,160 @@ export default function Jobs() {
     <Layout>
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Search Section */}
-        <section className="bg-gray-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
+        <section className="bg-gray-800 rounded-lg">
+          <div 
+            className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-750"
+            onClick={() => setIsSearchOpen(!isSearchOpen)}
+          >
             <h2 className="text-xl font-bold text-white flex items-center">
               <Icons.Search className="w-6 h-6 mr-2" />
               Search
             </h2>
-            <span className="text-sm text-gray-400">
-              {searchQuery ? `Found ${displayedCount} matches` : `${totalCount} total jobs`}
-            </span>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-400">
+                {searchQuery ? `Found ${searchedData.length} matches` : `${totalCount} total jobs`}
+              </span>
+              <Icons.ChevronRight 
+                className={`w-5 h-5 text-gray-400 transform transition-transform ${isSearchOpen ? 'rotate-90' : ''}`}
+              />
+            </div>
           </div>
-          <SearchBar
-            value={searchQuery}
-            onChange={setSearchQuery}
-            searchInFiltered={searchInFiltered}
-            setSearchInFiltered={setSearchInFiltered}
-          />
+          {isSearchOpen && (
+            <div className="p-6 pt-2">
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                searchInFiltered={searchInFiltered}
+                setSearchInFiltered={setSearchInFiltered}
+              />
+            </div>
+          )}
         </section>
 
         {/* Filter Section */}
-        <section className="bg-gray-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
+        <section className="bg-gray-800 rounded-lg">
+          <div 
+            className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-750"
+            onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+          >
             <h2 className="text-xl font-bold text-white flex items-center">
               <Icons.Filter className="w-6 h-6 mr-2" />
               Filters
+              {activeFilters.length > 0 && (
+                <span className="ml-2 px-2 py-1 text-xs bg-blue-600 text-white rounded-full">
+                  {activeFilters.length}
+                </span>
+              )}
             </h2>
-            {renderActions('Filter')}
+            <div className="flex items-center gap-2">
+              <IconButton
+                icon={<Icons.Add />}
+                label="Add Filter"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditingFilter(null);
+                  setFilterModalOpen(true);
+                }}
+                variant="primary"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Reset />}
+                label="Reset Filters"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  resetFilters();
+                }}
+                variant="default"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Clear />}
+                label="Clear Filters"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveFilters([]);
+                }}
+                variant="default"
+                size="sm"
+              />
+              <Icons.ChevronRight 
+                className={`w-5 h-5 text-gray-400 transform transition-transform ${isFiltersOpen ? 'rotate-90' : ''}`}
+              />
+            </div>
           </div>
-          <FilterSection
-            activeFilters={activeFilters}
-            setActiveFilters={setActiveFilters}
-            filteredCount={filteredCount}
-            totalCount={totalCount}
-          />
-          {activeFilters.length > 0 && (
-            <div className="mt-2 text-sm text-gray-400">
-              Showing {filteredCount} of {totalCount} jobs
+          {isFiltersOpen && (
+            <div className="p-6 pt-2">
+              <FilterSection
+                activeFilters={activeFilters}
+                setActiveFilters={setActiveFilters}
+                filteredCount={searchedData.length}
+                totalCount={totalCount}
+              />
             </div>
           )}
         </section>
 
         {/* Sort Section */}
-        <section className="bg-gray-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
+        <section className="bg-gray-800 rounded-lg">
+          <div 
+            className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-750"
+            onClick={() => setIsSortsOpen(!isSortsOpen)}
+          >
             <h2 className="text-xl font-bold text-white flex items-center">
               <Icons.Sort className="w-6 h-6 mr-2" />
               Sort
+              {activeSorts.length > 0 && (
+                <span className="ml-2 px-2 py-1 text-xs bg-blue-600 text-white rounded-full">
+                  {activeSorts.length}
+                </span>
+              )}
             </h2>
-            {renderActions('Sort')}
+            <div className="flex items-center gap-2">
+              <IconButton
+                icon={<Icons.Add />}
+                label="Add Sort"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditingSort(null);
+                  setSortModalOpen(true);
+                }}
+                variant="primary"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Reset />}
+                label="Reset Sorts"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  resetSorts();
+                }}
+                variant="default"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Clear />}
+                label="Clear Sorts"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveSorts([]);
+                }}
+                variant="default"
+                size="sm"
+              />
+              <Icons.ChevronRight 
+                className={`w-5 h-5 text-gray-400 transform transition-transform ${isSortsOpen ? 'rotate-90' : ''}`}
+              />
+            </div>
           </div>
-          <SortSection
-            activeSorts={activeSorts}
-            setActiveSorts={setActiveSorts}
-          />
+          {isSortsOpen && (
+            <div className="p-6 pt-2">
+              <SortSection
+                activeSorts={activeSorts}
+                setActiveSorts={setActiveSorts}
+              />
+            </div>
+          )}
         </section>
 
         {/* Results Section */}
@@ -3674,7 +3777,7 @@ export default function Jobs() {
             <div className="flex items-center space-x-4">
               <h2 className="text-xl font-bold text-white">Results</h2>
               <span className="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">
-                {displayedCount} jobs
+                {searchedData.length} jobs
               </span>
             </div>
             <div className="flex items-center space-x-4">
@@ -3689,56 +3792,43 @@ export default function Jobs() {
               </select>
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={() => prevPage()}
+                  onClick={prevPage}
                   disabled={page === 1}
                   className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
                 >
-                  <Icons.ChevronLeft className="w-5 h-5" />
+                  <Icons.ChevronLeft />
                 </button>
                 <span className="text-gray-400">
                   Page {page} of {totalPages}
                 </span>
                 <button
-                  onClick={() => nextPage()}
+                  onClick={nextPage}
                   disabled={page === totalPages}
                   className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
                 >
-                  <Icons.ChevronRight className="w-5 h-5" />
+                  <Icons.ChevronRight />
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Table */}
           <JobsTable 
             jobs={paginatedData}
-            sortConfig={activeSorts[0]} // Pass primary sort for column headers
+            pageSize={pageSize}
+            currentPage={page}
+            onPageChange={goToPage}
+            totalPages={totalPages}
+            totalCount={searchedData.length}
+            sortConfig={activeSorts[0]}
             onSort={(column) => {
-              // Handle column header sorting
               const currentSort = activeSorts.find(s => s.column === column);
               const newOrder = currentSort?.order === 'asc' ? 'desc' : 'asc';
-              
               setActiveSorts([
                 { column, order: newOrder },
                 ...activeSorts.filter(s => s.column !== column)
               ]);
             }}
           />
-
-          {/* Mobile Pagination */}
-          <div className="mt-4 sm:hidden">
-            <select
-              value={page}
-              onChange={(e) => goToPage(Number(e.target.value))}
-              className="block w-full bg-gray-700 border-gray-600 text-white rounded-md"
-            >
-              {Array.from({ length: totalPages }, (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  Page {i + 1} of {totalPages}
-                </option>
-              ))}
-            </select>
-          </div>
         </section>
       </div>
     </Layout>
@@ -4330,7 +4420,10 @@ export function useTableManager(initialData, config) {
     page,
     pageSize,
     totalPages,
-    setPageSize,
+    setPageSize: (newSize) => {
+      setPageSize(newSize);
+      setPage(1); // Reset to first page when changing page size
+    },
     goToPage,
     nextPage,
     prevPage,
@@ -5091,14 +5184,12 @@ export const getActionIcon = (type) => {
 ### update/src/components/jobs/FilterSection.jsx
 
 ```
-// src/components/jobs/FilterSection.jsx
 import React, { useState } from 'react';
 import FilterModal from './FilterModal';
-import { IconButton } from '../common/IconButton';
 import { Icons } from '../common/Icons';
-import config from '../../config';
+import { IconButton } from '../common/IconButton';
 
-export default function FilterSection({ activeFilters, setActiveFilters }) {
+export default function FilterSection({ activeFilters, setActiveFilters, filteredCount, totalCount }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingFilter, setEditingFilter] = useState(null);
 
@@ -5113,14 +5204,6 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
 
   const duplicateFilter = (filter) => {
     setActiveFilters(filters => [...filters, { ...filter }]);
-  };
-
-  const resetToDefault = () => {
-    setActiveFilters(config.defaults.filters);
-  };
-
-  const clearAll = () => {
-    setActiveFilters([]);
   };
 
   const getFilterSymbol = (type) => {
@@ -5189,70 +5272,38 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-white flex items-center">
-          <Icons.Filter className="w-6 h-6 mr-2" />
-          Filters
-        </h2>
-        <div className="flex gap-2">
-          <IconButton
-            icon={<Icons.Add />}
-            label="Add Filter"
-            onClick={() => {
-              setEditingFilter(null);
-              setIsModalOpen(true);
-            }}
-            variant="primary"
-          />
-          <IconButton
-            icon={<Icons.Reset />}
-            label="Reset to Default"
-            onClick={resetToDefault}
-            variant="success"
-          />
-          {activeFilters.length > 0 && (
-            <IconButton
-              icon={<Icons.Clear />}
-              label="Clear All"
-              onClick={clearAll}
-              variant="danger"
-            />
-          )}
-        </div>
-      </div>
-
       <div className="flex flex-wrap gap-2">
-        {activeFilters.map((filter, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg text-sm"
-          >
-            <span className="text-gray-200">{getFilterDisplay(filter)}</span>
-            <div className="flex gap-1">
-              <button
-                onClick={() => editFilter(filter, index)}
-                className="text-blue-400 hover:text-blue-300"
-                title="Edit"
-              >
-                <Icons.Edit className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => duplicateFilter(filter)}
-                className="text-green-400 hover:text-green-300"
-                title="Duplicate"
-              >
-                <Icons.Duplicate className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => removeFilter(index)}
-                className="text-red-400 hover:text-red-300"
-                title="Remove"
-              >
-                <Icons.Delete className="w-4 h-4" />
-              </button>
-            </div>
+      {activeFilters.map((filter, index) => (
+        <div
+          key={index}
+          className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg text-sm"
+        >
+          <span className="text-gray-200">{getFilterDisplay(filter)}</span>
+          <div className="flex gap-1">
+            <IconButton
+              icon={<Icons.Edit />}
+              label="Edit"
+              onClick={() => editFilter(filter, index)}
+              variant="primary"
+              size="sm"
+            />
+            <IconButton
+              icon={<Icons.Duplicate />}
+              label="Duplicate"
+              onClick={() => duplicateFilter(filter)}
+              variant="success"
+              size="sm"
+            />
+            <IconButton
+              icon={<Icons.Delete />}
+              label="Remove"
+              onClick={() => removeFilter(index)}
+              variant="danger"
+              size="sm"
+            />
           </div>
-        ))}
+        </div>
+      ))}
       </div>
 
       <FilterModal
@@ -5497,9 +5548,8 @@ export default function FilterModal({
 // src/components/jobs/SortSection.jsx
 import React, { useState } from 'react';
 import SortModal from './SortModal';
-import { IconButton } from '../common/IconButton';
 import { Icons } from '../common/Icons';
-import config from '../../config';
+import { IconButton } from '../common/IconButton';
 
 export default function SortSection({ activeSorts, setActiveSorts }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -5512,14 +5562,6 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
   const editSort = (sort, index) => {
     setEditingSort({ sort, index });
     setIsModalOpen(true);
-  };
-
-  const resetToDefault = () => {
-    setActiveSorts(config.defaults.sorts);
-  };
-
-  const clearAll = () => {
-    setActiveSorts([]);
   };
 
   // Handle drag and drop reordering
@@ -5551,38 +5593,6 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-white flex items-center">
-          <Icons.Sort className="w-6 h-6 mr-2" />
-          Sort
-        </h2>
-        <div className="flex gap-2">
-          <IconButton
-            icon={<Icons.Add />}
-            label="Add Sort"
-            onClick={() => {
-              setEditingSort(null);
-              setIsModalOpen(true);
-            }}
-            variant="primary"
-          />
-          <IconButton
-            icon={<Icons.Reset />}
-            label="Reset to Default"
-            onClick={resetToDefault}
-            variant="success"
-          />
-          {activeSorts.length > 0 && (
-            <IconButton
-              icon={<Icons.Clear />}
-              label="Clear All"
-              onClick={clearAll}
-              variant="danger"
-            />
-          )}
-        </div>
-      </div>
-
       <div className="flex flex-wrap gap-2">
         {activeSorts.map((sort, index) => (
           <div
@@ -5592,34 +5602,34 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
             onDragEnd={handleDragEnd}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
-            className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg text-sm cursor-move group"
+            className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg text-sm cursor-move"
           >
-            <div className="flex items-center gap-1 text-gray-200">
-              <span>{sort.column}</span>
-              <span className="text-gray-400">
+            <div className="text-gray-200">
+              {sort.column}
+              <span className="ml-1 text-gray-400">
                 {sort.order === 'asc' ? '↑' : '↓'}
               </span>
             </div>
             <div className="flex gap-1">
-              <button
+              <IconButton
+                icon={<Icons.Edit />}
+                label="Edit"
                 onClick={() => editSort(sort, index)}
-                className="text-blue-400 hover:text-blue-300"
-                title="Edit"
-              >
-                <Icons.Edit className="w-4 h-4" />
-              </button>
-              <button
+                variant="primary"
+                size="sm"
+              />
+              <IconButton
+                icon={<Icons.Delete />}
+                label="Remove"
                 onClick={() => removeSort(index)}
-                className="text-red-400 hover:text-red-300"
-                title="Remove"
-              >
-                <Icons.Delete className="w-4 h-4" />
-              </button>
+                variant="danger"
+                size="sm"
+              />
             </div>
           </div>
         ))}
       </div>
-
+      
       <SortModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -5639,18 +5649,21 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
 
 ```
 // src/components/jobs/JobsTable.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import { useApplications } from '../../context/ApplicationContext';
 
-const ITEMS_PER_PAGE = 25;
-
-export default function JobsTable({ jobs }) {
+export default function JobsTable({ 
+  jobs, 
+  pageSize, 
+  currentPage, 
+  onPageChange, 
+  totalPages,
+  totalCount, // Add this prop to get total number of jobs
+}) {
   const { getApplicationStatus, updateApplication } = useApplications();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(jobs.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedJobs = jobs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalCount);
 
   const handleStatusToggle = async (jobId, type) => {
     const currentStatus = getApplicationStatus(jobId, type);
@@ -5660,97 +5673,96 @@ export default function JobsTable({ jobs }) {
   return (
     <div className="flex flex-col space-y-4">
       <div className="overflow-x-hidden border border-gray-700 rounded-lg">
-      <div className="w-full">
-  <table className="w-full table-fixed divide-y divide-gray-700">
-    <thead>
-      <tr>
-        <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Company
-        </th>
-        <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Role
-        </th>
-        <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Location
-        </th>
-        <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Apply
-        </th>
-        <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Date
-        </th>
-        <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Applied
-        </th>
-        <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Active
-        </th>
-        <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Hide
-        </th>
-      </tr>
-    </thead>
-    <tbody className="divide-y divide-gray-700">
-      {jobs.map((job) => (
-        <tr 
-          key={job.id}
-          className={getApplicationStatus(job.id, 'hidden') ? 'hidden' : 'hover:bg-gray-700'}
-        >
-          <td className="px-4 py-3">
-            <div className="relative group">
-              <div className="text-sm text-gray-200 truncate">
-                {job.company_name}
-              </div>
-              <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
-                {job.company_name}
-              </div>
-            </div>
-          </td>
-          {/* Similar tooltip structure for Role and Location */}
-          <td className="px-4 py-3">
-            <div className="relative group">
-              <div className="text-sm text-gray-200 truncate">
-                {job.title}
-              </div>
-              <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
-                {job.title}
-              </div>
-            </div>
-          </td>
-          <td className="px-4 py-3">
-            <div className="relative group">
-              <div className="text-sm text-gray-200 truncate">
-                {job.locations}
-              </div>
-              <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
-                {job.locations}
-              </div>
-            </div>
-          </td>
-          <td className="px-4 py-3">
-            <div className="flex space-x-2">
-              <a
-                href={job.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:text-blue-300"
-              >
-                Apply
-              </a>
-              <a
-                href={`https://simplify.jobs/p/${job.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="/simplify-logo.png"
-                  alt="Simplify"
-                  className="h-5 w-5"
-                  title="Apply with Simplify"
-                />
-              </a>
-            </div>
-          </td>
+        <div className="w-full">
+          <table className="w-full table-fixed divide-y divide-gray-700">
+            <thead>
+              <tr>
+                <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Company
+                </th>
+                <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Location
+                </th>
+                <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Apply
+                </th>
+                <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Applied
+                </th>
+                <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Active
+                </th>
+                <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Hide
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-700">
+              {jobs.map((job) => (
+                <tr 
+                  key={job.id}
+                  className={getApplicationStatus(job.id, 'hidden') ? 'hidden' : 'hover:bg-gray-700'}
+                >
+                  <td className="px-4 py-3">
+                    <div className="relative group">
+                      <div className="text-sm text-gray-200 truncate">
+                        {job.company_name}
+                      </div>
+                      <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
+                        {job.company_name}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="relative group">
+                      <div className="text-sm text-gray-200 truncate">
+                        {job.title}
+                      </div>
+                      <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
+                        {job.title}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="relative group">
+                      <div className="text-sm text-gray-200 truncate">
+                        {job.locations}
+                      </div>
+                      <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
+                        {job.locations}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex space-x-2">
+                      <a
+                        href={job.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:text-blue-300"
+                      >
+                        Apply
+                      </a>
+                      <a
+                        href={`https://simplify.jobs/p/${job.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src="/simplify-logo.png"
+                          alt="Simplify"
+                          className="h-5 w-5"
+                          title="Apply with Simplify"
+                        />
+                      </a>
+                    </div>
+                  </td>
                   <td className="px-4 py-3 text-sm text-gray-200 whitespace-nowrap">
                     {job.date_updated}
                   </td>
@@ -5795,11 +5807,11 @@ export default function JobsTable({ jobs }) {
       {/* Pagination */}
       <div className="flex justify-between items-center bg-gray-800 px-4 py-3 rounded-lg">
         <div className="text-sm text-gray-400">
-          Showing {startIndex + 1} to {Math.min(startIndex + ITEMS_PER_PAGE, jobs.length)} of {jobs.length} results
+          Showing {totalCount > 0 ? startIndex + 1 : 0} to {endIndex} of {totalCount} results
         </div>
         <div className="flex space-x-2">
           <button
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -5809,13 +5821,28 @@ export default function JobsTable({ jobs }) {
             Page {currentPage} of {totalPages}
           </span>
           <button
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next
           </button>
         </div>
+      </div>
+
+      {/* Mobile Pagination */}
+      <div className="mt-4 sm:hidden">
+        <select
+          value={currentPage}
+          onChange={(e) => onPageChange(Number(e.target.value))}
+          className="block w-full bg-gray-700 border-gray-600 text-white rounded-md"
+        >
+          {Array.from({ length: totalPages }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              Page {i + 1} of {totalPages}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
@@ -5826,17 +5853,22 @@ export default function JobsTable({ jobs }) {
 
 ```
 // src/components/jobs/SearchBar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function SearchBar({
-  onSearch,
+  value,
+  onChange,
   searchInFiltered,
   setSearchInFiltered
 }) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(value || '');
+
+  useEffect(() => {
+    setInputValue(value || '');
+  }, [value]);
 
   const handleSearch = () => {
-    onSearch(inputValue);
+    onChange(inputValue);
   };
 
   const handleKeyPress = (e) => {
@@ -5845,9 +5877,14 @@ export default function SearchBar({
     }
   };
 
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value); // Real-time search
+  };
+
   const handleClear = () => {
     setInputValue('');
-    onSearch('');
+    onChange('');
   };
 
   return (
@@ -5857,7 +5894,7 @@ export default function SearchBar({
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             placeholder="Search for internships..."
             className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -5907,8 +5944,8 @@ export default function SortModal({
   setActiveSorts,
   editingSort
 }) {
-  const [column, setColumn] = useState('date');
-  const [order, setOrder] = useState('desc');
+  const [column, setColumn] = useState('company_name');
+  const [order, setOrder] = useState('asc');
 
   useEffect(() => {
     if (editingSort) {
@@ -5916,8 +5953,8 @@ export default function SortModal({
       setColumn(sort.column);
       setOrder(sort.order);
     } else {
-      setColumn('date');
-      setOrder('desc');
+      setColumn('company_name');
+      setOrder('asc');
     }
   }, [editingSort]);
 
@@ -5951,12 +5988,11 @@ export default function SortModal({
             onChange={(e) => setColumn(e.target.value)}
             className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
-            <option value="company_name">Company</option>
-            <option value="title">Role</option>
+            <option value="company_name">Company Name</option>
+            <option value="title">Job Title</option>
             <option value="locations">Location</option>
-            <option value="date_updated">Date Posted</option>
-            <option value="applied">Applied</option>
-            <option value="active">Active</option>
+            <option value="date_updated">Date Updated</option>
+            <option value="active">Status</option>
           </select>
         </div>
 

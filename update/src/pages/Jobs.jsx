@@ -140,7 +140,7 @@ export default function Jobs() {
                   setEditingFilter(null);
                   setFilterModalOpen(true);
                 }}
-                variant="primary"
+                variant="success"
                 size="sm"
               />
               <IconButton
@@ -150,7 +150,7 @@ export default function Jobs() {
                   e.stopPropagation();
                   resetFilters();
                 }}
-                variant="default"
+                variant="primary"
                 size="sm"
               />
               <IconButton
@@ -160,7 +160,7 @@ export default function Jobs() {
                   e.stopPropagation();
                   setActiveFilters([]);
                 }}
-                variant="default"
+                variant="danger"
                 size="sm"
               />
               <Icons.ChevronRight 
@@ -207,7 +207,7 @@ export default function Jobs() {
                   setEditingSort(null);
                   setSortModalOpen(true);
                 }}
-                variant="primary"
+                variant="success"
                 size="sm"
               />
               <IconButton
@@ -217,7 +217,7 @@ export default function Jobs() {
                   e.stopPropagation();
                   resetSorts();
                 }}
-                variant="default"
+                variant="primary"
                 size="sm"
               />
               <IconButton
@@ -227,7 +227,7 @@ export default function Jobs() {
                   e.stopPropagation();
                   setActiveSorts([]);
                 }}
-                variant="default"
+                variant="danger"
                 size="sm"
               />
               <Icons.ChevronRight 
