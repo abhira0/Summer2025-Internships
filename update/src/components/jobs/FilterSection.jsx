@@ -1,11 +1,8 @@
 // src/components/jobs/FilterSection.jsx
 import React, { useState } from 'react';
 import FilterModal from './FilterModal';
-import { IconButton } from '../common/IconButton';
-import { Icons } from '../common/Icons';
-import config from '../../config';
 
-export default function FilterSection({ activeFilters, setActiveFilters }) {
+export default function FilterSection({ activeFilters, setActiveFilters, filteredCount, totalCount }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingFilter, setEditingFilter] = useState(null);
 
@@ -20,14 +17,6 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
 
   const duplicateFilter = (filter) => {
     setActiveFilters(filters => [...filters, { ...filter }]);
-  };
-
-  const resetToDefault = () => {
-    setActiveFilters(config.defaults.filters);
-  };
-
-  const clearAll = () => {
-    setActiveFilters([]);
   };
 
   const getFilterSymbol = (type) => {
@@ -96,38 +85,6 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-white flex items-center">
-          <Icons.Filter className="w-6 h-6 mr-2" />
-          Filters
-        </h2>
-        <div className="flex gap-2">
-          <IconButton
-            icon={<Icons.Add />}
-            label="Add Filter"
-            onClick={() => {
-              setEditingFilter(null);
-              setIsModalOpen(true);
-            }}
-            variant="primary"
-          />
-          <IconButton
-            icon={<Icons.Reset />}
-            label="Reset to Default"
-            onClick={resetToDefault}
-            variant="success"
-          />
-          {activeFilters.length > 0 && (
-            <IconButton
-              icon={<Icons.Clear />}
-              label="Clear All"
-              onClick={clearAll}
-              variant="danger"
-            />
-          )}
-        </div>
-      </div>
-
       <div className="flex flex-wrap gap-2">
         {activeFilters.map((filter, index) => (
           <div
@@ -141,26 +98,36 @@ export default function FilterSection({ activeFilters, setActiveFilters }) {
                 className="text-blue-400 hover:text-blue-300"
                 title="Edit"
               >
-                <Icons.Edit className="w-4 h-4" />
+                Edit
               </button>
               <button
                 onClick={() => duplicateFilter(filter)}
                 className="text-green-400 hover:text-green-300"
                 title="Duplicate"
               >
-                <Icons.Duplicate className="w-4 h-4" />
+                Copy
               </button>
               <button
                 onClick={() => removeFilter(index)}
                 className="text-red-400 hover:text-red-300"
                 title="Remove"
               >
-                <Icons.Delete className="w-4 h-4" />
+                Remove
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      <button
+        onClick={() => {
+          setEditingFilter(null);
+          setIsModalOpen(true);
+        }}
+        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Add Filter
+      </button>
 
       <FilterModal
         isOpen={isModalOpen}

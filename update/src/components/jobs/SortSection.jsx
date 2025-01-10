@@ -1,9 +1,6 @@
 // src/components/jobs/SortSection.jsx
 import React, { useState } from 'react';
 import SortModal from './SortModal';
-import { IconButton } from '../common/IconButton';
-import { Icons } from '../common/Icons';
-import config from '../../config';
 
 export default function SortSection({ activeSorts, setActiveSorts }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,14 +13,6 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
   const editSort = (sort, index) => {
     setEditingSort({ sort, index });
     setIsModalOpen(true);
-  };
-
-  const resetToDefault = () => {
-    setActiveSorts(config.defaults.sorts);
-  };
-
-  const clearAll = () => {
-    setActiveSorts([]);
   };
 
   // Handle drag and drop reordering
@@ -55,38 +44,6 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-white flex items-center">
-          <Icons.Sort className="w-6 h-6 mr-2" />
-          Sort
-        </h2>
-        <div className="flex gap-2">
-          <IconButton
-            icon={<Icons.Add />}
-            label="Add Sort"
-            onClick={() => {
-              setEditingSort(null);
-              setIsModalOpen(true);
-            }}
-            variant="primary"
-          />
-          <IconButton
-            icon={<Icons.Reset />}
-            label="Reset to Default"
-            onClick={resetToDefault}
-            variant="success"
-          />
-          {activeSorts.length > 0 && (
-            <IconButton
-              icon={<Icons.Clear />}
-              label="Clear All"
-              onClick={clearAll}
-              variant="danger"
-            />
-          )}
-        </div>
-      </div>
-
       <div className="flex flex-wrap gap-2">
         {activeSorts.map((sort, index) => (
           <div
@@ -96,11 +53,11 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
             onDragEnd={handleDragEnd}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
-            className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg text-sm cursor-move group"
+            className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg text-sm cursor-move"
           >
-            <div className="flex items-center gap-1 text-gray-200">
-              <span>{sort.column}</span>
-              <span className="text-gray-400">
+            <div className="text-gray-200">
+              {sort.column}
+              <span className="ml-1 text-gray-400">
                 {sort.order === 'asc' ? '↑' : '↓'}
               </span>
             </div>
@@ -110,19 +67,29 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
                 className="text-blue-400 hover:text-blue-300"
                 title="Edit"
               >
-                <Icons.Edit className="w-4 h-4" />
+                Edit
               </button>
               <button
                 onClick={() => removeSort(index)}
                 className="text-red-400 hover:text-red-300"
                 title="Remove"
               >
-                <Icons.Delete className="w-4 h-4" />
+                Remove
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      <button
+        onClick={() => {
+          setEditingSort(null);
+          setIsModalOpen(true);
+        }}
+        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Add Sort
+      </button>
 
       <SortModal
         isOpen={isModalOpen}
