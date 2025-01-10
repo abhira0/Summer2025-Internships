@@ -43248,7 +43248,7 @@
     "company_name": "Pocket Worlds",
     "id": "bb4551f2-3af7-407d-aa29-afb4743850a7",
     "title": "Software Development Residency",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -43903,7 +43903,7 @@
     "company_name": "DV Trading",
     "id": "ef491a99-b19a-4e4d-b330-0c01b5fda069",
     "title": "2025 Summer Internship - Trader - DV Energy",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -75448,7 +75448,7 @@
     "company_name": "d-Matrix",
     "id": "aaab5c2f-a4ee-4662-b73e-b911bd1dfad2",
     "title": "Compiler Software Engineer Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -83348,7 +83348,7 @@
     "company_name": "Samsung Research America",
     "id": "e409843e-1eaa-46e4-a5c0-669bdbc6a50e",
     "title": "Summer Intern - Tech Incubation",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -83578,7 +83578,7 @@
     "company_name": "Xylem",
     "id": "8dfcee5b-c4da-4ecb-9061-327e71328137",
     "title": "Software Engineering Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -84669,7 +84669,7 @@
     "company_name": "Motorola",
     "id": "15d32fd4-69d8-409f-8ee6-504b099d3099",
     "title": "Software Engineer \u2013 Co-Op",
-    "active": true,
+    "active": false,
     "terms": [
       "Winter 2025"
     ],
@@ -87633,7 +87633,7 @@
     "company_name": "NT Concepts",
     "id": "4acdafc8-8b15-4280-bd1b-d8276e2f6a9f",
     "title": "Software Development Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -88238,7 +88238,7 @@
     "company_name": "Marvell",
     "id": "1a07af8b-eb3c-4448-8dce-f232475bf558",
     "title": "Sales Analytics Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -90040,7 +90040,7 @@
     "company_name": "Openlane",
     "id": "311dd120-8a07-413a-b972-9a06875e4b27",
     "title": "Software Engineer \u2013 Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -90821,6 +90821,160 @@
       "Remote in USA"
     ],
     "company_url": "https://simplify.jobs/c/Wealthsimple",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Cadence Design Systems",
+    "id": "ae66e8e5-b0db-48da-abcf-ac261f6145db",
+    "title": "Software Engineer Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736540911,
+    "date_posted": 1736540911,
+    "url": "https://cadence.wd1.myworkdayjobs.com/en-US/External_Careers/job/SAN-JOSE/Software-Engineer-Intern_R48702-1",
+    "locations": [
+      "San Jose, CA"
+    ],
+    "company_url": "https://simplify.jobs/c/Cadence-Design-Systems",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "StepStone Group",
+    "id": "8758cb84-3e53-40e0-873d-d4e2f6211d46",
+    "title": "Data Science Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736540720,
+    "date_posted": 1736540720,
+    "url": "https://boards.greenhouse.io/embed/job_app?token=6530606",
+    "locations": [
+      "Orlando, FL"
+    ],
+    "company_url": "https://simplify.jobs/c/StepStoneGroup",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Affirm",
+    "id": "c311b9ac-d492-47ed-969c-b385ec48dbaa",
+    "title": "Software Engineering Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736540551,
+    "date_posted": 1736540551,
+    "url": "https://job-boards.greenhouse.io/affirm/jobs/6228633003",
+    "locations": [
+      "SF"
+    ],
+    "company_url": "https://simplify.jobs/c/Affirm",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Nuro",
+    "id": "01c0587d-77c1-4ded-b1a0-c5fd17713149",
+    "title": "Systems Engineering Intern - Validation",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736540521,
+    "date_posted": 1736540521,
+    "url": "https://nuro.ai/careersitem?gh_jid=6523346",
+    "locations": [
+      "Mountain View, CA"
+    ],
+    "company_url": "https://simplify.jobs/c/Nuro",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "The Walt Disney Company",
+    "id": "025f9651-9c83-4954-a6a7-33532fdbf312",
+    "title": "Disney Entertainment and ESPN Technology Software Engineering Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736541585,
+    "date_posted": 1736541585,
+    "url": "https://disney.wd5.myworkdayjobs.com/en-US/disneycareer/job/Morrisville-NC-USA/Disney-Entertainment-and-ESPN-Technology-Software-Engineering-Intern--Morrisville--NC-Summer-2025_10110388-1",
+    "locations": [
+      "Morrisville, NC"
+    ],
+    "company_url": "https://simplify.jobs/c/Disney",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Elevance Health",
+    "id": "82294140-71a6-461e-a774-bbe2131f979e",
+    "title": "Data Science Internship",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736541216,
+    "date_posted": 1736541216,
+    "url": "https://elevancehealth.wd1.myworkdayjobs.com/en-US/ANT/job/IL-CHICAGO-233-S-WACKER-DR-STE-3700/Data-Science-Internship---Summer-2025_JR133463",
+    "locations": [
+      "Chicago, IL",
+      "Walnut Creek, CA",
+      "Norfolk, VA"
+    ],
+    "company_url": "https://simplify.jobs/c/Elevance-Health",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Eulerity",
+    "id": "91469ca1-37a4-4ba2-af64-cfe2631fc1f9",
+    "title": "Web Developer Intern",
+    "active": true,
+    "terms": [
+      "Spring 2025"
+    ],
+    "date_updated": 1736541152,
+    "date_posted": 1736541152,
+    "url": "https://job-boards.greenhouse.io/eulerity/jobs/4433437006",
+    "locations": [
+      "NYC"
+    ],
+    "company_url": "https://simplify.jobs/c/Eulerity",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Tempus",
+    "id": "296a0ddd-e385-4a17-93a5-42a9d4775483",
+    "title": "Software Engineering Summer Analyst/Associate",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736541156,
+    "date_posted": 1736541156,
+    "url": "https://boards.greenhouse.io/embed/job_app?token=7787178002",
+    "locations": [
+      "Chicago, IL"
+    ],
+    "company_url": "https://simplify.jobs/c/Tempus",
     "is_visible": true,
     "sponsorship": "Other"
   }
