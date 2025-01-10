@@ -6,10 +6,10 @@ const config = {
   },
   defaults: {
     filters: [
-      { column: 'date', fromDate: '2024-01-01', toDate: '' },
+      { column: 'date_posted', fromDate: '2024-01-01', toDate: '' },
       { column: 'active', active: true },
       {
-        column: 'location',
+        column: 'locations',
         conditionType: 'AND',
         conditions: [
           { type: 'not-equals', value: 'canada' },

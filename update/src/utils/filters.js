@@ -3,7 +3,7 @@ export const applyFilters = (jobs, activeFilters, getApplicationStatus, username
     return jobs.filter(job => {
       return activeFilters.every(filter => {
         switch (filter.column) {
-          case 'date':
+          case 'date_posted':
             const jobDate = new Date(job.date_posted);
             const fromDate = filter.fromDate ? new Date(filter.fromDate) : new Date(-8640000000000000);
             const toDate = filter.toDate ? new Date(filter.toDate) : new Date(8640000000000000);

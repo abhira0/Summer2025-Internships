@@ -38,7 +38,7 @@ export default function FilterSection({
 
   const getFilterDisplay = (filter) => {
     switch (filter.column) {
-      case 'date':
+      case 'date_posted':
         return (
           <span className="font-mono">
             <span className="text-blue-400">{filter.column}</span>

@@ -9,7 +9,7 @@ export default function FilterModal({
   setActiveFilters,
   editingFilter
 }) {
-  const [column, setColumn] = useState('company');
+  const [column, setColumn] = useState('company_name');
   const [conditions, setConditions] = useState([{ type: 'contains', value: '' }]);
   const [conditionType, setConditionType] = useState('OR');
   const [dateRange, setDateRange] = useState({ fromDate: '', toDate: '' });
@@ -19,7 +19,7 @@ export default function FilterModal({
     if (editingFilter) {
       const { filter } = editingFilter;
       setColumn(filter.column);
-      if (filter.column === 'date') {
+      if (filter.column === 'date_posted') {
         setDateRange({ fromDate: filter.fromDate || '', toDate: filter.toDate || '' });
       } else if (['applied', 'active', 'hidden'].includes(filter.column)) {
         setBooleanValue(filter[filter.column]);
@@ -29,7 +29,7 @@ export default function FilterModal({
       }
     } else {
       // Reset form when adding new filter
-      setColumn('company');
+      setColumn('company_name');
       setConditions([{ type: 'contains', value: '' }]);
       setConditionType('OR');
       setDateRange({ fromDate: '', toDate: '' });
@@ -40,7 +40,7 @@ export default function FilterModal({
   const handleApply = () => {
     let newFilter = { column };
 
-    if (column === 'date') {
+    if (column === 'date_posted') {
       newFilter = { ...newFilter, ...dateRange };
     } else if (['applied', 'active', 'hidden'].includes(column)) {
       newFilter[column] = booleanValue;
@@ -86,24 +86,24 @@ export default function FilterModal({
             onChange={(e) => setColumn(e.target.value)}
             className="w-full bg-gray-700 border-gray-600 text-white rounded-md shadow-sm"
           >
-            <option value="company">Company</option>
-            <option value="role">Role</option>
-            <option value="location">Location</option>
-            <option value="date">Date Posted</option>
+            <option value="company_name">Company</option>
+            <option value="title">Role</option>
+            <option value="locations">Location</option>
+            <option value="date_posted">Date Posted</option>
             <option value="applied">Applied</option>
             <option value="active">Active</option>
             <option value="hidden">Hidden</option>
           </select>
         </div>
 
-        {column === 'date' ? (
+        {column === 'date_posted' ? (
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 From Date
               </label>
               <input
-                type="date"
+                type="date_posted"
                 value={dateRange.fromDate}
                 onChange={(e) =>
                   setDateRange({ ...dateRange, fromDate: e.target.value })
@@ -116,7 +116,7 @@ export default function FilterModal({
                 To Date
               </label>
               <input
-                type="date"
+                type="date_posted"
                 value={dateRange.toDate}
                 onChange={(e) =>
                   setDateRange({ ...dateRange, toDate: e.target.value })
