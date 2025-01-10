@@ -4,17 +4,21 @@ import SortModal from './SortModal';
 import { Icons } from '../common/Icons';
 import { IconButton } from '../common/IconButton';
 
-export default function SortSection({ activeSorts, setActiveSorts }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingSort, setEditingSort] = useState(null);
-
+export default function SortSection({ 
+  activeSorts, 
+  setActiveSorts,
+  SortModalOpen,
+  setSortModalOpen,
+  editingSort,
+  setEditingSort
+}) {
   const removeSort = (index) => {
     setActiveSorts(sorts => sorts.filter((_, i) => i !== index));
   };
 
   const editSort = (sort, index) => {
     setEditingSort({ sort, index });
-    setIsModalOpen(true);
+    setSortModalOpen(true);
   };
 
   // Handle drag and drop reordering
@@ -82,11 +86,11 @@ export default function SortSection({ activeSorts, setActiveSorts }) {
           </div>
         ))}
       </div>
-      
+
       <SortModal
-        isOpen={isModalOpen}
+        isOpen={SortModalOpen}
         onClose={() => {
-          setIsModalOpen(false);
+          SortModalOpen(false);
           setEditingSort(null);
         }}
         activeSorts={activeSorts}

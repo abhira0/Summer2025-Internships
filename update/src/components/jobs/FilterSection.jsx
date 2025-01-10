@@ -3,17 +3,21 @@ import FilterModal from './FilterModal';
 import { Icons } from '../common/Icons';
 import { IconButton } from '../common/IconButton';
 
-export default function FilterSection({ activeFilters, setActiveFilters, filteredCount, totalCount }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingFilter, setEditingFilter] = useState(null);
-
+export default function FilterSection({ 
+  activeFilters, 
+  setActiveFilters,
+  filterModalOpen,
+  setFilterModalOpen,
+  editingFilter,
+  setEditingFilter
+}) {
   const removeFilter = (index) => {
     setActiveFilters(filters => filters.filter((_, i) => i !== index));
   };
 
   const editFilter = (filter, index) => {
     setEditingFilter({ filter, index });
-    setIsModalOpen(true);
+    setFilterModalOpen(true);
   };
 
   const duplicateFilter = (filter) => {
@@ -121,9 +125,9 @@ export default function FilterSection({ activeFilters, setActiveFilters, filtere
       </div>
 
       <FilterModal
-        isOpen={isModalOpen}
+        isOpen={filterModalOpen}
         onClose={() => {
-          setIsModalOpen(false);
+          filterModalOpen(false);
           setEditingFilter(null);
         }}
         activeFilters={activeFilters}

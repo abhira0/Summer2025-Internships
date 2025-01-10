@@ -5,6 +5,8 @@ import JobsTable from '../components/jobs/JobsTable';
 import SearchBar from '../components/jobs/SearchBar';
 import FilterSection from '../components/jobs/FilterSection';
 import SortSection from '../components/jobs/SortSection';
+import FilterModal from '../components/jobs/FilterModal';
+import SortModal from '../components/jobs/SortModal';
 import { Icons } from '../components/common/Icons';
 import { useJobs } from '../hooks/useJobs';
 import { useTableManager } from '../hooks/useTableManager';
@@ -41,6 +43,11 @@ export default function Jobs() {
   const [isSearchOpen, setIsSearchOpen] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [isSortsOpen, setIsSortsOpen] = useState(true);
+  
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [sortModalOpen, setSortModalOpen] = useState(false);
+  const [editingFilter, setEditingFilter] = useState(null);
+  const [editingSort, setEditingSort] = useState(null);
 
   if (loading) {
     return (
@@ -163,12 +170,15 @@ export default function Jobs() {
           </div>
           {isFiltersOpen && (
             <div className="p-6 pt-2">
-              <FilterSection
-                activeFilters={activeFilters}
-                setActiveFilters={setActiveFilters}
-                filteredCount={searchedData.length}
-                totalCount={totalCount}
-              />
+<FilterSection 
+  activeFilters={activeFilters}
+  setActiveFilters={setActiveFilters}
+  filterModalOpen={filterModalOpen}
+  setFilterModalOpen={setFilterModalOpen}
+  editingFilter={editingFilter}
+  setEditingFilter={setEditingFilter}
+/>
+
             </div>
           )}
         </section>
@@ -227,10 +237,14 @@ export default function Jobs() {
           </div>
           {isSortsOpen && (
             <div className="p-6 pt-2">
-              <SortSection
-                activeSorts={activeSorts}
-                setActiveSorts={setActiveSorts}
-              />
+<SortSection
+  activeSorts={activeSorts} 
+  setActiveSorts={setActiveSorts}
+  sortModalOpen={sortModalOpen}
+  setSortModalOpen={setSortModalOpen}
+  editingSort={editingSort}
+  setEditingSort={setEditingSort}
+/>
             </div>
           )}
         </section>
@@ -294,6 +308,29 @@ export default function Jobs() {
             }}
           />
         </section>
+
+        <FilterModal 
+        isOpen={filterModalOpen}
+        onClose={() => {
+          setFilterModalOpen(false);
+          setEditingFilter(null);
+        }}
+        activeFilters={activeFilters}
+        setActiveFilters={setActiveFilters}
+        editingFilter={editingFilter}
+      />
+
+      <SortModal
+        isOpen={sortModalOpen}
+        onClose={() => {
+          setSortModalOpen(false);
+          setEditingSort(null);
+        }}
+        activeSorts={activeSorts}
+        setActiveSorts={setActiveSorts}
+        editingSort={editingSort}
+      />
+
       </div>
     </Layout>
   );
