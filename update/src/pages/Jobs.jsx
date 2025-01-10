@@ -57,7 +57,10 @@ export default function Jobs() {
         {/* Search Section */}
         <section className="bg-gray-800 rounded-lg p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white">Search</h2>
+            <h2 className="text-xl font-bold text-white flex items-center">
+                <Icons.Search className="w-6 h-6 mr-2" />
+                Search
+            </h2>
             <span className="text-sm text-gray-400">
               {searchQuery ? `Found ${searchedData.length} matches` : `${totalCount} total jobs`}
             </span>
