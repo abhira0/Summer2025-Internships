@@ -1,15 +1,20 @@
 // src/components/jobs/SearchBar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function SearchBar({
-  onSearch,
+  value,
+  onChange,
   searchInFiltered,
   setSearchInFiltered
 }) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(value || '');
+
+  useEffect(() => {
+    setInputValue(value || '');
+  }, [value]);
 
   const handleSearch = () => {
-    onSearch(inputValue);
+    onChange(inputValue);
   };
 
   const handleKeyPress = (e) => {
@@ -18,9 +23,14 @@ export default function SearchBar({
     }
   };
 
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value); // Real-time search
+  };
+
   const handleClear = () => {
     setInputValue('');
-    onSearch('');
+    onChange('');
   };
 
   return (
@@ -30,7 +40,7 @@ export default function SearchBar({
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             placeholder="Search for internships..."
             className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"

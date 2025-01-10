@@ -1,16 +1,19 @@
 // src/components/jobs/JobsTable.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import { useApplications } from '../../context/ApplicationContext';
 
-const ITEMS_PER_PAGE = 25;
-
-export default function JobsTable({ jobs }) {
+export default function JobsTable({ 
+  jobs, 
+  pageSize, 
+  currentPage, 
+  onPageChange, 
+  totalPages,
+  totalCount, // Add this prop to get total number of jobs
+}) {
   const { getApplicationStatus, updateApplication } = useApplications();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(jobs.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedJobs = jobs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalCount);
 
   const handleStatusToggle = async (jobId, type) => {
     const currentStatus = getApplicationStatus(jobId, type);
@@ -20,97 +23,96 @@ export default function JobsTable({ jobs }) {
   return (
     <div className="flex flex-col space-y-4">
       <div className="overflow-x-hidden border border-gray-700 rounded-lg">
-      <div className="w-full">
-  <table className="w-full table-fixed divide-y divide-gray-700">
-    <thead>
-      <tr>
-        <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Company
-        </th>
-        <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Role
-        </th>
-        <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Location
-        </th>
-        <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Apply
-        </th>
-        <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Date
-        </th>
-        <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Applied
-        </th>
-        <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Active
-        </th>
-        <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-          Hide
-        </th>
-      </tr>
-    </thead>
-    <tbody className="divide-y divide-gray-700">
-      {jobs.map((job) => (
-        <tr 
-          key={job.id}
-          className={getApplicationStatus(job.id, 'hidden') ? 'hidden' : 'hover:bg-gray-700'}
-        >
-          <td className="px-4 py-3">
-            <div className="relative group">
-              <div className="text-sm text-gray-200 truncate">
-                {job.company_name}
-              </div>
-              <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
-                {job.company_name}
-              </div>
-            </div>
-          </td>
-          {/* Similar tooltip structure for Role and Location */}
-          <td className="px-4 py-3">
-            <div className="relative group">
-              <div className="text-sm text-gray-200 truncate">
-                {job.title}
-              </div>
-              <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
-                {job.title}
-              </div>
-            </div>
-          </td>
-          <td className="px-4 py-3">
-            <div className="relative group">
-              <div className="text-sm text-gray-200 truncate">
-                {job.locations}
-              </div>
-              <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
-                {job.locations}
-              </div>
-            </div>
-          </td>
-          <td className="px-4 py-3">
-            <div className="flex space-x-2">
-              <a
-                href={job.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:text-blue-300"
-              >
-                Apply
-              </a>
-              <a
-                href={`https://simplify.jobs/p/${job.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="/simplify-logo.png"
-                  alt="Simplify"
-                  className="h-5 w-5"
-                  title="Apply with Simplify"
-                />
-              </a>
-            </div>
-          </td>
+        <div className="w-full">
+          <table className="w-full table-fixed divide-y divide-gray-700">
+            <thead>
+              <tr>
+                <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Company
+                </th>
+                <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Location
+                </th>
+                <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Apply
+                </th>
+                <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Applied
+                </th>
+                <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Active
+                </th>
+                <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Hide
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-700">
+              {jobs.map((job) => (
+                <tr 
+                  key={job.id}
+                  className={getApplicationStatus(job.id, 'hidden') ? 'hidden' : 'hover:bg-gray-700'}
+                >
+                  <td className="px-4 py-3">
+                    <div className="relative group">
+                      <div className="text-sm text-gray-200 truncate">
+                        {job.company_name}
+                      </div>
+                      <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
+                        {job.company_name}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="relative group">
+                      <div className="text-sm text-gray-200 truncate">
+                        {job.title}
+                      </div>
+                      <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
+                        {job.title}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="relative group">
+                      <div className="text-sm text-gray-200 truncate">
+                        {job.locations}
+                      </div>
+                      <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-2 rounded shadow-lg whitespace-normal max-w-md">
+                        {job.locations}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex space-x-2">
+                      <a
+                        href={job.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:text-blue-300"
+                      >
+                        Apply
+                      </a>
+                      <a
+                        href={`https://simplify.jobs/p/${job.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src="/simplify-logo.png"
+                          alt="Simplify"
+                          className="h-5 w-5"
+                          title="Apply with Simplify"
+                        />
+                      </a>
+                    </div>
+                  </td>
                   <td className="px-4 py-3 text-sm text-gray-200 whitespace-nowrap">
                     {job.date_updated}
                   </td>
@@ -155,11 +157,11 @@ export default function JobsTable({ jobs }) {
       {/* Pagination */}
       <div className="flex justify-between items-center bg-gray-800 px-4 py-3 rounded-lg">
         <div className="text-sm text-gray-400">
-          Showing {startIndex + 1} to {Math.min(startIndex + ITEMS_PER_PAGE, jobs.length)} of {jobs.length} results
+          Showing {totalCount > 0 ? startIndex + 1 : 0} to {endIndex} of {totalCount} results
         </div>
         <div className="flex space-x-2">
           <button
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -169,13 +171,28 @@ export default function JobsTable({ jobs }) {
             Page {currentPage} of {totalPages}
           </span>
           <button
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next
           </button>
         </div>
+      </div>
+
+      {/* Mobile Pagination */}
+      <div className="mt-4 sm:hidden">
+        <select
+          value={currentPage}
+          onChange={(e) => onPageChange(Number(e.target.value))}
+          className="block w-full bg-gray-700 border-gray-600 text-white rounded-md"
+        >
+          {Array.from({ length: totalPages }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              Page {i + 1} of {totalPages}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );

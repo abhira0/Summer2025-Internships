@@ -35,7 +35,7 @@ export default function Jobs() {
     clearAll,
     totalCount,
     filteredCount,
-    displayedCount
+    searchedData
   } = useTableManager(jobs, config);
 
   if (loading) {
@@ -57,12 +57,9 @@ export default function Jobs() {
         {/* Search Section */}
         <section className="bg-gray-800 rounded-lg p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white flex items-center">
-              <Icons.Search className="w-6 h-6 mr-2" />
-              Search
-            </h2>
+            <h2 className="text-xl font-bold text-white">Search</h2>
             <span className="text-sm text-gray-400">
-              {searchQuery ? `Found ${displayedCount} matches` : `${totalCount} total jobs`}
+              {searchQuery ? `Found ${searchedData.length} matches` : `${totalCount} total jobs`}
             </span>
           </div>
           <SearchBar
@@ -78,7 +75,7 @@ export default function Jobs() {
           <FilterSection
             activeFilters={activeFilters}
             setActiveFilters={setActiveFilters}
-            filteredCount={filteredCount}
+            filteredCount={searchedData.length}
             totalCount={totalCount}
           />
           {activeFilters.length > 0 && (
@@ -102,7 +99,7 @@ export default function Jobs() {
             <div className="flex items-center space-x-4">
               <h2 className="text-xl font-bold text-white">Results</h2>
               <span className="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">
-                {displayedCount} jobs
+                {searchedData.length} jobs
               </span>
             </div>
             <div className="flex items-center space-x-4">
@@ -140,9 +137,13 @@ export default function Jobs() {
           {/* Table */}
           <JobsTable 
             jobs={paginatedData}
-            sortConfig={activeSorts[0]} // Pass primary sort for column headers
+            pageSize={pageSize}
+            currentPage={page}
+            onPageChange={goToPage}
+            totalPages={totalPages}
+            totalCount={searchedData.length}
+            sortConfig={activeSorts[0]}
             onSort={(column) => {
-              // Handle column header sorting
               const currentSort = activeSorts.find(s => s.column === column);
               const newOrder = currentSort?.order === 'asc' ? 'desc' : 'asc';
               
@@ -152,21 +153,6 @@ export default function Jobs() {
               ]);
             }}
           />
-
-          {/* Mobile Pagination */}
-          <div className="mt-4 sm:hidden">
-            <select
-              value={page}
-              onChange={(e) => goToPage(Number(e.target.value))}
-              className="block w-full bg-gray-700 border-gray-600 text-white rounded-md"
-            >
-              {Array.from({ length: totalPages }, (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  Page {i + 1} of {totalPages}
-                </option>
-              ))}
-            </select>
-          </div>
         </section>
       </div>
     </Layout>
