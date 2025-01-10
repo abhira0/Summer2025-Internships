@@ -2,8 +2,8 @@
 
 const getValueForSort = (job, column) => {
   switch (column) {
-    case 'date_updated':
-      return new Date(job.date_updated).getTime();
+    case 'date_posted':
+      return new Date(job.date_posted).getTime();
     case 'company_name':
     case 'title':
     case 'locations':

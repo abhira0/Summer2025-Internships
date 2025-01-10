@@ -56,7 +56,7 @@ export default function SortModal({
             <option value="company_name">Company Name</option>
             <option value="title">Job Title</option>
             <option value="locations">Location</option>
-            <option value="date_updated">Date Updated</option>
+            <option value="date_posted">Date Updated</option>
             <option value="active">Status</option>
           </select>
         </div>

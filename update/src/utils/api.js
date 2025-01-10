@@ -19,7 +19,7 @@ export const fetchJobs = async () => {
 
     return listings.map(item => ({
       ...item,
-        date_updated: new Date(item.date_updated * 1000).toLocaleDateString("en-US", {
+        date_posted: new Date(item.date_posted * 1000).toLocaleDateString("en-US", {
           year: "2-digit",
           month: "short",
           day: "2-digit"

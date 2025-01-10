@@ -22,7 +22,7 @@ const config = {
       { column: 'applied', applied: false }
     ],
     sorts: [
-      { column: 'date_updated', order: 'desc' }
+      { column: 'date_posted', order: 'desc' }
     ],
     pagination: {
       itemsPerPage: 25

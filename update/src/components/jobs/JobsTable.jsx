@@ -114,7 +114,7 @@ export default function JobsTable({
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-200 whitespace-nowrap">
-                    {job.date_updated}
+                    {job.date_posted}
                   </td>
                   <td className="px-4 py-3 text-sm text-center">
                     <button

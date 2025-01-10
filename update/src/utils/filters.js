@@ -4,7 +4,7 @@ export const applyFilters = (jobs, activeFilters, getApplicationStatus, username
       return activeFilters.every(filter => {
         switch (filter.column) {
           case 'date':
-            const jobDate = new Date(job.date_updated);
+            const jobDate = new Date(job.date_posted);
             const fromDate = filter.fromDate ? new Date(filter.fromDate) : new Date(-8640000000000000);
             const toDate = filter.toDate ? new Date(filter.toDate) : new Date(8640000000000000);
             return jobDate >= fromDate && jobDate <= toDate;
