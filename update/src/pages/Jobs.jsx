@@ -83,7 +83,7 @@ export default function Jobs() {
   );
 
   return (
-    <Layout>
+    <Layout fullWidth>
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Search Section */}
         <section className="bg-gray-800 rounded-lg">
