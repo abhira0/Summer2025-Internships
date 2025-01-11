@@ -51619,7 +51619,7 @@
     "company_name": "Walmart",
     "id": "90661bd1-fac3-49c8-bbbd-d11b3596c568",
     "title": "2025 Summer Intern: Software Engineer II",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -66015,7 +66015,7 @@
     "company_name": "Marvell",
     "id": "90b42244-c7b5-49dc-8d48-878f70132cc9",
     "title": "Application Engineering Intern - Masters",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -66267,7 +66267,7 @@
     "company_name": "Marvell",
     "id": "c8d08ea7-f2a4-4026-b631-04a16da122fd",
     "title": "Application Engineering Intern - Masters",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -84177,7 +84177,7 @@
     "company_name": "Marvell",
     "id": "51d65042-c3fc-4463-99f3-5aed9652ab09",
     "title": "Application Engineering Intern - Masters",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -91275,6 +91275,27 @@
     "date_updated": 1736555010,
     "date_posted": 1736555010,
     "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1800-Arch-St/Comcast-Data-Engineer-Co-op_R398010",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "600d14c8-43c5-4cc6-8a2a-a95e3929c8ff",
+    "title": "Comcast Software Engineer Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736554997,
+    "date_posted": 1736554997,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1800-Arch-St/Comcast-Software-Engineer-Co-op_R397653",
     "locations": [
       "Philadelphia, PA"
     ],
