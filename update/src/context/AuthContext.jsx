@@ -1,44 +1,22 @@
 // src/context/AuthContext.jsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { verifyToken } from '../utils/auth';
+const login = async (username, password) => {
+  try {
+    const response = await fetch(`${API_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
 
-const AuthContext = createContext(null);
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
-
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const token = localStorage.getItem('jwt_token');
-    if (token && verifyToken()) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      setUser({ username: payload.user });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Login failed');
     }
-    setLoading(false);
-  }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-  };
-
-  const logout = () => {
-    localStorage.removeItem('jwt_token');
-    setUser(null);
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
-
-export default AuthContext;
+    const data = await response.json();
+    localStorage.setItem('jwt_token', data.token);
+    setUser({ username: data.user.username, role: data.user.role });
+  } catch (error) {
+    console.error('Login error:', error);
+    throw error;
+  }
+};

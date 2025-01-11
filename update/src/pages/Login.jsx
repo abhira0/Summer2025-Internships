@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { generateToken } from '../utils/auth';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -16,27 +15,13 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await fetch('/data/users.json');
-      const data = await response.json();
-      
-      const user = data.users.find(u => 
-        u.username === username && u.password === password
-      );
-
-      if (user) {
-        const token = generateToken(user);
-        localStorage.setItem('jwt_token', token);
-        login({ username: user.username });
-        navigate('/jobs');
-      } else {
-        setError('Invalid credentials');
-      }
+      await login(username, password);
+      navigate('/jobs');
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError('Invalid credentials');
       console.error('Login error:', err);
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">

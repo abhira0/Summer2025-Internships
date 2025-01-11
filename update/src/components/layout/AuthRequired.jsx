@@ -1,7 +1,6 @@
 // src/components/layout/AuthRequired.jsx
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
 import { useAuth } from '../../context/AuthContext';
 
 const AuthRequired = ({ children }) => {

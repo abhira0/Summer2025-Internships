@@ -2,10 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 
-const BACKEND_URL = window.location.hostname.includes('github.dev') 
-  ? `https://${window.location.hostname.replace('5173', '5174')}`
-  : 'http://localhost:5174';
-
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5174';
 const ApplicationContext = createContext(null);
 
 export function ApplicationProvider({ children }) {
@@ -13,58 +10,43 @@ export function ApplicationProvider({ children }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        // Fetch configuration
-const fetchConfig = {
-  credentials: 'include',
-  headers: {
-    'Content-Type': 'application/json',
-  }
-};
+    if (user) {
+      fetchApplications();
+    }
+  }, [user]);
 
-const response = await fetch(`${BACKEND_URL}/api/applications`, fetchConfig);
-        if (!response.ok) throw new Error('Failed to fetch applications');
-        const data = await response.json();
-        setApplications(data);
-      } catch (error) {
-        console.error('Error loading applications:', error);
-      }
-    };
-
-    fetchApplications();
-  }, []);
-
-  const updateApplication = async (jobId, type, value) => {
-    if (!user?.username) return;
-
+  const fetchApplications = async () => {
     try {
-      const newApplications = { ...applications };
-      if (!newApplications.applications[user.username]) {
-        newApplications.applications[user.username] = { applied: [], hidden: [] };
-      }
-      
-      const typeArray = newApplications.applications[user.username][type] || [];
-      const index = typeArray.indexOf(jobId);
-      
-      if (value && index === -1) {
-        typeArray.push(jobId);
-      } else if (!value && index !== -1) {
-        typeArray.splice(index, 1);
-      }
+      const token = localStorage.getItem('jwt_token');
+      const response = await fetch(`${API_URL}/api/applications`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error('Failed to fetch applications');
+      const data = await response.json();
+      setApplications(data);
+    } catch (error) {
+      console.error('Error loading applications:', error);
+    }
+  };
 
-      newApplications.applications[user.username][type] = typeArray;
-      
-      const response = await fetch(`${BACKEND_URL}/api/applications`, {
+  const updateApplication = async (jobId, status, value) => {
+    try {
+      const token = localStorage.getItem('jwt_token');
+      const response = await fetch(`${API_URL}/api/applications`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newApplications)
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ jobId, status, value })
       });
 
-      if (!response.ok) throw new Error('Failed to sync with server');
-      
-      setApplications(newApplications);
-      return newApplications;
+      if (!response.ok) throw new Error('Failed to update application');
+      const data = await response.json();
+      setApplications(data);
+      return data;
     } catch (error) {
       console.error('Error updating application:', error);
       throw error;
@@ -77,13 +59,11 @@ const response = await fetch(`${BACKEND_URL}/api/applications`, fetchConfig);
   };
 
   return (
-    <ApplicationContext.Provider 
-      value={{ 
-        applications, 
-        updateApplication, 
-        getApplicationStatus 
-      }}
-    >
+    <ApplicationContext.Provider value={{ 
+      applications, 
+      updateApplication, 
+      getApplicationStatus 
+    }}>
       {children}
     </ApplicationContext.Provider>
   );

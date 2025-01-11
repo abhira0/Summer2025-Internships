@@ -30,13 +30,26 @@ update/
 │   │   │       └── AuthRequired.jsx (26 lines)
 │   │   ├── data/
 │   │   │   └── users.json (14 lines)
+│   │   ├── config/
+│   │   │   └── db.js (26 lines)
+│   │   ├── routes/
+│   │   │   ├── auth.js (28 lines)
+│   │   │   └── applications.js (59 lines)
 │   │   ├── data/
 │   │   │   └── applications.json (1 lines)
+│   │   ├── models/
+│   │   │   ├── User.js (43 lines)
+│   │   │   └── ApplicationLog.js (27 lines)
+│   │   ├── tests/
+│   │   │   └── testConnection.js (27 lines)
+│   │   ├── middleware/
+│   │   │   ├── errorHandler.js (11 lines)
+│   │   │   └── auth.js (20 lines)
 │   │   ├── pages/
 │   │   │   ├── Jobs.jsx (337 lines)
 │   │   │   ├── Home.jsx (15 lines)
 │   │   │   ├── Profile.jsx (129 lines)
-│   │   │   ├── Login.jsx (90 lines)
+│   │   │   ├── Login.jsx (75 lines)
 │   │   │   └── Analytics.jsx (177 lines)
 │   │   ├── config/
 │   │   │   └── index.js (33 lines)
@@ -51,22 +64,23 @@ update/
 │   │   │   ├── api.js (59 lines)
 │   │   │   └── sorts.js (37 lines)
 │   │   ├── context/
-│   │   │   ├── ApplicationContext.jsx (98 lines)
-│   │   │   └── AuthContext.jsx (44 lines)
+│   │   │   ├── ApplicationContext.jsx (78 lines)
+│   │   │   └── AuthContext.jsx (50 lines)
 │   │   └── components/
 │   │       └── ProtectedRoute.jsx (28 lines)
 │   ├── server/
-│   │   └── index.js (75 lines)
+│   │   ├── .env (7 lines)
+│   │   └── index.js (30 lines)
 │   └── src/
 │       ├── vite.config.js (24 lines)
 │       ├── index.css (3 lines)
 │       ├── main.jsx (10 lines)
 │       └── App.jsx (68 lines)
-├── .env (1 lines)
-├── package-lock.json (4301 lines)
+├── package-lock.json (4852 lines)
 ├── postcss.config.js (8 lines)
 ├── index.html (14 lines)
-└── package.json (29 lines)
+├── server.js (28 lines)
+└── package.json (36 lines)
 
 ```
 
@@ -87,12 +101,6 @@ export default {
   }
 ```
 
-### update/.env
-
-```
-VITE_API_URL=http://localhost:3000
-```
-
 ### update/package-lock.json
 
 ```
@@ -107,8 +115,15 @@ VITE_API_URL=http://localhost:3000
       "version": "1.0.0",
       "dependencies": {
         "@heroicons/react": "^2.1.1",
+        "axios": "^1.7.9",
+        "bcryptjs": "^2.4.3",
+        "connect-mongo": "^5.1.0",
         "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
         "express": "^4.21.2",
+        "express-session": "^1.18.1",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.9.4",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.22.0",
@@ -906,6 +921,15 @@ VITE_API_URL=http://localhost:3000
         "@jridgewell/sourcemap-codec": "^1.4.14"
       }
     },
+    "node_modules/@mongodb-js/saslprep": {
+      "version": "1.1.9",
+      "resolved": "https://registry.npmjs.org/@mongodb-js/saslprep/-/saslprep-1.1.9.tgz",
+      "integrity": "sha512-tVkljjeEaAhCqTzajSdgbQ6gE6f3oneVwa3iXR6csiEwXXOFsiC6Uh9iAjAhXPtqa/XMDHWjjeNH/77m/Yq2dw==",
+      "license": "MIT",
+      "dependencies": {
+        "sparse-bitfield": "^3.0.3"
+      }
+    },
     "node_modules/@nodelib/fs.scandir": {
       "version": "2.1.5",
       "resolved": "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz",
@@ -1373,6 +1397,21 @@ VITE_API_URL=http://localhost:3000
         "@types/react": "^18.0.0"
       }
     },
+    "node_modules/@types/webidl-conversions": {
+      "version": "7.0.3",
+      "resolved": "https://registry.npmjs.org/@types/webidl-conversions/-/webidl-conversions-7.0.3.tgz",
+      "integrity": "sha512-CiJJvcRtIgzadHCYXw7dqEnMNRjhGZlYK05Mj9OyktqV8uVT8fD2BFOB7S1uwBE3Kj2Z+4UyPmFw/Ixgw/LAlA==",
+      "license": "MIT"
+    },
+    "node_modules/@types/whatwg-url": {
+      "version": "11.0.5",
+      "resolved": "https://registry.npmjs.org/@types/whatwg-url/-/whatwg-url-11.0.5.tgz",
+      "integrity": "sha512-coYR071JRaHa+xoEvvYqvnIHaVqaYrLPbsufM9BF63HkwI5Lgmy2QR8Q5K/lYDYo5AK82wOvSOS0UsLTpTG7uQ==",
+      "license": "MIT",
+      "dependencies": {
+        "@types/webidl-conversions": "*"
+      }
+    },
     "node_modules/@vitejs/plugin-react": {
       "version": "4.3.4",
       "resolved": "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-4.3.4.tgz",
@@ -1466,6 +1505,24 @@ VITE_API_URL=http://localhost:3000
       "integrity": "sha512-PCVAQswWemu6UdxsDFFX/+gVeYqKAod3D3UVm91jHwynguOwAvYPhx8nNlM++NqRcK6CxxpUafjmhIdKiHibqg==",
       "license": "MIT"
     },
+    "node_modules/asn1.js": {
+      "version": "5.4.1",
+      "resolved": "https://registry.npmjs.org/asn1.js/-/asn1.js-5.4.1.tgz",
+      "integrity": "sha512-+I//4cYPccV8LdmBLiX8CYvf9Sp3vQsrqu2QNXRcrbiWvcx/UdlFiqUJJzxRQxgsZmvhXhn4cSKeSmoFjVdupA==",
+      "license": "MIT",
+      "dependencies": {
+        "bn.js": "^4.0.0",
+        "inherits": "^2.0.1",
+        "minimalistic-assert": "^1.0.0",
+        "safer-buffer": "^2.1.0"
+      }
+    },
+    "node_modules/asynckit": {
+      "version": "0.4.0",
+      "resolved": "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz",
+      "integrity": "sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==",
+      "license": "MIT"
+    },
     "node_modules/autoprefixer": {
       "version": "10.4.20",
       "resolved": "https://registry.npmjs.org/autoprefixer/-/autoprefixer-10.4.20.tgz",
@@ -1504,11 +1561,28 @@ VITE_API_URL=http://localhost:3000
         "postcss": "^8.1.0"
       }
     },
+    "node_modules/axios": {
+      "version": "1.7.9",
+      "resolved": "https://registry.npmjs.org/axios/-/axios-1.7.9.tgz",
+      "integrity": "sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==",
+      "license": "MIT",
+      "dependencies": {
+        "follow-redirects": "^1.15.6",
+        "form-data": "^4.0.0",
+        "proxy-from-env": "^1.1.0"
+      }
+    },
     "node_modules/balanced-match": {
       "version": "1.0.2",
       "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz",
       "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==",
       "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/bcryptjs": {
+      "version": "2.4.3",
+      "resolved": "https://registry.npmjs.org/bcryptjs/-/bcryptjs-2.4.3.tgz",
+      "integrity": "sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==",
       "license": "MIT"
     },
     "node_modules/binary-extensions": {
@@ -1523,6 +1597,12 @@ VITE_API_URL=http://localhost:3000
       "funding": {
         "url": "https://github.com/sponsors/sindresorhus"
       }
+    },
+    "node_modules/bn.js": {
+      "version": "4.12.1",
+      "resolved": "https://registry.npmjs.org/bn.js/-/bn.js-4.12.1.tgz",
+      "integrity": "sha512-k8TVBiPkPJT9uHLdOKfFpqcfprwBFOAAXXozRubr7R7PfIuKvQlzcI4M0pALeqXN09vdaMbUdUj+pass+uULAg==",
+      "license": "MIT"
     },
     "node_modules/body-parser": {
       "version": "1.20.3",
@@ -1618,6 +1698,21 @@ VITE_API_URL=http://localhost:3000
       "engines": {
         "node": "^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7"
       }
+    },
+    "node_modules/bson": {
+      "version": "6.10.1",
+      "resolved": "https://registry.npmjs.org/bson/-/bson-6.10.1.tgz",
+      "integrity": "sha512-P92xmHDQjSKPLHqFxefqMxASNq/aWJMEZugpCjf+AF/pgcUpMMQCg7t7+ewko0/u8AapvF3luf/FoehddEK+sA==",
+      "license": "Apache-2.0",
+      "engines": {
+        "node": ">=16.20.1"
+      }
+    },
+    "node_modules/buffer-equal-constant-time": {
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz",
+      "integrity": "sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==",
+      "license": "BSD-3-Clause"
     },
     "node_modules/bytes": {
       "version": "3.1.2",
@@ -1755,6 +1850,18 @@ VITE_API_URL=http://localhost:3000
       "dev": true,
       "license": "MIT"
     },
+    "node_modules/combined-stream": {
+      "version": "1.0.8",
+      "resolved": "https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.8.tgz",
+      "integrity": "sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==",
+      "license": "MIT",
+      "dependencies": {
+        "delayed-stream": "~1.0.0"
+      },
+      "engines": {
+        "node": ">= 0.8"
+      }
+    },
     "node_modules/commander": {
       "version": "4.1.1",
       "resolved": "https://registry.npmjs.org/commander/-/commander-4.1.1.tgz",
@@ -1763,6 +1870,23 @@ VITE_API_URL=http://localhost:3000
       "license": "MIT",
       "engines": {
         "node": ">= 6"
+      }
+    },
+    "node_modules/connect-mongo": {
+      "version": "5.1.0",
+      "resolved": "https://registry.npmjs.org/connect-mongo/-/connect-mongo-5.1.0.tgz",
+      "integrity": "sha512-xT0vxQLqyqoUTxPLzlP9a/u+vir0zNkhiy9uAdHjSCcUUf7TS5b55Icw8lVyYFxfemP3Mf9gdwUOgeF3cxCAhw==",
+      "license": "MIT",
+      "dependencies": {
+        "debug": "^4.3.1",
+        "kruptein": "^3.0.0"
+      },
+      "engines": {
+        "node": ">=12.9.0"
+      },
+      "peerDependencies": {
+        "express-session": "^1.17.1",
+        "mongodb": ">= 5.1.0 < 7"
       }
     },
     "node_modules/content-disposition": {
@@ -1792,6 +1916,15 @@ VITE_API_URL=http://localhost:3000
       "integrity": "sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==",
       "dev": true,
       "license": "MIT"
+    },
+    "node_modules/cookie": {
+      "version": "0.7.2",
+      "resolved": "https://registry.npmjs.org/cookie/-/cookie-0.7.2.tgz",
+      "integrity": "sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==",
+      "license": "MIT",
+      "engines": {
+        "node": ">= 0.6"
+      }
     },
     "node_modules/cookie-signature": {
       "version": "1.0.6",
@@ -1971,7 +2104,6 @@ VITE_API_URL=http://localhost:3000
       "version": "4.4.0",
       "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.0.tgz",
       "integrity": "sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==",
-      "dev": true,
       "license": "MIT",
       "dependencies": {
         "ms": "^2.1.3"
@@ -1990,6 +2122,15 @@ VITE_API_URL=http://localhost:3000
       "resolved": "https://registry.npmjs.org/decimal.js-light/-/decimal.js-light-2.5.1.tgz",
       "integrity": "sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==",
       "license": "MIT"
+    },
+    "node_modules/delayed-stream": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz",
+      "integrity": "sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.4.0"
+      }
     },
     "node_modules/depd": {
       "version": "2.0.0",
@@ -2034,6 +2175,18 @@ VITE_API_URL=http://localhost:3000
         "csstype": "^3.0.2"
       }
     },
+    "node_modules/dotenv": {
+      "version": "16.4.7",
+      "resolved": "https://registry.npmjs.org/dotenv/-/dotenv-16.4.7.tgz",
+      "integrity": "sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==",
+      "license": "BSD-2-Clause",
+      "engines": {
+        "node": ">=12"
+      },
+      "funding": {
+        "url": "https://dotenvx.com"
+      }
+    },
     "node_modules/dunder-proto": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz",
@@ -2054,6 +2207,15 @@ VITE_API_URL=http://localhost:3000
       "integrity": "sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==",
       "dev": true,
       "license": "MIT"
+    },
+    "node_modules/ecdsa-sig-formatter": {
+      "version": "1.0.11",
+      "resolved": "https://registry.npmjs.org/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz",
+      "integrity": "sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==",
+      "license": "Apache-2.0",
+      "dependencies": {
+        "safe-buffer": "^5.0.1"
+      }
     },
     "node_modules/ee-first": {
       "version": "1.1.1",
@@ -2230,6 +2392,46 @@ VITE_API_URL=http://localhost:3000
         "url": "https://opencollective.com/express"
       }
     },
+    "node_modules/express-session": {
+      "version": "1.18.1",
+      "resolved": "https://registry.npmjs.org/express-session/-/express-session-1.18.1.tgz",
+      "integrity": "sha512-a5mtTqEaZvBCL9A9aqkrtfz+3SMDhOVUnjafjo+s7A9Txkq+SVX2DLvSp1Zrv4uCXa3lMSK3viWnh9Gg07PBUA==",
+      "license": "MIT",
+      "dependencies": {
+        "cookie": "0.7.2",
+        "cookie-signature": "1.0.7",
+        "debug": "2.6.9",
+        "depd": "~2.0.0",
+        "on-headers": "~1.0.2",
+        "parseurl": "~1.3.3",
+        "safe-buffer": "5.2.1",
+        "uid-safe": "~2.1.5"
+      },
+      "engines": {
+        "node": ">= 0.8.0"
+      }
+    },
+    "node_modules/express-session/node_modules/cookie-signature": {
+      "version": "1.0.7",
+      "resolved": "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.7.tgz",
+      "integrity": "sha512-NXdYc3dLr47pBkpUCHtKSwIOQXLVn8dZEuywboCOJY/osA0wFSLlSawr3KN8qXJEyX66FcONTH8EIlVuK0yyFA==",
+      "license": "MIT"
+    },
+    "node_modules/express-session/node_modules/debug": {
+      "version": "2.6.9",
+      "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
+      "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
+      "license": "MIT",
+      "dependencies": {
+        "ms": "2.0.0"
+      }
+    },
+    "node_modules/express-session/node_modules/ms": {
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz",
+      "integrity": "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==",
+      "license": "MIT"
+    },
     "node_modules/express/node_modules/cookie": {
       "version": "0.7.1",
       "resolved": "https://registry.npmjs.org/cookie/-/cookie-0.7.1.tgz",
@@ -2349,6 +2551,26 @@ VITE_API_URL=http://localhost:3000
       "integrity": "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==",
       "license": "MIT"
     },
+    "node_modules/follow-redirects": {
+      "version": "1.15.9",
+      "resolved": "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.9.tgz",
+      "integrity": "sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==",
+      "funding": [
+        {
+          "type": "individual",
+          "url": "https://github.com/sponsors/RubenVerborgh"
+        }
+      ],
+      "license": "MIT",
+      "engines": {
+        "node": ">=4.0"
+      },
+      "peerDependenciesMeta": {
+        "debug": {
+          "optional": true
+        }
+      }
+    },
     "node_modules/foreground-child": {
       "version": "3.3.0",
       "resolved": "https://registry.npmjs.org/foreground-child/-/foreground-child-3.3.0.tgz",
@@ -2364,6 +2586,20 @@ VITE_API_URL=http://localhost:3000
       },
       "funding": {
         "url": "https://github.com/sponsors/isaacs"
+      }
+    },
+    "node_modules/form-data": {
+      "version": "4.0.1",
+      "resolved": "https://registry.npmjs.org/form-data/-/form-data-4.0.1.tgz",
+      "integrity": "sha512-tzN8e4TX8+kkxGPK8D5u0FNmjPUjw3lwC9lSLxxoB/+GtsJG91CO8bSWy73APlgAZzZbXEYZJuxjkHH2w+Ezhw==",
+      "license": "MIT",
+      "dependencies": {
+        "asynckit": "^0.4.0",
+        "combined-stream": "^1.0.8",
+        "mime-types": "^2.1.12"
+      },
+      "engines": {
+        "node": ">= 6"
       }
     },
     "node_modules/forwarded": {
@@ -2738,6 +2974,82 @@ VITE_API_URL=http://localhost:3000
         "node": ">=6"
       }
     },
+    "node_modules/jsonwebtoken": {
+      "version": "9.0.2",
+      "resolved": "https://registry.npmjs.org/jsonwebtoken/-/jsonwebtoken-9.0.2.tgz",
+      "integrity": "sha512-PRp66vJ865SSqOlgqS8hujT5U4AOgMfhrwYIuIhfKaoSCZcirrmASQr8CX7cUg+RMih+hgznrjp99o+W4pJLHQ==",
+      "license": "MIT",
+      "dependencies": {
+        "jws": "^3.2.2",
+        "lodash.includes": "^4.3.0",
+        "lodash.isboolean": "^3.0.3",
+        "lodash.isinteger": "^4.0.4",
+        "lodash.isnumber": "^3.0.3",
+        "lodash.isplainobject": "^4.0.6",
+        "lodash.isstring": "^4.0.1",
+        "lodash.once": "^4.0.0",
+        "ms": "^2.1.1",
+        "semver": "^7.5.4"
+      },
+      "engines": {
+        "node": ">=12",
+        "npm": ">=6"
+      }
+    },
+    "node_modules/jsonwebtoken/node_modules/semver": {
+      "version": "7.6.3",
+      "resolved": "https://registry.npmjs.org/semver/-/semver-7.6.3.tgz",
+      "integrity": "sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==",
+      "license": "ISC",
+      "bin": {
+        "semver": "bin/semver.js"
+      },
+      "engines": {
+        "node": ">=10"
+      }
+    },
+    "node_modules/jwa": {
+      "version": "1.4.1",
+      "resolved": "https://registry.npmjs.org/jwa/-/jwa-1.4.1.tgz",
+      "integrity": "sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==",
+      "license": "MIT",
+      "dependencies": {
+        "buffer-equal-constant-time": "1.0.1",
+        "ecdsa-sig-formatter": "1.0.11",
+        "safe-buffer": "^5.0.1"
+      }
+    },
+    "node_modules/jws": {
+      "version": "3.2.2",
+      "resolved": "https://registry.npmjs.org/jws/-/jws-3.2.2.tgz",
+      "integrity": "sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==",
+      "license": "MIT",
+      "dependencies": {
+        "jwa": "^1.4.1",
+        "safe-buffer": "^5.0.1"
+      }
+    },
+    "node_modules/kareem": {
+      "version": "2.6.3",
+      "resolved": "https://registry.npmjs.org/kareem/-/kareem-2.6.3.tgz",
+      "integrity": "sha512-C3iHfuGUXK2u8/ipq9LfjFfXFxAZMQJJq7vLS45r3D9Y2xQ/m4S8zaR4zMLFWh9AsNPXmcFfUDhTEO8UIC/V6Q==",
+      "license": "Apache-2.0",
+      "engines": {
+        "node": ">=12.0.0"
+      }
+    },
+    "node_modules/kruptein": {
+      "version": "3.0.7",
+      "resolved": "https://registry.npmjs.org/kruptein/-/kruptein-3.0.7.tgz",
+      "integrity": "sha512-vTftnEjfbqFHLqxDUMQCj6gBo5lKqjV4f0JsM8rk8rM3xmvFZ2eSy4YALdaye7E+cDKnEj7eAjFR3vwh8a4PgQ==",
+      "license": "MIT",
+      "dependencies": {
+        "asn1.js": "^5.4.1"
+      },
+      "engines": {
+        "node": ">8"
+      }
+    },
     "node_modules/lilconfig": {
       "version": "3.1.3",
       "resolved": "https://registry.npmjs.org/lilconfig/-/lilconfig-3.1.3.tgz",
@@ -2762,6 +3074,48 @@ VITE_API_URL=http://localhost:3000
       "version": "4.17.21",
       "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz",
       "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==",
+      "license": "MIT"
+    },
+    "node_modules/lodash.includes": {
+      "version": "4.3.0",
+      "resolved": "https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz",
+      "integrity": "sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==",
+      "license": "MIT"
+    },
+    "node_modules/lodash.isboolean": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz",
+      "integrity": "sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==",
+      "license": "MIT"
+    },
+    "node_modules/lodash.isinteger": {
+      "version": "4.0.4",
+      "resolved": "https://registry.npmjs.org/lodash.isinteger/-/lodash.isinteger-4.0.4.tgz",
+      "integrity": "sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==",
+      "license": "MIT"
+    },
+    "node_modules/lodash.isnumber": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/lodash.isnumber/-/lodash.isnumber-3.0.3.tgz",
+      "integrity": "sha512-QYqzpfwO3/CWf3XP+Z+tkQsfaLL/EnUlXWVkIk5FUPc4sBdTehEqZONuyRt2P67PXAk+NXmTBcc97zw9t1FQrw==",
+      "license": "MIT"
+    },
+    "node_modules/lodash.isplainobject": {
+      "version": "4.0.6",
+      "resolved": "https://registry.npmjs.org/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz",
+      "integrity": "sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==",
+      "license": "MIT"
+    },
+    "node_modules/lodash.isstring": {
+      "version": "4.0.1",
+      "resolved": "https://registry.npmjs.org/lodash.isstring/-/lodash.isstring-4.0.1.tgz",
+      "integrity": "sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==",
+      "license": "MIT"
+    },
+    "node_modules/lodash.once": {
+      "version": "4.1.1",
+      "resolved": "https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz",
+      "integrity": "sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==",
       "license": "MIT"
     },
     "node_modules/loose-envify": {
@@ -2803,6 +3157,12 @@ VITE_API_URL=http://localhost:3000
       "engines": {
         "node": ">= 0.6"
       }
+    },
+    "node_modules/memory-pager": {
+      "version": "1.5.0",
+      "resolved": "https://registry.npmjs.org/memory-pager/-/memory-pager-1.5.0.tgz",
+      "integrity": "sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==",
+      "license": "MIT"
     },
     "node_modules/merge-descriptors": {
       "version": "1.0.3",
@@ -2879,6 +3239,12 @@ VITE_API_URL=http://localhost:3000
         "node": ">= 0.6"
       }
     },
+    "node_modules/minimalistic-assert": {
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz",
+      "integrity": "sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==",
+      "license": "ISC"
+    },
     "node_modules/minimatch": {
       "version": "9.0.5",
       "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.5.tgz",
@@ -2903,6 +3269,105 @@ VITE_API_URL=http://localhost:3000
       "license": "ISC",
       "engines": {
         "node": ">=16 || 14 >=14.17"
+      }
+    },
+    "node_modules/mongodb": {
+      "version": "6.12.0",
+      "resolved": "https://registry.npmjs.org/mongodb/-/mongodb-6.12.0.tgz",
+      "integrity": "sha512-RM7AHlvYfS7jv7+BXund/kR64DryVI+cHbVAy9P61fnb1RcWZqOW1/Wj2YhqMCx+MuYhqTRGv7AwHBzmsCKBfA==",
+      "license": "Apache-2.0",
+      "dependencies": {
+        "@mongodb-js/saslprep": "^1.1.9",
+        "bson": "^6.10.1",
+        "mongodb-connection-string-url": "^3.0.0"
+      },
+      "engines": {
+        "node": ">=16.20.1"
+      },
+      "peerDependencies": {
+        "@aws-sdk/credential-providers": "^3.188.0",
+        "@mongodb-js/zstd": "^1.1.0 || ^2.0.0",
+        "gcp-metadata": "^5.2.0",
+        "kerberos": "^2.0.1",
+        "mongodb-client-encryption": ">=6.0.0 <7",
+        "snappy": "^7.2.2",
+        "socks": "^2.7.1"
+      },
+      "peerDependenciesMeta": {
+        "@aws-sdk/credential-providers": {
+          "optional": true
+        },
+        "@mongodb-js/zstd": {
+          "optional": true
+        },
+        "gcp-metadata": {
+          "optional": true
+        },
+        "kerberos": {
+          "optional": true
+        },
+        "mongodb-client-encryption": {
+          "optional": true
+        },
+        "snappy": {
+          "optional": true
+        },
+        "socks": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/mongodb-connection-string-url": {
+      "version": "3.0.1",
+      "resolved": "https://registry.npmjs.org/mongodb-connection-string-url/-/mongodb-connection-string-url-3.0.1.tgz",
+      "integrity": "sha512-XqMGwRX0Lgn05TDB4PyG2h2kKO/FfWJyCzYQbIhXUxz7ETt0I/FqHjUeqj37irJ+Dl1ZtU82uYyj14u2XsZKfg==",
+      "license": "Apache-2.0",
+      "dependencies": {
+        "@types/whatwg-url": "^11.0.2",
+        "whatwg-url": "^13.0.0"
+      }
+    },
+    "node_modules/mongoose": {
+      "version": "8.9.4",
+      "resolved": "https://registry.npmjs.org/mongoose/-/mongoose-8.9.4.tgz",
+      "integrity": "sha512-DndoI01aV/q40P9DiYDXsYjhj8vZjmmuFwcC3Tro5wFznoE1z6Fe2JgMnbLR6ghglym5ziYizSfAJykp+UPZWg==",
+      "license": "MIT",
+      "dependencies": {
+        "bson": "^6.10.1",
+        "kareem": "2.6.3",
+        "mongodb": "~6.12.0",
+        "mpath": "0.9.0",
+        "mquery": "5.0.0",
+        "ms": "2.1.3",
+        "sift": "17.1.3"
+      },
+      "engines": {
+        "node": ">=16.20.1"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/mongoose"
+      }
+    },
+    "node_modules/mpath": {
+      "version": "0.9.0",
+      "resolved": "https://registry.npmjs.org/mpath/-/mpath-0.9.0.tgz",
+      "integrity": "sha512-ikJRQTk8hw5DEoFVxHG1Gn9T/xcjtdnOKIU1JTmGjZZlg9LST2mBLmcX3/ICIbgJydT2GOc15RnNy5mHmzfSew==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=4.0.0"
+      }
+    },
+    "node_modules/mquery": {
+      "version": "5.0.0",
+      "resolved": "https://registry.npmjs.org/mquery/-/mquery-5.0.0.tgz",
+      "integrity": "sha512-iQMncpmEK8R8ncT8HJGsGc9Dsp8xcgYMVSbs5jgnm1lFHTZqMJTUWTDx1LBO8+mK3tPNZWFLBghQEIOULSTHZg==",
+      "license": "MIT",
+      "dependencies": {
+        "debug": "4.x"
+      },
+      "engines": {
+        "node": ">=14.0.0"
       }
     },
     "node_modules/ms": {
@@ -3017,6 +3482,15 @@ VITE_API_URL=http://localhost:3000
       "dependencies": {
         "ee-first": "1.1.1"
       },
+      "engines": {
+        "node": ">= 0.8"
+      }
+    },
+    "node_modules/on-headers": {
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/on-headers/-/on-headers-1.0.2.tgz",
+      "integrity": "sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==",
+      "license": "MIT",
       "engines": {
         "node": ">= 0.8"
       }
@@ -3304,6 +3778,21 @@ VITE_API_URL=http://localhost:3000
         "node": ">= 0.10"
       }
     },
+    "node_modules/proxy-from-env": {
+      "version": "1.1.0",
+      "resolved": "https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-1.1.0.tgz",
+      "integrity": "sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==",
+      "license": "MIT"
+    },
+    "node_modules/punycode": {
+      "version": "2.3.1",
+      "resolved": "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz",
+      "integrity": "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=6"
+      }
+    },
     "node_modules/qs": {
       "version": "6.13.0",
       "resolved": "https://registry.npmjs.org/qs/-/qs-6.13.0.tgz",
@@ -3339,6 +3828,15 @@ VITE_API_URL=http://localhost:3000
         }
       ],
       "license": "MIT"
+    },
+    "node_modules/random-bytes": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/random-bytes/-/random-bytes-1.0.0.tgz",
+      "integrity": "sha512-iv7LhNVO047HzYR3InF6pUcUsPQiHTM1Qal51DcGSuZFBil1aBBWG5eHPNek7bvILMaYJ/8RU1e8w1AMdHmLQQ==",
+      "license": "MIT",
+      "engines": {
+        "node": ">= 0.8"
+      }
     },
     "node_modules/range-parser": {
       "version": "1.2.1",
@@ -3833,6 +4331,12 @@ VITE_API_URL=http://localhost:3000
         "url": "https://github.com/sponsors/ljharb"
       }
     },
+    "node_modules/sift": {
+      "version": "17.1.3",
+      "resolved": "https://registry.npmjs.org/sift/-/sift-17.1.3.tgz",
+      "integrity": "sha512-Rtlj66/b0ICeFzYTuNvX/EF1igRbbnGSvEyT79McoZa/DeGhMyC5pWKOEsZKnpkqtSeovd5FL/bjHWC3CIIvCQ==",
+      "license": "MIT"
+    },
     "node_modules/signal-exit": {
       "version": "4.1.0",
       "resolved": "https://registry.npmjs.org/signal-exit/-/signal-exit-4.1.0.tgz",
@@ -3854,6 +4358,15 @@ VITE_API_URL=http://localhost:3000
       "license": "BSD-3-Clause",
       "engines": {
         "node": ">=0.10.0"
+      }
+    },
+    "node_modules/sparse-bitfield": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/sparse-bitfield/-/sparse-bitfield-3.0.3.tgz",
+      "integrity": "sha512-kvzhi7vqKTfkh0PZU+2D2PIllw2ymqJKujUcyPMd9Y75Nv4nPbGJZXNhxsgdQab2BmlDct1YnfQCguEvHr7VsQ==",
+      "license": "MIT",
+      "dependencies": {
+        "memory-pager": "^1.0.2"
       }
     },
     "node_modules/statuses": {
@@ -4094,6 +4607,18 @@ VITE_API_URL=http://localhost:3000
         "node": ">=0.6"
       }
     },
+    "node_modules/tr46": {
+      "version": "4.1.1",
+      "resolved": "https://registry.npmjs.org/tr46/-/tr46-4.1.1.tgz",
+      "integrity": "sha512-2lv/66T7e5yNyhAAC4NaKe5nVavzuGJQVVtRYLyQ2OI8tsJ61PMLlelehb0wi2Hx6+hT/OJUWZcw8MjlSRnxvw==",
+      "license": "MIT",
+      "dependencies": {
+        "punycode": "^2.3.0"
+      },
+      "engines": {
+        "node": ">=14"
+      }
+    },
     "node_modules/ts-interface-checker": {
       "version": "0.1.13",
       "resolved": "https://registry.npmjs.org/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz",
@@ -4112,6 +4637,18 @@ VITE_API_URL=http://localhost:3000
       },
       "engines": {
         "node": ">= 0.6"
+      }
+    },
+    "node_modules/uid-safe": {
+      "version": "2.1.5",
+      "resolved": "https://registry.npmjs.org/uid-safe/-/uid-safe-2.1.5.tgz",
+      "integrity": "sha512-KPHm4VL5dDXKz01UuEd88Df+KzynaohSL9fBh096KWAxSKZQDI2uBrVqtvRM4rwrIrRRKsdLNML/lnaaVSRioA==",
+      "license": "MIT",
+      "dependencies": {
+        "random-bytes": "~1.0.0"
+      },
+      "engines": {
+        "node": ">= 0.8"
       }
     },
     "node_modules/unpipe": {
@@ -4259,6 +4796,28 @@ VITE_API_URL=http://localhost:3000
         "terser": {
           "optional": true
         }
+      }
+    },
+    "node_modules/webidl-conversions": {
+      "version": "7.0.0",
+      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-7.0.0.tgz",
+      "integrity": "sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==",
+      "license": "BSD-2-Clause",
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/whatwg-url": {
+      "version": "13.0.0",
+      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-13.0.0.tgz",
+      "integrity": "sha512-9WWbymnqj57+XEuqADHrCJ2eSXzn8WXIW/YSGaZtb2WKAInQ6CHfaUUcTyyver0p8BDg5StLQq8h1vtZuwmOig==",
+      "license": "MIT",
+      "dependencies": {
+        "tr46": "^4.1.1",
+        "webidl-conversions": "^7.0.0"
+      },
+      "engines": {
+        "node": ">=16"
       }
     },
     "node_modules/which": {
@@ -4432,6 +4991,39 @@ export default {
 </html>
 ```
 
+### update/server.js
+
+```
+
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+};
+
+export default connectDB;
+
+import dotenv from 'dotenv';
+dotenv.config();
+// ...existing code...
+import connectDB from './config/db.js';
+// ...existing code...
+connectDB();
+// ...existing code...
+```
+
 ### update/package.json
 
 ```
@@ -4447,8 +5039,15 @@ export default {
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.0",
@@ -4490,90 +5089,340 @@ export default {
   }
 ```
 
+### update/server/.env
+
+```
+SIMPLIFY_CACHE=""
+SERVER_PORT=32768
+
+
+MONGO_URI=mongodb+srv://express_client:xlMyiXhLsyMRkhrc@jobs-db.tn2rn.mongodb.net/?retryWrites=true&w=majority&appName=jobs-db
+JWT_SECRET=your_secure_jwt_secret
+PORT=5174
+```
+
 ### update/server/index.js
 
 ```
 // server/index.js
 import express from 'express';
 import cors from 'cors';
-import { promises as fs } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import dotenv from 'dotenv';
+import connectDB from './config/db.js';
+import authRoutes from './routes/auth.js';
+import applicationRoutes from './routes/applications.js';
+import errorHandler from './middleware/errorHandler.js'; // Import errorHandler
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5174;
 
-// Basic CORS setup
-const corsOptions = {
-  origin: true, // Reflect the request origin
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
+// Connect to MongoDB
+connectDB();
 
-app.options('*', cors(corsOptions));
-app.use(cors(corsOptions));
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-// Enable pre-flight for all routes
-app.options('*', cors());
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/applications', applicationRoutes);
 
-const DATA_FILE = join(__dirname, 'data', 'applications.json');
-
-// Initialize data directory and file
-async function initFiles() {
-  const dir = join(__dirname, 'data');
-  try {
-    await fs.access(dir);
-  } catch {
-    await fs.mkdir(dir, { recursive: true });
-  }
-  try {
-    await fs.access(DATA_FILE);
-  } catch {
-    await fs.writeFile(DATA_FILE, JSON.stringify({ applications: {} }));
-  }
-}
-
-await initFiles();
-
-// Basic health check endpoint
-app.get('/', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
-app.get('/api/applications', cors(corsOptions), async (req, res) => {
-  try {
-    const data = await fs.readFile(DATA_FILE, 'utf8');
-    res.json(JSON.parse(data));
-  } catch (error) {
-    console.error('Error reading applications:', error);
-    res.status(500).json({ error: 'Failed to read applications' });
-  }
-});
-
-app.post('/api/applications', cors(corsOptions), async (req, res) => {
-  try {
-    await fs.writeFile(DATA_FILE, JSON.stringify(req.body, null, 2));
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error writing applications:', error);
-    res.status(500).json({ error: 'Failed to save applications' });
-  }
-});
+// Error Handling
+app.use(errorHandler); // Use errorHandler
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
 ```
 
+### update/server/config/db.js
+
+```
+// server/config/db.js
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const connectDB = async () => {
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    console.error('Error: MONGO_URI is not defined in the environment variables');
+    process.exit(1);
+  }
+
+  try {
+    const conn = await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+};
+
+export default connectDB;
+```
+
+### update/server/routes/auth.js
+
+```
+// server/routes/auth.js
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import { User } from '../models/User.js';
+
+const router = express.Router();
+
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+
+    if (user && await user.matchPassword(password)) {
+      const token = jwt.sign(
+        { userId: user._id, username: user.username, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+      res.json({ token, username: user.username, role: user.role });
+    } else {
+      res.status(401).json({ message: 'Invalid credentials' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+export default router;
+```
+
+### update/server/routes/applications.js
+
+```
+// server/routes/applications.js
+import express from 'express';
+import { ApplicationLog } from '../models/User.js';
+import auth from '../middleware/auth.js';
+
+const router = express.Router();
+
+// Get user's application logs
+router.get('/', auth, async (req, res) => {
+  try {
+    const logs = await ApplicationLog.find({ user: req.user.userId });
+    const formattedLogs = {
+      applications: {
+        [req.user.username]: {
+          applied: logs.filter(log => log.status === 'applied' && log.active).map(log => log.jobId),
+          hidden: logs.filter(log => log.status === 'hidden' && log.active).map(log => log.jobId)
+        }
+      }
+    };
+    res.json(formattedLogs);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update application status
+router.post('/', auth, async (req, res) => {
+  try {
+    const { jobId, status, value } = req.body;
+    
+    if (value) {
+      await ApplicationLog.findOneAndUpdate(
+        { user: req.user.userId, jobId, status },
+        { active: true },
+        { upsert: true, new: true }
+      );
+    } else {
+      await ApplicationLog.findOneAndUpdate(
+        { user: req.user.userId, jobId, status },
+        { active: false }
+      );
+    }
+    
+    const logs = await ApplicationLog.find({ user: req.user.userId });
+    const formattedLogs = {
+      applications: {
+        [req.user.username]: {
+          applied: logs.filter(log => log.status === 'applied' && log.active).map(log => log.jobId),
+          hidden: logs.filter(log => log.status === 'hidden' && log.active).map(log => log.jobId)
+        }
+      }
+    };
+    res.json(formattedLogs);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+export default router;
+```
+
 ### update/server/data/applications.json
 
 ```
 {"applications":{}}
+```
+
+### update/server/models/User.js
+
+```
+// server/models/User.js
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  }
+}, {
+  timestamps: true
+});
+
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+const applicationLogSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  jobId: { type: String, required: true },
+  status: { type: String, required: true },
+  active: { type: Boolean, default: true },
+});
+
+const ApplicationLog = mongoose.model('ApplicationLog', applicationLogSchema);
+
+export const User = mongoose.model('User', userSchema);
+export { ApplicationLog };
+
+```
+
+### update/server/models/ApplicationLog.js
+
+```
+
+// server/models/ApplicationLog.js
+const applicationLogSchema = new mongoose.Schema({
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    },
+    jobId: {
+      type: String,
+      required: true
+    },
+    applied: {
+      type: Boolean,
+      default: true
+    },
+    hidden: {
+      type: Boolean,
+      default: true
+    }
+  }, {
+    timestamps: true
+  });
+  
+  const ApplicationLog = mongoose.model('ApplicationLog', applicationLogSchema);
+  
+  export { User, ApplicationLog };
+```
+
+### update/server/tests/testConnection.js
+
+```
+
+// server/tests/testConnection.js
+import connectDB from '../config/db.js';
+import { User } from '../models/User.js';
+
+const testConnection = async () => {
+  try {
+    await connectDB();
+    
+    // Create test user
+    const testUser = new User({
+      username: 'demo',
+      password: 'demo',
+      role: 'user'
+    });
+    
+    await testUser.save();
+    console.log('Test user created successfully');
+    
+    process.exit(0);
+  } catch (error) {
+    console.error('Connection test failed:', error);
+    process.exit(1);
+  }
+};
+
+testConnection();
+```
+
+### update/server/middleware/errorHandler.js
+
+```
+// server/middleware/errorHandler.js
+const errorHandler = (err, req, res, next) => {
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode);
+  res.json({
+    message: err.message,
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
+};
+
+export default errorHandler;
+```
+
+### update/server/middleware/auth.js
+
+```
+// server/middleware/auth.js
+import jwt from 'jsonwebtoken';
+
+const auth = (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ message: 'No token provided' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+};
+
+export default auth;
+
+
 ```
 
 ### update/src/vite.config.js
@@ -5205,7 +6054,6 @@ export default Profile;
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { generateToken } from '../utils/auth';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -5219,27 +6067,13 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await fetch('/data/users.json');
-      const data = await response.json();
-      
-      const user = data.users.find(u => 
-        u.username === username && u.password === password
-      );
-
-      if (user) {
-        const token = generateToken(user);
-        localStorage.setItem('jwt_token', token);
-        login({ username: user.username });
-        navigate('/jobs');
-      } else {
-        setError('Invalid credentials');
-      }
+      await login(username, password);
+      navigate('/jobs');
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError('Invalid credentials');
       console.error('Login error:', err);
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -6030,10 +6864,7 @@ export const applySorts = (jobs, activeSorts) => {
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 
-const BACKEND_URL = window.location.hostname.includes('github.dev') 
-  ? `https://${window.location.hostname.replace('5173', '5174')}`
-  : 'http://localhost:5174';
-
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5174';
 const ApplicationContext = createContext(null);
 
 export function ApplicationProvider({ children }) {
@@ -6041,58 +6872,43 @@ export function ApplicationProvider({ children }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        // Fetch configuration
-const fetchConfig = {
-  credentials: 'include',
-  headers: {
-    'Content-Type': 'application/json',
-  }
-};
+    if (user) {
+      fetchApplications();
+    }
+  }, [user]);
 
-const response = await fetch(`${BACKEND_URL}/api/applications`, fetchConfig);
-        if (!response.ok) throw new Error('Failed to fetch applications');
-        const data = await response.json();
-        setApplications(data);
-      } catch (error) {
-        console.error('Error loading applications:', error);
-      }
-    };
-
-    fetchApplications();
-  }, []);
-
-  const updateApplication = async (jobId, type, value) => {
-    if (!user?.username) return;
-
+  const fetchApplications = async () => {
     try {
-      const newApplications = { ...applications };
-      if (!newApplications.applications[user.username]) {
-        newApplications.applications[user.username] = { applied: [], hidden: [] };
-      }
-      
-      const typeArray = newApplications.applications[user.username][type] || [];
-      const index = typeArray.indexOf(jobId);
-      
-      if (value && index === -1) {
-        typeArray.push(jobId);
-      } else if (!value && index !== -1) {
-        typeArray.splice(index, 1);
-      }
+      const token = localStorage.getItem('jwt_token');
+      const response = await fetch(`${API_URL}/api/applications`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error('Failed to fetch applications');
+      const data = await response.json();
+      setApplications(data);
+    } catch (error) {
+      console.error('Error loading applications:', error);
+    }
+  };
 
-      newApplications.applications[user.username][type] = typeArray;
-      
-      const response = await fetch(`${BACKEND_URL}/api/applications`, {
+  const updateApplication = async (jobId, status, value) => {
+    try {
+      const token = localStorage.getItem('jwt_token');
+      const response = await fetch(`${API_URL}/api/applications`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newApplications)
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ jobId, status, value })
       });
 
-      if (!response.ok) throw new Error('Failed to sync with server');
-      
-      setApplications(newApplications);
-      return newApplications;
+      if (!response.ok) throw new Error('Failed to update application');
+      const data = await response.json();
+      setApplications(data);
+      return data;
     } catch (error) {
       console.error('Error updating application:', error);
       throw error;
@@ -6105,13 +6921,11 @@ const response = await fetch(`${BACKEND_URL}/api/applications`, fetchConfig);
   };
 
   return (
-    <ApplicationContext.Provider 
-      value={{ 
-        applications, 
-        updateApplication, 
-        getApplicationStatus 
-      }}
-    >
+    <ApplicationContext.Provider value={{ 
+      applications, 
+      updateApplication, 
+      getApplicationStatus 
+    }}>
       {children}
     </ApplicationContext.Provider>
   );
@@ -6131,16 +6945,12 @@ export function useApplications() {
 ```
 // src/context/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { verifyToken } from '../utils/auth';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5174';
 const AuthContext = createContext(null);
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
@@ -6149,15 +6959,27 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const token = localStorage.getItem('jwt_token');
-    if (token && verifyToken()) {
+    if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      setUser({ username: payload.user });
+      setUser({ username: payload.username, role: payload.role });
     }
     setLoading(false);
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
+  const login = async (username, password) => {
+    const response = await fetch(`${API_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    if (!response.ok) {
+      throw new Error('Invalid credentials');
+    }
+
+    const data = await response.json();
+    localStorage.setItem('jwt_token', data.token);
+    setUser({ username: data.username, role: data.role });
   };
 
   const logout = () => {
@@ -6171,8 +6993,6 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-
-export default AuthContext;
 ```
 
 ### update/src/components/ProtectedRoute.jsx
