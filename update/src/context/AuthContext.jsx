@@ -1,6 +1,9 @@
 // src/context/AuthContext.jsx
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+
 
 const AuthContext = createContext();
 const API_URL = import.meta.env.VITE_API_URL || 'https://refactored-space-lamp-jgpvjwqggwvhq4wv-5174.app.github.dev';
@@ -22,7 +25,8 @@ export function AuthProvider({ children }) {
       const token = localStorage.getItem('jwt_token');
       if (token) {
         try {
-          setUser({ username: token }); // For now, just use the token as username
+          const decoded = jwtDecode(token);
+          setUser({ username: decoded.sub }); // Correctly set username from token
         } catch (error) {
           console.error('Auth check failed:', error);
           localStorage.removeItem('jwt_token');
@@ -51,7 +55,9 @@ export function AuthProvider({ children }) {
       
       const { access_token } = response.data;
       localStorage.setItem('jwt_token', access_token);
-      setUser({ username });
+      
+      const decoded = jwtDecode(access_token);
+      setUser({ username: decoded.sub }); // Correctly set username from token
       return response.data;
     } catch (error) {
       console.error('Login failed:', error);
