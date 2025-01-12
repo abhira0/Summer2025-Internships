@@ -18,6 +18,7 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "mongoose": "^8.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
