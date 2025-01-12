@@ -16,18 +16,19 @@ export function useApplications() {
 export function ApplicationProvider({ children }) {
   const [applications, setApplications] = useState({ applications: {} });
   const { user } = useAuth();
-  const API_URL = import.meta.env.VITE_API_URL || 'https://refactored-space-lamp-jgpvjwqggwvhq4wv-5174.app.github.dev';
 
   useEffect(() => {
     const fetchApplications = async () => {
       if (user) {
         try {
           const token = localStorage.getItem('jwt_token');
-          const response = await axios.get(`${API_URL}/api/v1/applications`, {
+          const response = await axios.get(`/api/applications`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           });
+          console.log(`Fetching applications for user: ${user.username}`);
+          console.log(response)
           setApplications(response.data);
         } catch (error) {
           console.error('Error loading applications:', error);
@@ -36,13 +37,13 @@ export function ApplicationProvider({ children }) {
     };
 
     fetchApplications();
-  }, [user, API_URL]);
+  }, [user]);
 
   const updateApplication = async (jobId, status, value) => {
     try {
       const token = localStorage.getItem('jwt_token');
       const response = await axios.post(
-        `${API_URL}/api/v1/applications`,
+        `/api/applications`,
         { job_id: jobId, status, value },
         {
           headers: {
