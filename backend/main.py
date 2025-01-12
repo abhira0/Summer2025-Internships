@@ -1,6 +1,7 @@
 # backend/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from backend.core.config import settings
 from backend.routers import auth, applications
 from backend.utils.db import connect_to_mongo, close_mongo_connection
@@ -56,7 +57,6 @@ async def global_exception_handler(request, exc):
 async def startup_db_client():
     await connect_to_mongo()
     logger.info("Application startup complete")
-    logger.info(f"CORS Origin configured for: {FRONTEND_URL}")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
