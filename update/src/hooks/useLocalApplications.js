@@ -1,8 +1,8 @@
-// src/hooks/useApplications.js
+// src/hooks/useLocalApplications.js
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-export function useApplications() {
+export function useLocalApplications() {
   const [applications, setApplications] = useState({ applications: {} });
   const { user } = useAuth();
 

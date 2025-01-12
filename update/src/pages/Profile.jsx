@@ -1,13 +1,13 @@
 // src/pages/Profile.jsx
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useApplications } from '../hooks/useApplications';
+import { useLocalApplications } from '../hooks/useLocalApplications';
 import { useJobs } from '../hooks/useJobs';
 import Layout from '../components/layout/Layout';
 
 const Profile = () => {
   const { user, logout } = useAuth();
-  const { applications } = useApplications();
+  const { applications } = useLocalApplications();
   const { jobs } = useJobs();
 
   const userApplications = applications.applications[user?.username] || { applied: [], hidden: [] };

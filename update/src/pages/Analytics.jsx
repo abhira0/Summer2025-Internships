@@ -1,7 +1,7 @@
 // src/pages/Analytics.jsx
 import React from 'react';
 import { useJobs } from '../hooks/useJobs';
-import { useApplications } from '../hooks/useApplications';
+import { useLocalApplications } from '../hooks/useLocalApplications';
 import { useAuth } from '../context/AuthContext';
 import Layout from '../components/layout/Layout';
 import {
@@ -20,7 +20,7 @@ import {
 
 const Analytics = () => {
   const { jobs, loading: jobsLoading } = useJobs();
-  const { applications } = useApplications();
+  const { applications } = useLocalApplications();
   const { user } = useAuth();
 
   if (jobsLoading) {
