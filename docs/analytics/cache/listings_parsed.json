@@ -86599,7 +86599,7 @@
     "company_name": "MSD",
     "id": "b28e4056-7e4c-4c15-b7a4-5ad47e1733de",
     "title": "Forecasting Capabilities and Data Science Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -86638,7 +86638,7 @@
     "company_name": "MSD",
     "id": "5fec1bf1-74e2-4685-b5d5-e57b2daf7ee1",
     "title": "Data Science Business Analyst Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -86676,7 +86676,7 @@
     "company_name": "MSD",
     "id": "cc5d093d-c37b-40e5-8eb0-0aef9986210a",
     "title": "Business Insights & Analytics Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -86788,7 +86788,7 @@
     "company_name": "MSD",
     "id": "2c5cac65-540a-491c-9d78-9fa6b656694a",
     "title": "Data Science Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -90002,7 +90002,7 @@
     "company_name": "ServiceNow",
     "id": "f5d84aba-8aa4-4951-8c15-083f711b5122",
     "title": "Technical Accelerator Consultant \u2013 Intern",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -90180,7 +90180,7 @@
     "company_name": "ServiceNow",
     "id": "61d618df-5f67-474a-8760-f488ddfd50b0",
     "title": "Technical Accelerator Consultant \u2013 Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -91302,5 +91302,62 @@
     "company_url": "https://simplify.jobs/c/Comcast",
     "is_visible": true,
     "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Cadence Design Systems",
+    "id": "6963e98e-8703-4cfc-8d5c-6cab076c32a8",
+    "title": "SVG Software Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736655197,
+    "date_posted": 1736655197,
+    "url": "https://cadence.wd1.myworkdayjobs.com/en-US/External_Careers/job/Burlington-MA/SVG-Software-Intern--Summer-2025-_R48637-2",
+    "locations": [
+      "Burlington, MA"
+    ],
+    "company_url": "https://simplify.jobs/c/Cadence-Design-Systems",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "date_updated": 1736658523,
+    "url": "https://careers.synopsys.com/job/-/-/44408/75804262800",
+    "company_name": "Synopsys",
+    "title": "Software Engineering Intern",
+    "locations": [
+      "Austin, TX"
+    ],
+    "terms": [
+      "Summer 2025"
+    ],
+    "sponsorship": "Offers Sponsorship",
+    "active": true,
+    "source": "GaryZhous",
+    "id": "6f13a5d8-1e58-4075-a6bc-e0c857ae1408",
+    "date_posted": 1736658523,
+    "company_url": "",
+    "is_visible": true
+  },
+  {
+    "date_updated": 1736658606,
+    "url": "https://proofpoint.wd5.myworkdayjobs.com/ProofpointCareers/job/Boulder-CO/Software-Engineering-Intern_R11690",
+    "company_name": "Proofpoint",
+    "title": "Software Engineering Intern",
+    "locations": [
+      "Boulder, CO"
+    ],
+    "terms": [
+      "Summer 2025"
+    ],
+    "sponsorship": "Offers Sponsorship",
+    "active": true,
+    "source": "GaryZhous",
+    "id": "7bd89862-f341-4aec-81b8-c7dc688f13b9",
+    "date_posted": 1736658606,
+    "company_url": "",
+    "is_visible": true
   }
 ]
