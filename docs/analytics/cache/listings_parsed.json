@@ -69340,7 +69340,7 @@
     "company_name": "Sunwater Capital",
     "id": "4ba8a9d8-e274-4325-9d0e-c021733f1f08",
     "title": "Intern-Data Science Spring 2025",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2025"
     ],
@@ -90002,7 +90002,7 @@
     "company_name": "ServiceNow",
     "id": "f5d84aba-8aa4-4951-8c15-083f711b5122",
     "title": "Technical Accelerator Consultant \u2013 Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -90180,7 +90180,7 @@
     "company_name": "ServiceNow",
     "id": "61d618df-5f67-474a-8760-f488ddfd50b0",
     "title": "Technical Accelerator Consultant \u2013 Intern",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
