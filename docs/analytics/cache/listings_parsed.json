@@ -77211,7 +77211,7 @@
     "company_name": "Microsoft",
     "id": "15e857cc-0424-4bde-b1c5-23025034d15c",
     "title": "Technical Program Management: Internship Neurodiversity Hiring Program",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -90002,7 +90002,7 @@
     "company_name": "ServiceNow",
     "id": "f5d84aba-8aa4-4951-8c15-083f711b5122",
     "title": "Technical Accelerator Consultant \u2013 Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -90180,7 +90180,7 @@
     "company_name": "ServiceNow",
     "id": "61d618df-5f67-474a-8760-f488ddfd50b0",
     "title": "Technical Accelerator Consultant \u2013 Intern",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
