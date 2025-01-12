@@ -1,28 +1,25 @@
 // src/components/ProtectedRoute.jsx
-import { Navigate } from 'react-router-dom';
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
 };
 
-// Update App.jsx routes to use ProtectedRoute
-<Routes>
-  <Route path="/login" element={<Login />} />
-  <Route path="/jobs" element={
-    <ProtectedRoute>
-      <Jobs />
-    </ProtectedRoute>
-  } />
-  {/* Other protected routes */}
-</Routes>
+export default ProtectedRoute;

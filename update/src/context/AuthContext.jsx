@@ -1,22 +1,79 @@
 // src/context/AuthContext.jsx
-const login = async (username, password) => {
-  try {
-    const response = await fetch(`${API_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Login failed');
-    }
+const AuthContext = createContext();
+const API_URL = import.meta.env.VITE_API_URL || 'https://refactored-space-lamp-jgpvjwqggwvhq4wv-5174.app.github.dev';
 
-    const data = await response.json();
-    localStorage.setItem('jwt_token', data.token);
-    setUser({ username: data.user.username, role: data.user.role });
-  } catch (error) {
-    console.error('Login error:', error);
-    throw error;
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
   }
-};
+  return context;
+}
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('jwt_token');
+      if (token) {
+        try {
+          setUser({ username: token }); // For now, just use the token as username
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          localStorage.removeItem('jwt_token');
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  const login = async (username, password) => {
+    try {
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('password', password);
+      
+      console.log('Making login request to:', `${API_URL}/api/v1/auth/login`);
+      
+      const response = await axios.post(`${API_URL}/api/v1/auth/login`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true
+      });
+      
+      const { access_token } = response.data;
+      localStorage.setItem('jwt_token', access_token);
+      setUser({ username });
+      return response.data;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('jwt_token');
+    setUser(null);
+  };
+
+  const value = {
+    user,
+    loading,
+    login,
+    logout
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+}

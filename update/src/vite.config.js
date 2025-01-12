@@ -2,22 +2,22 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+const CODESPACE_NAME = process.env.CODESPACE_NAME;
+const CODESPACE_DOMAIN = process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN;
+const BACKEND_URL = CODESPACE_NAME 
+  ? `https://${CODESPACE_NAME}-5174.${CODESPACE_DOMAIN}`
+  : 'http://localhost:5174';
+
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0',
     port: 5173,
-    hmr: {
-      host: `${process.env.CODESPACE_NAME}-5173.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`,
-      protocol: 'wss',
-      clientPort: 443
-    },
     proxy: {
       '/api': {
-        target: `http://${process.env.CODESPACE_NAME}-5174.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`,
+        target: BACKEND_URL,
         changeOrigin: true,
         secure: false,
-        ws: true
+        rewrite: (path) => path.replace(/^\/api/, '/api/v1')
       }
     }
   }

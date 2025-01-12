@@ -1,52 +1,58 @@
 // src/context/ApplicationContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 import { useAuth } from './AuthContext';
 
-const API_URL = process.env.VITE_API_URL || 'http://localhost:5174';
-const ApplicationContext = createContext(null);
+const ApplicationContext = createContext();
+
+export function useApplications() {
+  const context = useContext(ApplicationContext);
+  if (!context) {
+    throw new Error('useApplications must be used within an ApplicationProvider');
+  }
+  return context;
+}
 
 export function ApplicationProvider({ children }) {
   const [applications, setApplications] = useState({ applications: {} });
   const { user } = useAuth();
+  const API_URL = import.meta.env.VITE_API_URL || 'https://refactored-space-lamp-jgpvjwqggwvhq4wv-5174.app.github.dev';
 
   useEffect(() => {
-    if (user) {
-      fetchApplications();
-    }
-  }, [user]);
-
-  const fetchApplications = async () => {
-    try {
-      const token = localStorage.getItem('jwt_token');
-      const response = await fetch(`${API_URL}/api/applications`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
+    const fetchApplications = async () => {
+      if (user) {
+        try {
+          const token = localStorage.getItem('jwt_token');
+          const response = await axios.get(`${API_URL}/api/v1/applications`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          setApplications(response.data);
+        } catch (error) {
+          console.error('Error loading applications:', error);
         }
-      });
-      if (!response.ok) throw new Error('Failed to fetch applications');
-      const data = await response.json();
-      setApplications(data);
-    } catch (error) {
-      console.error('Error loading applications:', error);
-    }
-  };
+      }
+    };
+
+    fetchApplications();
+  }, [user, API_URL]);
 
   const updateApplication = async (jobId, status, value) => {
     try {
       const token = localStorage.getItem('jwt_token');
-      const response = await fetch(`${API_URL}/api/applications`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ jobId, status, value })
-      });
-
-      if (!response.ok) throw new Error('Failed to update application');
-      const data = await response.json();
-      setApplications(data);
-      return data;
+      const response = await axios.post(
+        `${API_URL}/api/v1/applications`,
+        { job_id: jobId, status, value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      setApplications(response.data);
+      return response.data;
     } catch (error) {
       console.error('Error updating application:', error);
       throw error;
@@ -58,21 +64,15 @@ export function ApplicationProvider({ children }) {
     return applications.applications[user.username][type]?.includes(jobId) || false;
   };
 
+  const value = {
+    applications,
+    updateApplication,
+    getApplicationStatus
+  };
+
   return (
-    <ApplicationContext.Provider value={{ 
-      applications, 
-      updateApplication, 
-      getApplicationStatus 
-    }}>
+    <ApplicationContext.Provider value={value}>
       {children}
     </ApplicationContext.Provider>
   );
-}
-
-export function useApplications() {
-  const context = useContext(ApplicationContext);
-  if (!context) {
-    throw new Error('useApplications must be used within an ApplicationProvider');
-  }
-  return context;
 }
