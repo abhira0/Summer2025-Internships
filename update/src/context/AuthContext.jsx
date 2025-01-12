@@ -44,8 +44,6 @@ export function AuthProvider({ children }) {
       formData.append('username', username);
       formData.append('password', password);
       
-      console.log('Making login request to:', `${API_URL}/api/v1/auth/login`);
-      
       const response = await axios.post(`${API_URL}/api/v1/auth/login`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

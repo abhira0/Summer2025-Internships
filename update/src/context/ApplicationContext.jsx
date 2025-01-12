@@ -27,8 +27,6 @@ export function ApplicationProvider({ children }) {
               Authorization: `Bearer ${token}`
             }
           });
-          console.log(`Fetching applications for user: ${user.username}`);
-          console.log(response)
           setApplications(response.data);
         } catch (error) {
           console.error('Error loading applications:', error);
