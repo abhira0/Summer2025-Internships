@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5174';
+const API_URL = process.env.VITE_API_URL || 'http://localhost:5174';
 const ApplicationContext = createContext(null);
 
 export function ApplicationProvider({ children }) {
