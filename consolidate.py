@@ -38,6 +38,7 @@ def generate_tree(directory: str, ignore_patterns: List[str]) -> Tree:
     Generate a tree-like structure for the given directory, ignoring files and directories
     matching the ignore patterns.
     """
+    ignore_patterns.append('node_modules')  # Add node_modules to ignore patterns
     tree = Tree(f"[bold cyan]{directory}[/bold cyan]")
     for root, dirs, files in os.walk(directory):
         # Apply ignore patterns
@@ -70,6 +71,7 @@ def consolidate_files(
     """
     Consolidate files from the given directory into a single document.
     """
+    ignore_patterns.append('node_modules')  # Add node_modules to ignore patterns
     content = []
     if include_tree:
         console.print(f"[green]Including directory structure...[/green]")
@@ -117,12 +119,14 @@ def main(
     """
     Consolidate files from a directory into a single document.
     """
+    ignore = ignore or []
+    ignore.extend(['node_modules', '__pycache__'])  # Add node_modules to ignore patterns
     if summarize:
         console.print(f"[yellow]Summary mode selected. Only showing directory structure.[/yellow]")
-        tree = generate_tree(directory, ignore or [])
+        tree = generate_tree(directory, ignore)
         console.print(tree)
     else:
-        consolidate_files(directory, ignore or [], include_tree, output_format, output_filename)
+        consolidate_files(directory, ignore, include_tree, output_format, output_filename)
 
 
 if __name__ == "__main__":
