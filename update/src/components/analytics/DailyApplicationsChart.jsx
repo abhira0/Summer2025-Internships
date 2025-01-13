@@ -149,8 +149,8 @@ const DailyApplicationsChart = ({ data }) => {
                 labelStyle={{ color: '#9CA3AF' }}
                 itemStyle={{ color: '#9CA3AF' }}
                 formatter={(value, name) => {
-                  if (name === "Additional Applications") {
-                    return [`${value} more`, "Additional Applications"];
+                  if (name === "Total Applications") {
+                    return [value, name];
                   }
                   return [value, name];
                 }}
@@ -167,8 +167,8 @@ const DailyApplicationsChart = ({ data }) => {
                 radius={[4, 4, 0, 0]}
               />
               <Bar 
-                dataKey="additionalApps" 
-                name="Additional Applications" 
+                dataKey="totalApplications" 
+                name="Total Applications" 
                 stackId="apps"
                 fill="#3B82F6"
                 radius={[4, 4, 0, 0]}
