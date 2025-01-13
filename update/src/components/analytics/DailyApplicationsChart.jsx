@@ -16,6 +16,7 @@ const DailyApplicationsChart = ({ data }) => {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [processedData, setProcessedData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [slideAmount, setSlideAmount] = useState(1);
   
   const dateRanges = [
     { label: '7D', value: 7 },
@@ -80,10 +81,11 @@ const DailyApplicationsChart = ({ data }) => {
   }, [currentOffset, selectedRange, processedData.length]);
 
   const handleSlide = (direction) => {
+    const amount = parseInt(slideAmount) || 1;
     if (direction === 'next' && canSlideNext) {
-      setCurrentOffset(prev => prev - 1);
+      setCurrentOffset(prev => Math.max(0, prev - amount));
     } else if (direction === 'prev' && canSlidePrevious) {
-      setCurrentOffset(prev => prev + 1);
+      setCurrentOffset(prev => Math.min(processedData.length - selectedRange, prev + amount));
     }
   };
 
@@ -148,7 +150,7 @@ const DailyApplicationsChart = ({ data }) => {
             
             {/* Sliding Controls */}
             {selectedRange !== 'all' && (
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleSlide('prev')}
                   disabled={!canSlidePrevious}
@@ -159,6 +161,19 @@ const DailyApplicationsChart = ({ data }) => {
                 >
                   ←
                 </button>
+                
+                <div className="flex items-center bg-gray-800 rounded-lg px-2">
+                  <input
+                    type="number"
+                    min="1"
+                    value={slideAmount}
+                    onChange={(e) => setSlideAmount(e.target.value)}
+                    className="w-16 bg-transparent text-white text-center border-0 focus:ring-1 focus:ring-indigo-500"
+                    title="Number of days to slide"
+                  />
+                  <span className="text-gray-400 text-sm ml-1">days</span>
+                </div>
+
                 <button
                   onClick={() => handleSlide('next')}
                   disabled={!canSlideNext}
