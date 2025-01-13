@@ -93,20 +93,26 @@ export const processChartData = (data) => {
   // Process data for daily applications chart - Now starts from today
   const processDailyData = () => {
       const dailyStats = {};
+      
+      // Get current date in UTC
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      today.setUTCHours(0, 0, 0, 0);
 
-      // Find the earliest date in the data
+      // Initialize earliest date
       let earliestDate = new Date();
+      earliestDate.setUTCHours(0, 0, 0, 0);
+
+      // Find earliest date in UTC
       data.forEach(job => {
           if (!job.tracked_date) return;
           const jobDate = new Date(job.tracked_date);
+          jobDate.setUTCHours(0, 0, 0, 0);
           if (jobDate < earliestDate) {
               earliestDate = jobDate;
           }
       });
 
-      // Initialize all dates from today backwards to earliest date
+      // Initialize all dates from today backwards to earliest date in UTC
       const currentDate = new Date(today);
       while (currentDate >= earliestDate) {
           const dateStr = currentDate.toISOString().split('T')[0];
@@ -115,24 +121,29 @@ export const processChartData = (data) => {
               uniqueCompanies: new Set(),
               rejections: 0
           };
-          currentDate.setDate(currentDate.getDate() - 1);
+          currentDate.setUTCDate(currentDate.getUTCDate() - 1);
       }
 
-      // Process applications
+      // Process applications using UTC dates
       data.forEach(job => {
           if (!job.tracked_date) return;
-          const dateStr = job.tracked_date.split('T')[0];
+          const jobDate = new Date(job.tracked_date);
+          jobDate.setUTCHours(0, 0, 0, 0);
+          const dateStr = jobDate.toISOString().split('T')[0];
+          
           if (dailyStats[dateStr]) {
               dailyStats[dateStr].totalApplications++;
               dailyStats[dateStr].uniqueCompanies.add(job.company_id);
           }
 
-          // Process rejections
+          // Process rejections in UTC
           job.status_events?.forEach(event => {
               if (event.status === 'rejected' && event.timestamp) {
-                  const rejectDate = event.timestamp.split('T')[0];
-                  if (dailyStats[rejectDate]) {
-                      dailyStats[rejectDate].rejections++;
+                  const rejectDate = new Date(event.timestamp);
+                  rejectDate.setUTCHours(0, 0, 0, 0);
+                  const rejectDateStr = rejectDate.toISOString().split('T')[0];
+                  if (dailyStats[rejectDateStr]) {
+                      dailyStats[rejectDateStr].rejections++;
                   }
               }
           });

@@ -166,7 +166,16 @@ const DailyApplicationsChart = ({ data }) => {
                 dataKey="date" 
                 stroke="#9CA3AF"
                 tick={{ fill: '#9CA3AF' }}
-                tickFormatter={(date) => new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                tickFormatter={(date) => {
+                  const utcDate = new Date(date);
+                  utcDate.setUTCHours(0, 0, 0, 0);
+                  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                  return new Intl.DateTimeFormat('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    timeZone: userTimezone
+                  }).format(utcDate);
+                }}
                 tickLine={{ stroke: '#4B5563' }}
               />
               <YAxis 
@@ -193,12 +202,18 @@ const DailyApplicationsChart = ({ data }) => {
                   }
                   return [value, name];
                 }}
-                labelFormatter={(date) => new Date(date).toLocaleDateString(undefined, { 
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
+                labelFormatter={(date) => {
+                  const utcDate = new Date(date);
+                  utcDate.setUTCHours(0, 0, 0, 0);
+                  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                  return new Intl.DateTimeFormat('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    timeZone: userTimezone
+                  }).format(utcDate);
+                }}
               />
               <Legend 
                 wrapperStyle={{
