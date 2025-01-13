@@ -181,9 +181,6 @@ async def update_simplify_cookie(
     current_user: dict = Depends(get_current_user)
 ):
     """Update user's Simplify cookie"""
-    print("Received cookie update request")
-    print("Cookie:", cookie)
-    print("Current user:", current_user)
     
     db = get_database()
     try:

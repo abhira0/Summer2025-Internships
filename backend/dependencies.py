@@ -14,33 +14,23 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
         headers={"WWW-Authenticate": "Bearer"},
     )
     
-    print("=== Auth Debug ===")
-    print("Received token:", token[:20] + "..." if token else None)
-    
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
         username: str = payload.get("sub")
-        print("Decoded username:", username)
         
         if username is None:
-            print("No username in token")
             raise credentials_exception
             
         db = get_database()
         user = await db.users.find_one({"username": username})
-        print("Found user:", bool(user))
-        
         if user is None:
-            print("User not found in database")
             raise credentials_exception
             
         return user
         
     except JWTError as e:
-        print("JWT Error:", str(e))
         raise credentials_exception
     except Exception as e:
-        print("Unexpected error:", str(e))
         raise credentials_exception
