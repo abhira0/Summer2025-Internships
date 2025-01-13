@@ -25,8 +25,9 @@ export function useJobs() {
     
         const [listingsResponse, trackerResponse] = await Promise.all([
           fetch(config.api.listings),
-          axios.get('/api/simplify/parsed', {
-            headers: headers,
+          await fetch('/api/simplify/parsed', {
+            method: 'GET',
+            headers: headers
           })
         ]);
     
