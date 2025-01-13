@@ -5,6 +5,9 @@ import json
 from ..dependencies import get_current_user
 from backend.core.config import settings
 from io import BytesIO
+from fastapi import Body
+from backend.utils.db import get_database
+
 import os
 from ..utils import parse_simplify
 
@@ -14,7 +17,7 @@ router = APIRouter()
 
 NEXTCLOUD_CLIENT = nc_py_api.Nextcloud(nextcloud_url="https://hulkinblue.dragon.usbx.me/nextcloud", nc_auth_user=settings.NEXTCLOUD_USER, nc_auth_pass=settings.NEXTCLOUD_PASSWORD)
 
-async def fetch_all_results(cookies: str, page_size: int = 25, page_max: Optional[int] = 1):
+async def fetch_all_results(cookies: str, page_size: int = 500, page_max: Optional[int] = None):
 # async def fetch_all_results(cookies: str, page_size: int = 500, page_max: Optional[int] = None):
     all_results = []
     total_pages = 1
@@ -113,12 +116,20 @@ async def post_tracker(
 
 @router.post("/refresh")
 async def post_tracker_local(
-    cookies: str = Header(...),
     current_user: dict = Depends(get_current_user)
 ):
-    try:
+    # try:
+        # Get cookie from database
+        db = get_database()
+        user = await db.users.find_one({"username": current_user["username"]})
+        if not user or "simplify_cookie" not in user:
+            raise HTTPException(
+                status_code=404,
+                detail="Simplify cookie not found"
+            )
+            
         # Fetch all results from Simplify
-        results = await fetch_all_results(cookies)
+        results = await fetch_all_results(user["simplify_cookie"])
         
         # Create directory if it doesn't exist
         os.makedirs(f"cache/{current_user['username']}", exist_ok=True)
@@ -133,11 +144,11 @@ async def post_tracker_local(
             "message": "Tracker data fetched and saved locally",
             "items_count": len(results)
         }
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to fetch and save tracker data locally: {str(e)}"
-        )
+    # except Exception as e:
+    #     raise HTTPException(
+    #         status_code=500,
+    #         detail=f"Failed to fetch and save tracker data locally: {str(e)}"
+    #     )
 
 @router.get("/parsed")
 async def get_parsed(
@@ -163,3 +174,46 @@ async def get_parsed(
             detail=f"Failed to read parsed data: {str(e)}"
         )
 
+
+@router.put("/cookie")
+async def update_simplify_cookie(
+    cookie: str = Body(..., embed=True),  # Changed to expect JSON body
+    current_user: dict = Depends(get_current_user)
+):
+    """Update user's Simplify cookie"""
+    print("Received cookie update request")
+    print("Cookie:", cookie)
+    print("Current user:", current_user)
+    
+    db = get_database()
+    try:
+        await db.users.update_one(
+            {"username": current_user["username"]},
+            {"$set": {"simplify_cookie": cookie}}
+        )
+        return {"message": "Simplify cookie updated successfully"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to update Simplify cookie: {str(e)}"
+        )
+
+@router.get("/cookie")
+async def get_simplify_cookie(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get user's Simplify cookie from MongoDB"""
+    db = get_database()
+    try:
+        user = await db.users.find_one({"username": current_user["username"]})
+        if not user or "simplify_cookie" not in user:
+            raise HTTPException(
+                status_code=404,
+                detail="Simplify cookie not found"
+            )
+        return {"cookie": user["simplify_cookie"]}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get Simplify cookie: {str(e)}"
+        )

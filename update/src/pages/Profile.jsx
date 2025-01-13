@@ -1,14 +1,15 @@
-// src/pages/Profile.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLocalApplications } from '../hooks/useLocalApplications';
 import { useJobs } from '../hooks/useJobs';
 import Layout from '../components/layout/Layout';
+import SimplifyCookieModal from '../components/profile/SimplifyCookieModal';
 
 const Profile = () => {
   const { user, logout } = useAuth();
   const { applications } = useLocalApplications();
   const { jobs } = useJobs();
+  const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
 
   const userApplications = applications.applications[user?.username] || { applied: [], hidden: [] };
   const appliedJobs = jobs.filter(job => userApplications.applied.includes(job.id));
@@ -20,9 +21,17 @@ const Profile = () => {
         <div className="bg-gray-800 shadow rounded-lg">
           {/* Profile Header */}
           <div className="px-4 py-5 sm:px-6 border-b border-gray-700">
-            <h3 className="text-lg leading-6 font-medium text-white">
-              Profile Information
-            </h3>
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg leading-6 font-medium text-white">
+                Profile Information
+              </h3>
+              <button
+                onClick={() => setIsCookieModalOpen(true)}
+                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Update Simplify Cookie
+              </button>
+            </div>
           </div>
 
           {/* Profile Content */}
@@ -121,6 +130,11 @@ const Profile = () => {
             </div>
           </div>
         </div>
+
+        <SimplifyCookieModal 
+          isOpen={isCookieModalOpen}
+          onClose={() => setIsCookieModalOpen(false)}
+        />
       </div>
     </Layout>
   );

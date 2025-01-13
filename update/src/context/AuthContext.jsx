@@ -6,8 +6,6 @@ import { jwtDecode } from 'jwt-decode';
 
 
 const AuthContext = createContext();
-const API_URL = import.meta.env.VITE_API_URL || 'https://refactored-space-lamp-jgpvjwqggwvhq4wv-5174.app.github.dev';
-
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
@@ -44,7 +42,7 @@ export function AuthProvider({ children }) {
       formData.append('username', username);
       formData.append('password', password);
       
-      const response = await axios.post(`${API_URL}/api/v1/auth/login`, formData, {
+      const response = await axios.post(`/api/auth/login`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
