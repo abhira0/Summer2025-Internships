@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from backend.core.config import settings
-from backend.routers import auth, applications
+from backend.routers import auth, applications, simplify
 from backend.utils.db import connect_to_mongo, close_mongo_connection
 import logging
 from time import time
@@ -70,6 +70,7 @@ app.include_router(
     prefix=f"{settings.API_V1_STR}/applications",
     tags=["applications"]
 )
+app.include_router(simplify.router, prefix=f"{settings.API_V1_STR}/simplify", tags=["simplify"])
 
 @app.get("/health")
 async def health_check():
