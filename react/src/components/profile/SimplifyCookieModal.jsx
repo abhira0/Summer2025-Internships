@@ -37,7 +37,7 @@ const SimplifyCookieModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('jwt_token');
-      await axios.put('/api/v1/simplify/cookie', 
+      await axios.put('/api/simplify/cookie', 
         { cookie }, 
         {
           headers: {
