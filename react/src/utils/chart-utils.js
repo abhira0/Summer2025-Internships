@@ -108,25 +108,25 @@ const getLocalDateStr = (timestamp) => {
   const processDailyData = () => {
       const dailyStats = {};
       
-      // Convert today to local midnight
+      // Get current date in UTC
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      today.setUTCHours(0, 0, 0, 0);
 
-      // Initialize earliest date to today's local midnight
-      let earliestDate = new Date(today);
+      // Initialize earliest date
+      let earliestDate = new Date();
+      earliestDate.setUTCHours(0, 0, 0, 0);
 
-      // Find earliest date from "applied" status events
+      // Find earliest date in UTC
       data.forEach(job => {
-          const appliedEvent = job.status_events?.find(event => event.status === "applied");
-          
-          const applicationDate = new Date(getLocalDateStr(event.timestamp));
-          applicationDate.setHours(0, 0, 0, 0);
-          if (applicationDate < earliestDate) {
-              earliestDate = new Date(applicationDate);
+          if (!job.tracked_date) return;
+          const jobDate = new Date(job.tracked_date);
+          jobDate.setUTCHours(0, 0, 0, 0);
+          if (jobDate < earliestDate) {
+              earliestDate = jobDate;
           }
       });
 
-      // Initialize all dates from today backwards to earliest date in local time
+      // Initialize all dates from today backwards to earliest date in UTC
       const currentDate = new Date(today);
       while (currentDate >= earliestDate) {
           const dateStr = currentDate.toISOString().split('T')[0];
@@ -135,12 +135,12 @@ const getLocalDateStr = (timestamp) => {
               uniqueCompanies: new Set(),
               rejections: 0
           };
-          currentDate.setDate(currentDate.getDate() - 1);
+          currentDate.setUTCDate(currentDate.getUTCDate() - 1);
       }
+
 
       // Process applications using "applied" status events
 
-      console.log(dailyStats );
       data.forEach(job => {
           job.status_events?.forEach(event => {
             if (event.status === 'applied') {
