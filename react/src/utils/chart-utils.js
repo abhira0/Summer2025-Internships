@@ -1,21 +1,35 @@
 // src/utils/chart-utils.js
 
 export const processChartData = (data) => {
+const getLocalDateStr = (timestamp) => {
+    if (!timestamp) return null;
+    const utcDate = new Date(timestamp + "Z"); // Adding Z suffix to explicitly mark as UTC
+    const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000);
+    return localDate.toISOString().split('T')[0];
+    };
   // Process data for summary statistics
   const processSummaryStats = () => {
       const today = new Date().toISOString().split('T')[0];
       
-      const totalApps = data.length;
-      const todayApps = data.filter(job => 
-          job.tracked_date?.startsWith(today)
-      ).length;
+    const totalApps = data.filter(job => 
+        job.status_events?.some(event => event.status === "applied")
+    ).length;
 
-      const totalCompanies = new Set(data.map(job => job.company_id)).size;
-      const todayCompanies = new Set(
-          data
-              .filter(job => job.tracked_date?.startsWith(today))
-              .map(job => job.company_id)
-      ).size;
+    const todayApps = data.filter(job => 
+        job.status_events?.some(event => event.status === "applied" && getLocalDateStr(event.timestamp)?.startsWith(today))
+    ).length;
+
+    const totalCompanies = new Set(
+        data.filter(job => 
+          job.status_events?.some(event => event.status === "applied")
+        ).map(job => job.company_id)
+    ).size;
+
+    const todayCompanies = new Set(
+        data.filter(job => 
+          job.status_events?.some(event => event.status === "applied" && getLocalDateStr(event.timestamp)?.startsWith(today))
+        ).map(job => job.company_id)
+    ).size;
 
       let totalRejections = 0;
       let todayRejections = 0;
@@ -24,7 +38,7 @@ export const processChartData = (data) => {
           job.status_events?.forEach(event => {
               if (event.status === "rejected") {
                   totalRejections++;
-                  if (event.timestamp?.startsWith(today)) {
+                  if (getLocalDateStr(event.timestamp)?.startsWith(today)) {
                       todayRejections++;
                   }
               }
@@ -94,25 +108,25 @@ export const processChartData = (data) => {
   const processDailyData = () => {
       const dailyStats = {};
       
-      // Get current date in UTC
+      // Convert today to local midnight
       const today = new Date();
-      today.setUTCHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
 
-      // Initialize earliest date
-      let earliestDate = new Date();
-      earliestDate.setUTCHours(0, 0, 0, 0);
+      // Initialize earliest date to today's local midnight
+      let earliestDate = new Date(today);
 
-      // Find earliest date in UTC
+      // Find earliest date from "applied" status events
       data.forEach(job => {
-          if (!job.tracked_date) return;
-          const jobDate = new Date(job.tracked_date);
-          jobDate.setUTCHours(0, 0, 0, 0);
-          if (jobDate < earliestDate) {
-              earliestDate = jobDate;
+          const appliedEvent = job.status_events?.find(event => event.status === "applied");
+          
+          const applicationDate = new Date(getLocalDateStr(event.timestamp));
+          applicationDate.setHours(0, 0, 0, 0);
+          if (applicationDate < earliestDate) {
+              earliestDate = new Date(applicationDate);
           }
       });
 
-      // Initialize all dates from today backwards to earliest date in UTC
+      // Initialize all dates from today backwards to earliest date in local time
       const currentDate = new Date(today);
       while (currentDate >= earliestDate) {
           const dateStr = currentDate.toISOString().split('T')[0];
@@ -121,27 +135,26 @@ export const processChartData = (data) => {
               uniqueCompanies: new Set(),
               rejections: 0
           };
-          currentDate.setUTCDate(currentDate.getUTCDate() - 1);
+          currentDate.setDate(currentDate.getDate() - 1);
       }
 
-      // Process applications using UTC dates
-      data.forEach(job => {
-          if (!job.tracked_date) return;
-          const jobDate = new Date(job.tracked_date);
-          jobDate.setUTCHours(0, 0, 0, 0);
-          const dateStr = jobDate.toISOString().split('T')[0];
-          
-          if (dailyStats[dateStr]) {
-              dailyStats[dateStr].totalApplications++;
-              dailyStats[dateStr].uniqueCompanies.add(job.company_id);
-          }
+      // Process applications using "applied" status events
 
-          // Process rejections in UTC
+      console.log(dailyStats );
+      data.forEach(job => {
           job.status_events?.forEach(event => {
-              if (event.status === 'rejected' && event.timestamp) {
-                  const rejectDate = new Date(event.timestamp);
-                  rejectDate.setUTCHours(0, 0, 0, 0);
-                  const rejectDateStr = rejectDate.toISOString().split('T')[0];
+            if (event.status === 'applied') {
+                const applicationDate = new Date(getLocalDateStr(event.timestamp)); // Adding Z suffix to explicitly mark as UTC
+                const localDateStr = applicationDate.toISOString().split('T')[0];
+                
+                if (dailyStats[localDateStr]) {
+                    dailyStats[localDateStr].totalApplications++;
+                    dailyStats[localDateStr].uniqueCompanies.add(job.company_id);
+                }
+            }
+                if (event.status === 'rejected') {
+                  const rejectLocalDate = new Date(getLocalDateStr(event.timestamp));
+                  const rejectDateStr = rejectLocalDate.toISOString().split('T')[0];
                   if (dailyStats[rejectDateStr]) {
                       dailyStats[rejectDateStr].rejections++;
                   }
