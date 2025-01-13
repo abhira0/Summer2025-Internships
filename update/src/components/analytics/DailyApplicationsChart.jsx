@@ -34,7 +34,9 @@ const DailyApplicationsChart = ({ data }) => {
         return {
           date,
           uniqueCompanies,
-          additionalApps: Math.max(0, totalApps - uniqueCompanies),
+          // Display value for stacking (difference)
+          displayApplications: Math.max(0, totalApps - uniqueCompanies),
+          // Actual total for tooltip
           totalApplications: totalApps,
           rejections: stats.rejections
         };
@@ -184,6 +186,13 @@ const DailyApplicationsChart = ({ data }) => {
                 labelStyle={{ color: '#E5E7EB', fontWeight: 'bold', marginBottom: '4px' }}
                 itemStyle={{ color: '#9CA3AF', padding: '4px 0' }}
                 cursor={{ fill: 'rgba(107, 114, 128, 0.1)' }}
+                formatter={(value, name, props) => {
+                  // Show total applications instead of the display value
+                  if (name === "Total Applications") {
+                    return [props.payload.totalApplications, name];
+                  }
+                  return [value, name];
+                }}
                 labelFormatter={(date) => new Date(date).toLocaleDateString(undefined, { 
                   weekday: 'long',
                   year: 'numeric',
@@ -209,7 +218,7 @@ const DailyApplicationsChart = ({ data }) => {
                 animationDuration={1000}
               />
               <Bar 
-                dataKey="totalApplications" 
+                dataKey="displayApplications" 
                 name="Total Applications" 
                 stackId="apps"
                 fill="url(#gradient-totalApplications)"
