@@ -1,7 +1,7 @@
-// src/components/layout/Navbar.jsx
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import MobileNav from './MobileNav';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -12,24 +12,28 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="text-white font-bold text-xl">
-              Job/Internship Tracker
+              Job Tracker
             </Link>
-            <div className="ml-10 flex items-baseline space-x-4">
-              <Link
-                to="/jobs"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Jobs
-              </Link>
-              <Link
-                to="/analytics"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Analytics
-              </Link>
+            <div className="hidden lg:flex lg:items-center lg:ml-10">
+              <div className="flex items-baseline space-x-4">
+                <Link
+                  to="/jobs"
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Jobs
+                </Link>
+                <Link
+                  to="/analytics"
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Analytics
+                </Link>
+              </div>
             </div>
           </div>
-          <div className="flex items-center">
+          
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex lg:items-center">
             {user && (
               <Link
                 to="/profile"
@@ -45,10 +49,11 @@ export default function Navbar() {
               Logout
             </button>
           </div>
+
+          {/* Mobile Menu */}
+          <MobileNav />
         </div>
       </div>
     </nav>
   );
 }
-
-

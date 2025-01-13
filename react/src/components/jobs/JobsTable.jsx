@@ -1,6 +1,6 @@
-// src/components/jobs/JobsTable.jsx
 import React from 'react';
 import { useApplications } from '../../context/ApplicationContext';
+import MobileJobsList from './MobileJobsList';
 
 export default function JobsTable({ 
   jobs, 
@@ -8,10 +8,9 @@ export default function JobsTable({
   currentPage, 
   onPageChange, 
   totalPages,
-  totalCount, // Add this prop to get total number of jobs
+  totalCount,
 }) {
   const { getApplicationStatus, updateApplication } = useApplications();
-
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalCount);
 
@@ -20,11 +19,41 @@ export default function JobsTable({
     await updateApplication(jobId, type, !currentStatus);
   };
 
+  // Pagination component
+  const Pagination = () => (
+    <div className="flex justify-between items-center bg-gray-800 px-4 py-3 rounded-lg">
+      <div className="text-sm text-gray-400 hidden sm:block">
+        Showing {totalCount > 0 ? startIndex + 1 : 0} to {endIndex} of {totalCount} results
+      </div>
+      <div className="flex space-x-2">
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Previous
+        </button>
+        <span className="px-3 py-1 text-sm text-gray-400">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex flex-col space-y-4">
-      <div className="overflow-x-hidden border border-gray-700 rounded-lg">
-        <div className="w-full">
-          <table className="w-full table-fixed divide-y divide-gray-700">
+      {/* Desktop View */}
+      <div className="hidden lg:block overflow-x-auto border border-gray-700 rounded-lg">
+        <table className="w-full table-fixed divide-y divide-gray-700">
+
+        <table className="w-full table-fixed divide-y divide-gray-700">
             <thead>
               <tr>
                 <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
@@ -151,49 +180,16 @@ export default function JobsTable({
               ))}
             </tbody>
           </table>
-        </div>
+        </table>
+      </div>
+
+      {/* Mobile View */}
+      <div className="lg:hidden">
+        <MobileJobsList jobs={jobs} />
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center bg-gray-800 px-4 py-3 rounded-lg">
-        <div className="text-sm text-gray-400">
-          Showing {totalCount > 0 ? startIndex + 1 : 0} to {endIndex} of {totalCount} results
-        </div>
-        <div className="flex space-x-2">
-          <button
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Previous
-          </button>
-          <span className="px-3 py-1 text-sm text-gray-400">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Next
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Pagination */}
-      <div className="mt-4 sm:hidden">
-        <select
-          value={currentPage}
-          onChange={(e) => onPageChange(Number(e.target.value))}
-          className="block w-full bg-gray-700 border-gray-600 text-white rounded-md"
-        >
-          {Array.from({ length: totalPages }, (_, i) => (
-            <option key={i + 1} value={i + 1}>
-              Page {i + 1} of {totalPages}
-            </option>
-          ))}
-        </select>
-      </div>
+      <Pagination />
     </div>
   );
 }
