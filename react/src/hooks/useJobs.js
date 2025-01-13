@@ -13,18 +13,31 @@ export function useJobs() {
       try {
         setLoading(true);
         const token = localStorage.getItem('jwt_token');
+        
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+    
         const headers = {
-          Authorization: `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         };
-
+    
         const [listingsResponse, trackerResponse] = await Promise.all([
           fetch(config.api.listings),
-          axios.get('/api/simplify/parsed', { headers })
+          axios.get('/api/simplify/parsed', {
+            headers: headers,
+          })
         ]);
-
+    
+        // Add some debug logging
+        console.log('Token:', token);
+        console.log('TrackerResponse:', trackerResponse);
+    
         if (!listingsResponse.ok) {
           throw new Error('Failed to fetch listings data');
         }
+    
 
         const listings = await listingsResponse.json();
         const tracker = trackerResponse.data;
