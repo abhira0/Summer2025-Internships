@@ -19,15 +19,12 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
-# Get the Codespace URL from environment variables
-CODESPACE_NAME = os.getenv('CODESPACE_NAME')
-GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN = os.getenv('GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN')
-FRONTEND_URL = f"https://{CODESPACE_NAME}-5173.{GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
+FRONTEND_URL = f"http://localhost:5173"
 
 # CORS middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL, "https://refactored-space-lamp-jgpvjwqggwvhq4wv-5173.app.github.dev"],
+    allow_origins=[FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
