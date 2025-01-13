@@ -176,7 +176,7 @@ class ProcessSalary:
             if sal:
                 if salary_period > 1 and sal < 100:
                     logger.error(
-                        f"Change salary from anually to hourly ({sal, item["salary_low"], item["salary_high"]}): https://simplify.jobs/tracker?id={item['id']}"
+                        f"Change salary from anually to hourly ({sal, item['salary_low'], item['salary_high']}): https://simplify.jobs/tracker?id={item['id']}"
                     )
                 # if salary_period == 1 and sal > 80:
                 #     logger.error(
