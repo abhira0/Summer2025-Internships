@@ -157,23 +157,22 @@ async def get_parsed(
     try:
         file_path = f"cache/{current_user['username']}/parsed.json"
         if not os.path.exists(file_path):
-            raise HTTPException(
-                status_code=404,
-                detail="Parsed data not found. Please refresh the tracker first."
-            )
+            # Create directory if it doesn't exist
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            # Create empty file with empty list
+            with open(file_path, 'w') as f:
+                json.dump([], f)
+            return []
             
         with open(file_path, 'r') as f:
             data = json.load(f)
             
         return data
-    except HTTPException:
-        raise
     except Exception as e:
         raise HTTPException(
             status_code=500,
             detail=f"Failed to read parsed data: {str(e)}"
         )
-
 
 @router.put("/cookie")
 async def update_simplify_cookie(
