@@ -120,7 +120,7 @@ def main(
     Consolidate files from a directory into a single document.
     """
     ignore = ignore or []
-    ignore.extend(['node_modules', '__pycache__', 'package-lock.json'])  # Add node_modules to ignore patterns
+    ignore.extend(['node_modules', '__pycache__', 'package-lock.json', 'locations.json', 'cache'])  # Add node_modules to ignore patterns
     if summarize:
         console.print(f"[yellow]Summary mode selected. Only showing directory structure.[/yellow]")
         tree = generate_tree(directory, ignore)
