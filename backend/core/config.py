@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     # Database
     MONGODB_URL: str
     
+    # NEXTCLOUD CLOUD STORAGE
+    NEXTCLOUD_USER: str
+    NEXTCLOUD_PASSWORD : str
+    
     # CORS
     FRONTEND_URL: str = "http://localhost:5173"  # Default value, override in .env
 
