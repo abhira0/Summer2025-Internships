@@ -91359,5 +91359,86 @@
     "date_posted": 1736658606,
     "company_url": "",
     "is_visible": true
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Allstate Insurance Company",
+    "id": "d8e3da7e-c33d-41a2-86fd-b4bbf013eb8e",
+    "title": "Investments Quantitative Analyst Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736727588,
+    "date_posted": 1736727588,
+    "url": "https://allstate.wd5.myworkdayjobs.com/allstate_careers/job/USA---IL-Remote/Investments-Quantitative-Analyst-Intern_R6059",
+    "locations": [
+      "Chicago, IL"
+    ],
+    "company_url": "https://simplify.jobs/c/Allstate-Insurance-Company",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Allstate Insurance Company",
+    "id": "0782f839-c391-409b-9096-9101f4a704a2",
+    "title": "2025 ATS Technology Internship Program - Event Only",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736727552,
+    "date_posted": 1736727552,
+    "url": "https://allstate.wd5.myworkdayjobs.com/allstate_careers/job/USA---CA-Remote/XMLNAME-2025-ATS-Technology-Internship-Program_R8748",
+    "locations": [
+      "Northbrook, IL",
+      "Chicago, IL",
+      "Charlotte, NC",
+      "Scottsdale, AZ",
+      "Irving, TX"
+    ],
+    "company_url": "https://simplify.jobs/c/Allstate-Insurance-Company",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Allstate Insurance Company",
+    "id": "feccd055-0c2e-443e-a488-9aac111874fe",
+    "title": "Machine Learning Engineer Intern",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025"
+    ],
+    "date_updated": 1736727543,
+    "date_posted": 1736727543,
+    "url": "https://allstate.wd5.myworkdayjobs.com/allstate_careers/job/USA---NC-Remote/Machine-Learning-Engineer-Intern_R5357",
+    "locations": [
+      "Remote in USA"
+    ],
+    "company_url": "https://simplify.jobs/c/Allstate-Insurance-Company",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Nominal",
+    "id": "e70296a3-2843-4c68-a089-b4565748f11f",
+    "title": "Software Engineer \u2013 Internship",
+    "active": true,
+    "terms": [
+      "Spring 2025"
+    ],
+    "date_updated": 1736727427,
+    "date_posted": 1736727427,
+    "url": "https://jobs.lever.co/nominal/e0922dce-30a1-41cf-bee3-80833a714cbd/apply",
+    "locations": [
+      "NYC"
+    ],
+    "company_url": "https://simplify.jobs/c/Nominal",
+    "is_visible": true,
+    "sponsorship": "Other"
   }
 ]
