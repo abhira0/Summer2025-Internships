@@ -1,8 +1,7 @@
 // src/config/index.js
 const config = {
   api: {
-    listings: 'https://raw.githubusercontent.com/abhira0/Summer2025-Internships/feature/mongodb/.github/scripts/listings.json',
-    tracker: 'https://raw.githubusercontent.com/abhira0/Summer2025-Internships/feature/mongodb/docs/analytics/cache/simplify/parsed.json'
+    listings: 'https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/.github/scripts/listings.json',
   },
   defaults: {
     filters: [

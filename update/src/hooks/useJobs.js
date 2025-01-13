@@ -1,5 +1,6 @@
 // src/hooks/useJobs.js
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import config from '../config';
 
 export function useJobs() {
@@ -11,19 +12,22 @@ export function useJobs() {
     const fetchJobs = async () => {
       try {
         setLoading(true);
+        const token = localStorage.getItem('jwt_token');
+        const headers = {
+          Authorization: `Bearer ${token}`
+        };
+
         const [listingsResponse, trackerResponse] = await Promise.all([
           fetch(config.api.listings),
-          fetch(config.api.tracker)
+          axios.get('/api/simplify/parsed', { headers })
         ]);
 
-        if (!listingsResponse.ok || !trackerResponse.ok) {
-          throw new Error('Failed to fetch job data');
+        if (!listingsResponse.ok) {
+          throw new Error('Failed to fetch listings data');
         }
 
-        const [listings, tracker] = await Promise.all([
-          listingsResponse.json(),
-          trackerResponse.json()
-        ]);
+        const listings = await listingsResponse.json();
+        const tracker = trackerResponse.data;
 
         if (!Array.isArray(listings)) {
           throw new Error('Invalid data format');
