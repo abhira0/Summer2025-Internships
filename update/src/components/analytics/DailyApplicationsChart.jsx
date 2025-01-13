@@ -69,14 +69,32 @@ const DailyApplicationsChart = ({ data }) => {
     }), { totalApplications: 0, uniqueCompanies: 0, rejections: 0 });
   }, [filteredData]);
 
+  // Custom gradient definitions
+  const gradients = {
+    uniqueCompanies: {
+      main: '#10B981',
+      light: '#059669'
+    },
+    totalApplications: {
+      main: '#6366F1',
+      light: '#4F46E5'
+    },
+    rejections: {
+      main: '#F43F5E',
+      light: '#E11D48'
+    }
+  };
+
   return (
-    <div className="w-full bg-gray-800 rounded-lg p-6">
-      <div className="flex flex-col space-y-4">
+    <div className="w-full bg-gray-900 rounded-xl p-8 shadow-xl">
+      <div className="flex flex-col space-y-6">
         {/* Header and Controls */}
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-white">Daily Application Analysis</h2>
+          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+            Daily Application Analysis
+          </h2>
           <div className="flex items-center gap-4">
-            <div className="flex bg-gray-700 rounded-lg p-1">
+            <div className="flex bg-gray-800 rounded-lg p-1 shadow-inner">
               {dateRanges.map(range => (
                 <button
                   key={range.value}
@@ -84,10 +102,10 @@ const DailyApplicationsChart = ({ data }) => {
                     console.log(`Selecting range: ${range.value} days`);
                     setSelectedRange(range.value);
                   }}
-                  className={`px-3 py-1 rounded-md text-sm font-medium transition-colors
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-in-out
                     ${selectedRange === range.value
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-600'
+                      ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-gray-700'
                     }`}
                 >
                   {range.label}
@@ -98,27 +116,27 @@ const DailyApplicationsChart = ({ data }) => {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-6">
           {[
             { 
               label: 'Total Applications', 
               value: statistics.totalApplications,
-              color: 'bg-blue-600'
+              gradient: 'from-indigo-500 to-indigo-600'
             },
             { 
               label: 'Unique Companies', 
               value: statistics.uniqueCompanies,
-              color: 'bg-green-600'
+              gradient: 'from-emerald-500 to-emerald-600'
             },
             { 
               label: 'Rejections', 
               value: statistics.rejections,
-              color: 'bg-red-600'
+              gradient: 'from-rose-500 to-rose-600'
             }
           ].map((stat, index) => (
-            <div key={index} className="bg-gray-700 rounded-lg p-4">
-              <div className="text-gray-400 text-sm">{stat.label}</div>
-              <div className={`text-2xl font-bold ${stat.color} bg-opacity-20 mt-2 p-2 rounded`}>
+            <div key={index} className="bg-gray-800 rounded-xl p-6 shadow-lg transition-transform hover:scale-105">
+              <div className="text-gray-400 text-sm font-medium">{stat.label}</div>
+              <div className={`text-3xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mt-2`}>
                 {stat.value}
               </div>
             </div>
@@ -126,62 +144,95 @@ const DailyApplicationsChart = ({ data }) => {
         </div>
 
         {/* Chart */}
-        <div className="h-96 mt-4">
+        <div className="h-96 mt-6">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={filteredData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <defs>
+                {Object.entries(gradients).map(([key, colors]) => (
+                  <linearGradient key={key} id={`gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={colors.main} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={colors.light} stopOpacity={0.3}/>
+                  </linearGradient>
+                ))}
+              </defs>
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                stroke="#374151" 
+                strokeOpacity={0.4}
+              />
               <XAxis 
                 dataKey="date" 
                 stroke="#9CA3AF"
                 tick={{ fill: '#9CA3AF' }}
                 tickFormatter={(date) => new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                tickLine={{ stroke: '#4B5563' }}
               />
               <YAxis 
                 stroke="#9CA3AF"
                 tick={{ fill: '#9CA3AF' }}
+                tickLine={{ stroke: '#4B5563' }}
+                axisLine={{ stroke: '#4B5563' }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#1F2937',
+                  backgroundColor: 'rgba(17, 24, 39, 0.95)',
                   border: '1px solid #374151',
-                  borderRadius: '0.375rem'
+                  borderRadius: '0.75rem',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  padding: '12px'
                 }}
-                labelStyle={{ color: '#9CA3AF' }}
-                itemStyle={{ color: '#9CA3AF' }}
-                formatter={(value, name) => {
-                  if (name === "Total Applications") {
-                    return [value, name];
-                  }
-                  return [value, name];
-                }}
-                labelFormatter={(date) => new Date(date).toLocaleDateString()}
+                labelStyle={{ color: '#E5E7EB', fontWeight: 'bold', marginBottom: '4px' }}
+                itemStyle={{ color: '#9CA3AF', padding: '4px 0' }}
+                cursor={{ fill: 'rgba(107, 114, 128, 0.1)' }}
+                labelFormatter={(date) => new Date(date).toLocaleDateString(undefined, { 
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
               />
-              <Legend />
+              <Legend 
+                wrapperStyle={{
+                  padding: '20px 0',
+                }}
+                formatter={(value) => (
+                  <span style={{ color: '#D1D5DB', fontSize: '14px' }}>{value}</span>
+                )}
+              />
               
-              {/* Stacked bars for applications */}
               <Bar 
                 dataKey="uniqueCompanies" 
                 name="Unique Companies" 
                 stackId="apps"
-                fill="#10B981"
+                fill="url(#gradient-uniqueCompanies)"
                 radius={[4, 4, 0, 0]}
+                animationDuration={1000}
               />
               <Bar 
                 dataKey="totalApplications" 
                 name="Total Applications" 
                 stackId="apps"
-                fill="#3B82F6"
+                fill="url(#gradient-totalApplications)"
                 radius={[4, 4, 0, 0]}
+                animationDuration={1000}
               />
-              
-              {/* Line for rejections */}
               <Line
                 type="monotone"
                 dataKey="rejections"
                 name="Rejections"
-                stroke="#EF4444"
-                strokeWidth={2}
-                dot={{ r: 4 }}
+                stroke={gradients.rejections.main}
+                strokeWidth={3}
+                dot={{ 
+                  r: 4, 
+                  fill: gradients.rejections.main,
+                  strokeWidth: 2
+                }}
+                activeDot={{
+                  r: 6,
+                  strokeWidth: 0,
+                  fill: gradients.rejections.light
+                }}
+                animationDuration={1500}
               />
             </ComposedChart>
           </ResponsiveContainer>
