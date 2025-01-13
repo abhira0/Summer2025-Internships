@@ -7,8 +7,21 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showSignup, setShowSignup] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  // Add demo login handler
+  const handleDemoLogin = async () => {
+    setError('');
+    try {
+      await login('demo', 'demo');
+      navigate('/jobs');
+    } catch (err) {
+      setError('Demo login failed');
+      console.error('Demo login error:', err);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +40,7 @@ export default function Login() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold text-white">
-            Sign in to Internship Tracker
+            Sign in
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -67,8 +80,57 @@ export default function Login() {
             >
               Sign in
             </button>
+            {/* Add demo login button */}
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              className="mt-3 w-full flex justify-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+            >
+              Demo?
+            </button>
           </div>
         </form>
+        
+        {/* Collapsible Sign up instructions */}
+        <div className="mt-6">
+          <button
+            onClick={() => setShowSignup(!showSignup)}
+            className="w-full text-sm text-gray-400 hover:text-gray-300 flex items-center justify-center gap-2 transition-colors duration-200"
+          >
+            Want an account? 
+            <svg 
+              className={`w-4 h-4 transform transition-transform duration-200 ${showSignup ? 'rotate-180' : ''}`} 
+              fill="currentColor" 
+              viewBox="0 0 20 20"
+            >
+              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </button>
+          
+          {showSignup && (
+            <div className="mt-4 text-center animate-fade-in">
+              <ol className="text-sm text-gray-400 space-y-2">
+                <li>
+                  1. Star the repository{' '}
+                  <a 
+                    href="https://github.com/abhira0/Summer2025-Internships" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 underline"
+                  >
+                    abhira0/Summer2025-Internships
+                  </a>
+                </li>
+                <li>
+                  2. Raise an issue in the repo with your username and email
+                </li>
+                <li>
+                  3. Once approved by developers, credentials will be sent to your email
+                </li>
+              </ol>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
