@@ -1,6 +1,4 @@
-// src/pages/Analytics.jsx
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useSimplify } from '../context/SimplifyContext';
 import Layout from '../components/layout/Layout';
 import DailyApplicationsChart from '../components/analytics/DailyApplicationsChart';
@@ -10,11 +8,9 @@ import SummaryStats from '../components/analytics/SummaryStats';
 import { processChartData } from '../utils/chart-utils';
 
 const Analytics = () => {
-  const { user } = useAuth();
   const { fetchData, refreshData, loading, error } = useSimplify();
   const [data, setData] = useState([]);
   const [processedData, setProcessedData] = useState(null);
-  const [selectedDateRange, setSelectedDateRange] = useState(7);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -23,10 +19,10 @@ const Analytics = () => {
 
   useEffect(() => {
     if (data.length) {
-      const processed = processChartData(data, selectedDateRange);
+      const processed = processChartData(data);
       setProcessedData(processed);
     }
-  }, [data, selectedDateRange]);
+  }, [data]);
 
   const loadData = async () => {
     try {
@@ -49,10 +45,6 @@ const Analytics = () => {
     } finally {
       setRefreshing(false);
     }
-  };
-
-  const handleDateRangeChange = (days) => {
-    setSelectedDateRange(days);
   };
 
   if (loading && !processedData) {
@@ -107,60 +99,10 @@ const Analytics = () => {
 
         {processedData && (
           <div className="space-y-6">
-            {/* Summary Stats */}
-            <section className="bg-gray-900 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Summary Statistics</h2>
-              <SummaryStats data={processedData.summary} />
-            </section>
-
-            {/* Daily Applications Chart */}
-            <section className="bg-gray-900 rounded-lg p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-white">Daily Applications</h2>
-                <div className="flex gap-2">
-                  {[7, 14, 30, 60].map(days => (
-                    <button
-                      key={days}
-                      onClick={() => handleDateRangeChange(days)}
-                      className={`
-                        px-3 py-1 rounded text-sm transition-colors
-                        ${selectedDateRange === days
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                        }
-                      `}
-                    >
-                      {days} Days
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => handleDateRangeChange('all')}
-                    className={`
-                      px-3 py-1 rounded text-sm transition-colors
-                      ${selectedDateRange === 'all'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                      }
-                    `}
-                  >
-                    All Time
-                  </button>
-                </div>
-              </div>
-              <DailyApplicationsChart data={processedData.daily} />
-            </section>
-
-            {/* Salary Distribution */}
-            <section className="bg-gray-900 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Salary Distribution</h2>
-              <SalaryDistributionChart data={processedData.salary} />
-            </section>
-
-            {/* Map Section */}
-            <section className="bg-gray-900 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Job Locations</h2>
-              <JobLocationsMap data={processedData.location} />
-            </section>
+            <SummaryStats data={processedData.summary} />
+            <DailyApplicationsChart data={processedData.daily} />
+            <SalaryDistributionChart data={processedData.salary} />
+            <JobLocationsMap data={processedData.location} />
           </div>
         )}
       </div>

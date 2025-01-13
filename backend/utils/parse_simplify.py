@@ -208,6 +208,6 @@ def main(from_path: str, to_path: str):
     AddCoordinates(data)
     StatusEvents(data)
     ProcessSalary(data)
-    RemoveUnusedKeys(data)
+    # RemoveUnusedKeys(data)
     
     JSONFile(to_path).save(data.data)
