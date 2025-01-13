@@ -13,6 +13,7 @@ import {
 
 const DailyApplicationsChart = ({ data }) => {
   const [selectedRange, setSelectedRange] = useState(7);
+  const [currentOffset, setCurrentOffset] = useState(0);
   const [processedData, setProcessedData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   
@@ -46,21 +47,50 @@ const DailyApplicationsChart = ({ data }) => {
     setProcessedData(processed);
   }, [data]);
 
-  // Filter data based on selected range
+  // Modified filter logic to support sliding
   useEffect(() => {
     if (!processedData.length) return;
     
-    const filtered = selectedRange === 'all' 
-      ? processedData 
-      : processedData.slice(-selectedRange);
-      
+    if (selectedRange === 'all') {
+      setFilteredData(processedData);
+      return;
+    }
+
+    const endIndex = processedData.length - currentOffset;
+    const startIndex = Math.max(0, endIndex - selectedRange);
+    const filtered = processedData.slice(startIndex, endIndex);
+    
     setFilteredData(filtered);
     
     console.log(`Showing ${filtered.length} days of data`);
     if (filtered.length > 0) {
       console.log(`Date range: ${filtered[0].date} to ${filtered[filtered.length-1].date}`);
     }
-  }, [selectedRange, processedData]);
+  }, [selectedRange, currentOffset, processedData]);
+
+  // Calculate if we can slide further
+  const canSlideNext = useMemo(() => {
+    if (selectedRange === 'all') return false;
+    return currentOffset > 0;
+  }, [currentOffset, selectedRange]);
+
+  const canSlidePrevious = useMemo(() => {
+    if (selectedRange === 'all') return false;
+    return currentOffset < processedData.length - selectedRange;
+  }, [currentOffset, selectedRange, processedData.length]);
+
+  const handleSlide = (direction) => {
+    if (direction === 'next' && canSlideNext) {
+      setCurrentOffset(prev => prev - 1);
+    } else if (direction === 'prev' && canSlidePrevious) {
+      setCurrentOffset(prev => prev + 1);
+    }
+  };
+
+  // Reset offset when range changes
+  useEffect(() => {
+    setCurrentOffset(0);
+  }, [selectedRange]);
 
   // Calculate statistics for the filtered range
   const statistics = useMemo(() => {
@@ -96,6 +126,7 @@ const DailyApplicationsChart = ({ data }) => {
             Daily Application Analysis
           </h2>
           <div className="flex items-center gap-4">
+            {/* Range Selection */}
             <div className="flex bg-gray-800 rounded-lg p-1 shadow-inner">
               {dateRanges.map(range => (
                 <button
@@ -114,6 +145,32 @@ const DailyApplicationsChart = ({ data }) => {
                 </button>
               ))}
             </div>
+            
+            {/* Sliding Controls */}
+            {selectedRange !== 'all' && (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleSlide('prev')}
+                  disabled={!canSlidePrevious}
+                  className={`p-2 rounded-lg transition-all duration-200
+                    ${canSlidePrevious 
+                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white' 
+                      : 'bg-gray-700 text-gray-400 cursor-not-allowed'}`}
+                >
+                  ←
+                </button>
+                <button
+                  onClick={() => handleSlide('next')}
+                  disabled={!canSlideNext}
+                  className={`p-2 rounded-lg transition-all duration-200
+                    ${canSlideNext 
+                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white' 
+                      : 'bg-gray-700 text-gray-400 cursor-not-allowed'}`}
+                >
+                  →
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
