@@ -93186,7 +93186,7 @@
     "company_name": "Motorola",
     "id": "0e997eb2-3739-4d66-a5df-f9beef7eb436",
     "title": "Google Applications Developer Internship - Summer 2025",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -93492,7 +93492,7 @@
     "company_name": "Pocket Worlds",
     "id": "bb4551f2-3af7-407d-aa29-afb4743850a7",
     "title": "Software Development Residency",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -94147,7 +94147,7 @@
     "company_name": "DV Trading",
     "id": "ef491a99-b19a-4e4d-b330-0c01b5fda069",
     "title": "2025 Summer Internship - Trader - DV Energy",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -109433,7 +109433,7 @@
     "company_name": "Nutanix",
     "id": "c134fc85-037f-458a-ba69-20e83d986106",
     "title": "Software Engineering Intern Summer 2025 - Undergraduate - Only",
-    "active": false,
+    "active": true,
     "terms": [
       "Summer 2025"
     ],
@@ -119584,7 +119584,7 @@
     "company_name": "Sunwater Capital",
     "id": "4ba8a9d8-e274-4325-9d0e-c021733f1f08",
     "title": "Intern-Data Science Spring 2025",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2025"
     ],
@@ -121527,7 +121527,7 @@
     "company_name": "Activision-Blizzard",
     "id": "1e7c4ea7-273e-4827-8f3d-1b6ce71e9e4a",
     "title": "2025 US Summer Internship - Software Engineering",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -121550,7 +121550,7 @@
     "company_name": "Activision-Blizzard",
     "id": "14878e49-628b-4737-840d-e30871af4b1a",
     "title": "2025 US Summer Internship - Game Engineering",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -121598,7 +121598,7 @@
     "company_name": "Activision-Blizzard",
     "id": "1a46bffa-7246-4395-add4-e21204a0954c",
     "title": "Data Analytics & Science Internship",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2024",
       "Summer 2024"
@@ -121723,7 +121723,7 @@
     "company_name": "Blizzard Entertainment",
     "id": "886bd6bb-f53a-484a-a7cd-42b36046339c",
     "title": "Game Engineering Co-Op",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2024",
       "Summer 2024",
@@ -122784,7 +122784,7 @@
     "company_name": "Rockwell Automation",
     "id": "e341d148-eca2-4743-88fe-af86722ece1c",
     "title": "Intern \u2013 Software Engineering",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -124152,7 +124152,7 @@
     "company_name": "Blizzard Entertainment",
     "id": "9e507f04-ad49-4a59-80d9-10308570325c",
     "title": "2025 US Summer Internship - AI Localization",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -125921,7 +125921,7 @@
     "company_name": "Blizzard Entertainment",
     "id": "f135aac4-f047-4f50-bf38-aaaedd6b0d96",
     "title": "2025 US Co-Op - Game Production",
-    "active": true,
+    "active": false,
     "terms": [
       "Spring 2024",
       "Summer 2024",
@@ -130197,7 +130197,7 @@
     "company_name": "Parsons",
     "id": "7df4d08b-bb4b-4d86-99c3-cdd7a2ff9fed",
     "title": "Missile Track Custody Software Developer - Summer 2025",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -133822,7 +133822,7 @@
     "company_name": "Xylem",
     "id": "8dfcee5b-c4da-4ecb-9061-327e71328137",
     "title": "Software Engineering Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -134440,7 +134440,7 @@
     "company_name": "Activision-Blizzard",
     "id": "ee03b3a0-caf2-422b-a939-4b99c633e7ad",
     "title": "Summer Internship - Computer Graphics",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -135962,7 +135962,7 @@
     "company_name": "Dropbox",
     "id": "b5e15405-ee30-4f32-8f93-122b995a974e",
     "title": "Software Engineer Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -136254,7 +136254,7 @@
     "company_name": "Dropbox",
     "id": "ea0b7bb2-539c-4f81-99e3-291528b0c693",
     "title": "Software Engineer Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -136843,7 +136843,7 @@
     "company_name": "MSD",
     "id": "b28e4056-7e4c-4c15-b7a4-5ad47e1733de",
     "title": "Forecasting Capabilities and Data Science Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -136882,7 +136882,7 @@
     "company_name": "MSD",
     "id": "5fec1bf1-74e2-4685-b5d5-e57b2daf7ee1",
     "title": "Data Science Business Analyst Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -136920,7 +136920,7 @@
     "company_name": "MSD",
     "id": "cc5d093d-c37b-40e5-8eb0-0aef9986210a",
     "title": "Business Insights & Analytics Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -137032,7 +137032,7 @@
     "company_name": "MSD",
     "id": "2c5cac65-540a-491c-9d78-9fa6b656694a",
     "title": "Data Science Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -138482,7 +138482,7 @@
     "company_name": "Marvell",
     "id": "1a07af8b-eb3c-4448-8dce-f232475bf558",
     "title": "Sales Analytics Intern",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -139470,7 +139470,7 @@
     "company_name": "Applied Materials",
     "id": "956f59e3-7eae-4f61-b2a7-c8dae368310b",
     "title": "2025 Summer Software Engineer Intern - Bachelors",
-    "active": true,
+    "active": false,
     "terms": [
       "Summer 2025"
     ],
@@ -141067,5 +141067,541 @@
     "company_url": "https://simplify.jobs/c/Wealthsimple",
     "is_visible": true,
     "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Cadence Design Systems",
+    "id": "ae66e8e5-b0db-48da-abcf-ac261f6145db",
+    "title": "Software Engineer Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736540911,
+    "date_posted": 1736540911,
+    "url": "https://cadence.wd1.myworkdayjobs.com/en-US/External_Careers/job/SAN-JOSE/Software-Engineer-Intern_R48702-1",
+    "locations": [
+      "San Jose, CA"
+    ],
+    "company_url": "https://simplify.jobs/c/Cadence-Design-Systems",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "StepStone Group",
+    "id": "8758cb84-3e53-40e0-873d-d4e2f6211d46",
+    "title": "Data Science Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736540720,
+    "date_posted": 1736540720,
+    "url": "https://boards.greenhouse.io/embed/job_app?token=6530606",
+    "locations": [
+      "Orlando, FL"
+    ],
+    "company_url": "https://simplify.jobs/c/StepStoneGroup",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Affirm",
+    "id": "c311b9ac-d492-47ed-969c-b385ec48dbaa",
+    "title": "Software Engineering Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736540551,
+    "date_posted": 1736540551,
+    "url": "https://job-boards.greenhouse.io/affirm/jobs/6228633003",
+    "locations": [
+      "SF"
+    ],
+    "company_url": "https://simplify.jobs/c/Affirm",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Nuro",
+    "id": "01c0587d-77c1-4ded-b1a0-c5fd17713149",
+    "title": "Systems Engineering Intern - Validation",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736540521,
+    "date_posted": 1736540521,
+    "url": "https://nuro.ai/careersitem?gh_jid=6523346",
+    "locations": [
+      "Mountain View, CA"
+    ],
+    "company_url": "https://simplify.jobs/c/Nuro",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "The Walt Disney Company",
+    "id": "025f9651-9c83-4954-a6a7-33532fdbf312",
+    "title": "Disney Entertainment and ESPN Technology Software Engineering Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736541585,
+    "date_posted": 1736541585,
+    "url": "https://disney.wd5.myworkdayjobs.com/en-US/disneycareer/job/Morrisville-NC-USA/Disney-Entertainment-and-ESPN-Technology-Software-Engineering-Intern--Morrisville--NC-Summer-2025_10110388-1",
+    "locations": [
+      "Morrisville, NC"
+    ],
+    "company_url": "https://simplify.jobs/c/Disney",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Elevance Health",
+    "id": "82294140-71a6-461e-a774-bbe2131f979e",
+    "title": "Data Science Internship",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736541216,
+    "date_posted": 1736541216,
+    "url": "https://elevancehealth.wd1.myworkdayjobs.com/en-US/ANT/job/IL-CHICAGO-233-S-WACKER-DR-STE-3700/Data-Science-Internship---Summer-2025_JR133463",
+    "locations": [
+      "Chicago, IL",
+      "Walnut Creek, CA",
+      "Norfolk, VA"
+    ],
+    "company_url": "https://simplify.jobs/c/Elevance-Health",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Eulerity",
+    "id": "91469ca1-37a4-4ba2-af64-cfe2631fc1f9",
+    "title": "Web Developer Intern",
+    "active": true,
+    "terms": [
+      "Spring 2025"
+    ],
+    "date_updated": 1736541152,
+    "date_posted": 1736541152,
+    "url": "https://job-boards.greenhouse.io/eulerity/jobs/4433437006",
+    "locations": [
+      "NYC"
+    ],
+    "company_url": "https://simplify.jobs/c/Eulerity",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Tempus",
+    "id": "296a0ddd-e385-4a17-93a5-42a9d4775483",
+    "title": "Software Engineering Summer Analyst/Associate",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736541156,
+    "date_posted": 1736541156,
+    "url": "https://boards.greenhouse.io/embed/job_app?token=7787178002",
+    "locations": [
+      "Chicago, IL"
+    ],
+    "company_url": "https://simplify.jobs/c/Tempus",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "ActBlue",
+    "id": "fcc94b61-d8fb-40c2-a882-e33dfdfda66f",
+    "title": "Summer Intern 2025",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736554470,
+    "date_posted": 1736554470,
+    "url": "https://secure.actblue.com/available-positions?gh_jid=7808519002",
+    "locations": [
+      "Remote in USA"
+    ],
+    "company_url": "https://simplify.jobs/c/ActBlue",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Codeium",
+    "id": "3799759c-3fa0-4920-9cc2-5ca03ca6ebc5",
+    "title": "Deployed Engineer Internship",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736554331,
+    "date_posted": 1736554331,
+    "url": "https://jobs.ashbyhq.com/codeium/e9b45ca2-e1ef-4781-9e0b-38703a4ca9c6/application",
+    "locations": [],
+    "company_url": "https://simplify.jobs/c/5db7086b-b6ff-42a7-8f16-5967451d29bf",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "2683527a-f517-4552-80dd-72e63130f360",
+    "title": "Subscriber Planning & Analytics Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736555007,
+    "date_posted": 1736555007,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/CO---Centennial-9401-E-Panorama-Cir/Subscriber-Planning---Analytics-Intern--West-Division-_R402642",
+    "locations": [
+      "Centennial, CO"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "927c5f4b-f4cb-4c00-b390-faa36b904b51",
+    "title": "Comcast Software Developer \u2013 Frontend Development Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736555003,
+    "date_posted": 1736555003,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---West-Chester-1354-Boot-Rd/Comcast-Software-Developer--Frontend-Development-Co-op_R397680",
+    "locations": [
+      "West Chester, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "097ceab2-6dfc-4781-a7d7-b01ee2880202",
+    "title": "Comcast Software Full Stack Developer \u2013 Sports Experiences Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736555003,
+    "date_posted": 1736555003,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1800-Arch-St/Comcast-Software-Full-Stack-Developer---Sports-Experiences-Co-op_R398009",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "7245c98b-e3fc-468a-9573-5723452e9164",
+    "title": "Comcast Machine Learning Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736555000,
+    "date_posted": 1736555000,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1800-Arch-St/Comcast-Machine-Learning-Co-op_R398006",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "62e609f0-8e94-452f-a979-2c6c9e29fd4c",
+    "title": "Comcast Software Engineer Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736555000,
+    "date_posted": 1736555000,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1800-Arch-St/Comcast-Software-Engineer-Co-op_R397703",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "98325fc2-2931-4215-a3fb-ab9579863a94",
+    "title": "Comcast Software Engineer Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736554998,
+    "date_posted": 1736554998,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1800-Arch-St/Comcast-Software-Engineer-Co-op_R397699",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "72d0c830-ac97-4e46-b42b-63173689795d",
+    "title": "Comcast AI Strategy \u2013 & Investments Co-op - Transformation",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736554998,
+    "date_posted": 1736554998,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1701-John-F-Kennedy-Blvd/Comcast-AI-Strategy--Transformation----Investments-Co-op_R397383",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "4ad52cf0-e800-4e60-900f-3349f3ccfd69",
+    "title": "Comcast Information Systems Analyst Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736554999,
+    "date_posted": 1736554999,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1701-John-F-Kennedy-Blvd/Comcast-Information-Systems-Analyst-Co-op_R397376",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "e48c3abb-f427-4cf5-aab3-b169ad2fcf6d",
+    "title": "Comcast Software Engineer Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736554997,
+    "date_posted": 1736554997,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/NJ---Mount-Laurel-1800-Bishops-Gate/Comcast-Software-Engineer-Co-op_R397701",
+    "locations": [
+      "Mt Laurel Township, NJ"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "caf2b8e0-c59f-462a-8002-5c35b3bed47c",
+    "title": "Comcast Data Products & Governance Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736554988,
+    "date_posted": 1736554988,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1701-John-F-Kennedy-Blvd/Comcast-Data-Products---Governance-Co-op_R397406",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Marathon Petroleum",
+    "id": "c9c34dc3-4096-413f-a020-606741a2d5a1",
+    "title": "Intern/Co-op RAD-IT",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736554853,
+    "date_posted": 1736554853,
+    "url": "https://mpc.wd1.myworkdayjobs.com/en-US/MPCCareers/job/Catlettsburg-Kentucky/Intern-Co-op-RAD-IT--Summer-2025-_00014816",
+    "locations": [
+      "Ashland, KY"
+    ],
+    "company_url": "https://simplify.jobs/c/Marathon-Petroleum",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Verizon Communications",
+    "id": "448fab3f-97db-458d-aefd-7e1faadaaf70",
+    "title": "Break Through Tech Sprinternship",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736554677,
+    "date_posted": 1736554677,
+    "url": "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Basking-Ridge-New-Jersey/Break-Through-Tech-Sprinternship--For-Break-Through-Tech-Program-Members-_R-1058104",
+    "locations": [
+      "Berkeley Heights, NJ"
+    ],
+    "company_url": "https://simplify.jobs/c/Verizon-Communications",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "706a4d44-b17a-462f-8938-87d58e480983",
+    "title": "Comcast Data Engineer Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736555010,
+    "date_posted": 1736555010,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1800-Arch-St/Comcast-Data-Engineer-Co-op_R398010",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Comcast",
+    "id": "600d14c8-43c5-4cc6-8a2a-a95e3929c8ff",
+    "title": "Comcast Software Engineer Co-op",
+    "active": true,
+    "terms": [
+      "Spring 2025",
+      "Summer 2025",
+      "Fall 2025"
+    ],
+    "date_updated": 1736554997,
+    "date_posted": 1736554997,
+    "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers/job/PA---Philadelphia-1800-Arch-St/Comcast-Software-Engineer-Co-op_R397653",
+    "locations": [
+      "Philadelphia, PA"
+    ],
+    "company_url": "https://simplify.jobs/c/Comcast",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "source": "Simplify",
+    "company_name": "Cadence Design Systems",
+    "id": "6963e98e-8703-4cfc-8d5c-6cab076c32a8",
+    "title": "SVG Software Intern",
+    "active": true,
+    "terms": [
+      "Summer 2025"
+    ],
+    "date_updated": 1736655197,
+    "date_posted": 1736655197,
+    "url": "https://cadence.wd1.myworkdayjobs.com/en-US/External_Careers/job/Burlington-MA/SVG-Software-Intern--Summer-2025-_R48637-2",
+    "locations": [
+      "Burlington, MA"
+    ],
+    "company_url": "https://simplify.jobs/c/Cadence-Design-Systems",
+    "is_visible": true,
+    "sponsorship": "Other"
+  },
+  {
+    "date_updated": 1736658523,
+    "url": "https://careers.synopsys.com/job/-/-/44408/75804262800",
+    "company_name": "Synopsys",
+    "title": "Software Engineering Intern",
+    "locations": [
+      "Austin, TX"
+    ],
+    "terms": [
+      "Summer 2025"
+    ],
+    "sponsorship": "Offers Sponsorship",
+    "active": true,
+    "source": "GaryZhous",
+    "id": "6f13a5d8-1e58-4075-a6bc-e0c857ae1408",
+    "date_posted": 1736658523,
+    "company_url": "",
+    "is_visible": true
+  },
+  {
+    "date_updated": 1736658606,
+    "url": "https://proofpoint.wd5.myworkdayjobs.com/ProofpointCareers/job/Boulder-CO/Software-Engineering-Intern_R11690",
+    "company_name": "Proofpoint",
+    "title": "Software Engineering Intern",
+    "locations": [
+      "Boulder, CO"
+    ],
+    "terms": [
+      "Summer 2025"
+    ],
+    "sponsorship": "Offers Sponsorship",
+    "active": true,
+    "source": "GaryZhous",
+    "id": "7bd89862-f341-4aec-81b8-c7dc688f13b9",
+    "date_posted": 1736658606,
+    "company_url": "",
+    "is_visible": true
   }
 ]
