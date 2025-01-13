@@ -2,7 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-const BACKEND_URL = 'https://api.abhirao.in'; // Change this to your backend URL
+const BACKEND_URL = 'https://jobs-api.abhirao.in'; // Change this to your backend URL
 
 export default defineConfig({
   plugins: [react()],
