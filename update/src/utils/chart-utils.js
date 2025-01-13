@@ -90,22 +90,32 @@ export const processChartData = (data) => {
       };
   };
 
-  // Process data for daily applications chart
-  const processDailyData = (days = 7) => {
+  // Process data for daily applications chart - Now starts from today
+  const processDailyData = () => {
       const dailyStats = {};
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // Initialize dates for the selected range
-      for (let i = 0; i < days; i++) {
-          const date = new Date(today);
-          date.setDate(date.getDate() - i);
-          const dateStr = date.toISOString().split('T')[0];
+      // Find the earliest date in the data
+      let earliestDate = new Date();
+      data.forEach(job => {
+          if (!job.tracked_date) return;
+          const jobDate = new Date(job.tracked_date);
+          if (jobDate < earliestDate) {
+              earliestDate = jobDate;
+          }
+      });
+
+      // Initialize all dates from today backwards to earliest date
+      const currentDate = new Date(today);
+      while (currentDate >= earliestDate) {
+          const dateStr = currentDate.toISOString().split('T')[0];
           dailyStats[dateStr] = {
               totalApplications: 0,
               uniqueCompanies: new Set(),
               rejections: 0
           };
+          currentDate.setDate(currentDate.getDate() - 1);
       }
 
       // Process applications
