@@ -239,14 +239,11 @@ const DailyApplicationsChart = ({ data }) => {
                 stroke="#9CA3AF"
                 tick={{ fill: '#9CA3AF' }}
                 tickFormatter={(date) => {
-                  const utcDate = new Date(date);
-                  utcDate.setUTCHours(0, 0, 0, 0);
-                  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                  const localDate = new Date(date+'T00:00');
                   return new Intl.DateTimeFormat('en-US', {
                     month: 'short',
-                    day: 'numeric',
-                    timeZone: userTimezone
-                  }).format(utcDate);
+                    day: 'numeric'
+                  }).format(localDate);
                 }}
                 tickLine={{ stroke: '#4B5563' }}
               />
@@ -275,16 +272,13 @@ const DailyApplicationsChart = ({ data }) => {
                   return [value, name];
                 }}
                 labelFormatter={(date) => {
-                  const utcDate = new Date(date);
-                  utcDate.setUTCHours(0, 0, 0, 0);
-                  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                  const localDate = new Date(date+'T00:00');
                   return new Intl.DateTimeFormat('en-US', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
-                    day: 'numeric',
-                    timeZone: userTimezone
-                  }).format(utcDate);
+                    day: 'numeric'
+                  }).format(localDate);
                 }}
               />
               <Legend 
