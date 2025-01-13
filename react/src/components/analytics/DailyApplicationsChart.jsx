@@ -62,11 +62,6 @@ const DailyApplicationsChart = ({ data }) => {
     const filtered = processedData.slice(startIndex, endIndex);
     
     setFilteredData(filtered);
-    
-    console.log(`Showing ${filtered.length} days of data`);
-    if (filtered.length > 0) {
-      console.log(`Date range: ${filtered[0].date} to ${filtered[filtered.length-1].date}`);
-    }
   }, [selectedRange, currentOffset, processedData]);
 
   // Calculate if we can slide further
