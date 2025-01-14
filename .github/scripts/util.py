@@ -97,7 +97,6 @@ def create_md_table(listings, offSeason=False):
 def getListingsFromJSON(filename=".github/scripts/listings.json"):
     with open(filename) as f:
         listings = json.load(f)
-        print(f"Received {len(listings)} listings from listings.json")
         return listings
 
 
