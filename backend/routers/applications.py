@@ -36,10 +36,8 @@ async def get_applications(current_user: dict = Depends(get_current_user)):
     for job in parsed_data:
         status_events = job.get("status_events", [])
         for event in status_events:
-            if event.get("status") == "applied":
-                job_id = job.get("job_posting_id")
-                if job_id:
-                    all_applied_jobs.add(job_id)
+            if event.get("status") == "applied" and job.get("job_posting_id"):
+                all_applied_jobs.add(job.get("job_posting_id"))
                 break
     # Combine both sources
     applications["applications"][username]["applied"] = list(all_applied_jobs)
