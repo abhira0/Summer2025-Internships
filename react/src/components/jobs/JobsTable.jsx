@@ -120,19 +120,16 @@ export default function JobsTable({
                   </td>
                   <td className="px-4 py-3 text-center">
                     <div className="flex justify-center space-x-2">
-                      <a
-                        href={job.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-blue-300"
+                      <button
+                        onClick={() => window.open(job.url, '_blank')}
+                        className="px-2 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-500"
                       >
                         Apply
-                      </a>
+                      </button>
                       {job.source === "Simplify" && (
-                        <a
-                          href={`https://simplify.jobs/p/${job.id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          onClick={() => window.open(`https://simplify.jobs/p/${job.id}`, '_blank')}
+                          className="flex items-center"
                         >
                           <img
                             src="/simplify-logo.png"
@@ -140,7 +137,7 @@ export default function JobsTable({
                             className="h-5 w-5"
                             title="Apply with Simplify"
                           />
-                        </a>
+                        </button>
                       )}
                     </div>
                   </td>
