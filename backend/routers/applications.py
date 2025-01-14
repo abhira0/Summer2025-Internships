@@ -20,6 +20,20 @@ async def get_parsed_data(username: str):
         print(f"Error reading parsed data: {str(e)}")
         return []
 
+
+async def get_applied_ids(username: str, jobs: list = None) -> list[str]:
+    # Get parsed data from cache
+    parsed_data = await get_parsed_data(username)
+    
+    all_applied_jobs = set(jobs)
+    for job in parsed_data:
+        status_events = job.get("status_events", [])
+        for event in status_events:
+            if event.get("status") == "applied" and job.get("job_posting_id"):
+                all_applied_jobs.add(job.get("job_posting_id"))
+                break
+    return list(all_applied_jobs)
+
 @router.get("", response_model=ApplicationResponse)
 async def get_applications(current_user: dict = Depends(get_current_user)):
     db = get_database()
@@ -27,22 +41,10 @@ async def get_applications(current_user: dict = Depends(get_current_user)):
     applications = await db.applications.find_one(
         {"username": username}
     ) or {"applications": {username: {"applied": [], "hidden": []}}}
-    print(applications)
-
-    # Get parsed data from cache
-    parsed_data = await get_parsed_data(username)
     
-    all_applied_jobs = set(applications["applications"][username]["applied"])
-    for job in parsed_data:
-        status_events = job.get("status_events", [])
-        for event in status_events:
-            if event.get("status") == "applied" and job.get("job_posting_id"):
-                all_applied_jobs.add(job.get("job_posting_id"))
-                break
     # Combine both sources
-    applications["applications"][username]["applied"] = list(all_applied_jobs)
-    
-    print(applications)
+    all_applied_jobs = await get_applied_ids(username, applications["applications"][username]["applied"])
+    applications["applications"][username]["applied"] = all_applied_jobs
     return applications
 
 @router.post("", response_model=ApplicationResponse)
@@ -60,6 +62,9 @@ async def update_application(
             "username": username,
             "applications": {username: {"applied": [], "hidden": []}}
         }
+    
+    all_applied_jobs = await get_applied_ids(username, user_applications["applications"][username]["applied"])
+    user_applications["applications"][username]["applied"] = all_applied_jobs
     
     apps = user_applications["applications"][username]
     status_list = apps.get(application.status, [])
