@@ -29,6 +29,12 @@ export function useTableManager(initialData, config) {
   // Apply filters
   const filteredData = useMemo(() => {
     if (!initialData || !Array.isArray(initialData)) return [];
+    
+    // If there are no active filters, return all data including hidden items
+    if (activeFilters.length === 0) {
+      return initialData;
+    }
+    
     return applyFilters(initialData, activeFilters, getApplicationStatus, user?.username);
   }, [initialData, activeFilters, getApplicationStatus, user?.username]);
 

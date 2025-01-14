@@ -86,7 +86,7 @@ export default function JobsTable({
               {jobs.map((job) => (
                 <tr 
                   key={job.id}
-                  className={getApplicationStatus(job.id, 'hidden') ? 'hidden' : 'hover:bg-gray-700'}
+                  className="hover:bg-gray-700"
                 >
                   <td className="px-4 py-3">
                     <div className="relative group">
