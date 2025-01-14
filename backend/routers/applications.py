@@ -1,18 +1,50 @@
-
-# backend/app/routers/applications.py
+# backend/routers/applications.py
 from fastapi import APIRouter, Depends, HTTPException
 from backend.schemas.application import ApplicationUpdate, ApplicationResponse
 from backend.dependencies import get_current_user
 from backend.utils.db import get_database
+import json
+import os
 
 router = APIRouter()
+
+async def get_parsed_data(username: str):
+    """Helper function to get parsed data from cache"""
+    try:
+        file_path = f"cache/{username}/parsed.json"
+        if not os.path.exists(file_path):
+            return []
+        with open(file_path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error reading parsed data: {str(e)}")
+        return []
 
 @router.get("", response_model=ApplicationResponse)
 async def get_applications(current_user: dict = Depends(get_current_user)):
     db = get_database()
+    username = current_user["username"]
     applications = await db.applications.find_one(
-        {"username": current_user["username"]}
-    ) or {"applications": {current_user["username"]: {"applied": [], "hidden": []}}}
+        {"username": username}
+    ) or {"applications": {username: {"applied": [], "hidden": []}}}
+    print(applications)
+
+    # Get parsed data from cache
+    parsed_data = await get_parsed_data(username)
+    
+    all_applied_jobs = set(applications["applications"][username]["applied"])
+    for job in parsed_data:
+        status_events = job.get("status_events", [])
+        for event in status_events:
+            if event.get("status") == "applied":
+                job_id = job.get("job_posting_id")
+                if job_id:
+                    all_applied_jobs.add(job_id)
+                break
+    # Combine both sources
+    applications["applications"][username]["applied"] = list(all_applied_jobs)
+    
+    print(applications)
     return applications
 
 @router.post("", response_model=ApplicationResponse)
@@ -46,5 +78,5 @@ async def update_application(
         {"$set": user_applications},
         upsert=True
     )
-    
+
     return user_applications
