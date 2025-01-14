@@ -65,7 +65,7 @@ export default function JobsTable({
                 <th className="w-1/5 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Location
                 </th>
-                <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Apply
                 </th>
                 <th className="w-1/12 px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
@@ -118,8 +118,8 @@ export default function JobsTable({
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex space-x-2">
+                  <td className="px-4 py-3 text-center">
+                    <div className="flex justify-center space-x-2">
                       <a
                         href={job.url}
                         target="_blank"
@@ -128,18 +128,20 @@ export default function JobsTable({
                       >
                         Apply
                       </a>
-                      <a
-                        href={`https://simplify.jobs/p/${job.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src="/simplify-logo.png"
-                          alt="Simplify"
-                          className="h-5 w-5"
-                          title="Apply with Simplify"
-                        />
-                      </a>
+                      {job.source === "Simplify" && (
+                        <a
+                          href={`https://simplify.jobs/p/${job.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            src="/simplify-logo.png"
+                            alt="Simplify"
+                            className="h-5 w-5"
+                            title="Apply with Simplify"
+                          />
+                        </a>
+                      )}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-200 whitespace-nowrap">

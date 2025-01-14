@@ -39,6 +39,7 @@ export function useJobs() {
           title: item.title,
           locations: Array.isArray(item.locations) ? item.locations.join(', ') : item.locations,
           url: item.url,
+          source: item.source,
           date_posted: new Date(item.date_posted * 1000).toLocaleDateString(),
           active: item.active ?? true,
           trackerInfo: tracker.find(t => t.job_posting_id === item.id)
