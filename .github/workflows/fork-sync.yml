@@ -14,27 +14,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY: ${{ github.repository }}
           BRANCH_NAME: ${{ github.ref_name }}
-  
-  filter-2024:
-    needs: sync
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: |
-          python -m pip install -r requirements.txt
-      - name: Filter 2024 entries
-        run: |
-          python docs/analytics/cache/parse.py
-      - name: Commit changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add docs/analytics/cache/listings_parsed.json
-          git commit -m "Update 2024 internships JSON" || exit 0
-          git push
