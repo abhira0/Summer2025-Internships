@@ -137,7 +137,7 @@ async def post_tracker_local(
         
         # Save to local file
         with open(f"cache/{current_user['username']}/raw.json", 'w') as f:
-            json.dump(results, f)
+            json.dump(results, f, indent=1)
         
         parse_simplify.main(f"cache/{current_user['username']}/raw.json", f"cache/{current_user['username']}/parsed.json")
         
