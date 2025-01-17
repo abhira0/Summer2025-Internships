@@ -115,6 +115,7 @@ async def post_tracker(
         )
 
 @router.post("/refresh")
+@router.get("/refresh")
 async def post_tracker_local(
     current_user: dict = Depends(get_current_user)
 ):
