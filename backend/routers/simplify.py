@@ -170,10 +170,8 @@ async def get_parsed(
             
         return data
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to read parsed data: {str(e)}"
-        )
+        print(e)
+        return []
 
 @router.put("/cookie")
 async def update_simplify_cookie(
