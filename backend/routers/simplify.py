@@ -13,7 +13,6 @@ from ..utils import parse_simplify
 
 import nc_py_api
 import shutil
-import asyncio
 
 router = APIRouter()
 
@@ -143,8 +142,8 @@ async def post_tracker_local(
         with open(f"cache/{current_user['username']}/raw.json", 'w') as f:
             json.dump(results, f, indent=1)
         
-        loop = asyncio.get_event_loop()
-        loop.run_in_executor(None, parse_simplify.main, f"cache/{current_user['username']}/raw.json", f"cache/{current_user['username']}/parsed.json")
+        parse_simplify.main(f"cache/{current_user['username']}/raw.json", f"cache/{current_user['username']}/parsed.json")
+        
         return {
             "message": "Tracker data fetched and saved locally",
             "items_count": len(results)

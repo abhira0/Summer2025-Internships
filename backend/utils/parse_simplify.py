@@ -205,9 +205,9 @@ class RemoveUnusedKeys:
 def main(from_path: str, to_path: str):
     data = JSONFile(from_path, auto_save=False)
     
-    AddCoordinates(data)
     StatusEvents(data)
     ProcessSalary(data)
+    AddCoordinates(data)
     # RemoveUnusedKeys(data)
     
     JSONFile(to_path).save(data.data)
