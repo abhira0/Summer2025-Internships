@@ -1,7 +1,7 @@
 // src/config/index.js
 const config = {
   api: {
-    listings: 'https://raw.githubusercontent.com/abhira0/Summer2025-Internships/dev/.github/scripts/listings.json',
+    listings: 'https://raw.githubusercontent.com/SimplifyJobs/New-Grad-Positions/refs/heads/dev/.github/scripts/listings.json',
   },
   defaults: {
     filters: [

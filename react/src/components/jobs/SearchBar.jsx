@@ -42,7 +42,7 @@ export default function SearchBar({
             value={inputValue}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
-            placeholder="Search for internships..."
+            placeholder="Search for jobs..."
             className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
