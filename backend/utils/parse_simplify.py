@@ -60,7 +60,7 @@ class JSONFile:
         thread.start()
 
 
-LOCATION_CACHE = JSONFile("utils/locations.json")
+LOCATION_CACHE = JSONFile("backend/utils/locations.json")
 
 
 # class FilterByDate:

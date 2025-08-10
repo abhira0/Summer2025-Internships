@@ -7,7 +7,7 @@ load_dotenv()  # Load environment variables from .env file
 
 class Settings(BaseSettings):
     # Project metadata
-    PROJECT_NAME: str = "Internship Tracker"
+    PROJECT_NAME: str = "Jobs Tracker"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     
@@ -18,14 +18,9 @@ class Settings(BaseSettings):
     
     # Server settings
     SERVER_PORT: int
-    PORT: int
     
     # Database
     MONGODB_URL: str
-    
-    # NEXTCLOUD CLOUD STORAGE
-    NEXTCLOUD_USER: str
-    NEXTCLOUD_PASSWORD : str
     
     # CORS
     FRONTEND_URL: str = "http://localhost:5173"  # Default value, override in .env

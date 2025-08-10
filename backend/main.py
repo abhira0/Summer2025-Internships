@@ -7,7 +7,6 @@ from backend.routers import auth, applications, simplify
 from backend.utils.db import connect_to_mongo, close_mongo_connection
 import logging
 from time import time
-import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

@@ -11,14 +11,9 @@ from backend.utils.db import get_database
 import os
 from ..utils import parse_simplify
 
-import nc_py_api
-
 router = APIRouter()
 
-NEXTCLOUD_CLIENT = nc_py_api.Nextcloud(nextcloud_url="https://hulkinblue.dragon.usbx.me/nextcloud", nc_auth_user=settings.NEXTCLOUD_USER, nc_auth_pass=settings.NEXTCLOUD_PASSWORD)
-
 async def fetch_all_results(cookies: str, page_size: int = 500, page_max: Optional[int] = None):
-# async def fetch_all_results(cookies: str, page_size: int = 500, page_max: Optional[int] = None):
     all_results = []
     total_pages = 1
     page = 0
@@ -77,41 +72,6 @@ async def get_tracker(
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch tracker data: {str(e)}"
-        )
-
-def save_at_cloud(username: str, data: dict):
-    """Save tracker data to Nextcloud storage"""
-    json_data = json.dumps(data)
-    file_like = BytesIO(json_data.encode('utf-8'))
-    try:
-        NEXTCLOUD_CLIENT.files.mkdir(f"simplify_tracker_data/{username}")
-    except:
-        pass
-    NEXTCLOUD_CLIENT.files.upload_stream(
-        f"simplify_tracker_data/{username}/raw.json",
-        file_like
-    )
-
-@router.post("/nextcloud/tracker")
-async def post_tracker(
-    cookies: str = Header(...),
-    current_user: dict = Depends(get_current_user)
-):
-    try:
-        # Fetch all results from Simplify
-        results = await fetch_all_results(cookies)
-        
-        # Save to Nextcloud
-        save_at_cloud(current_user["username"], results)
-        
-        return {
-            "message": "Tracker data fetched and saved successfully",
-            "items_count": len(results)
-        }
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to fetch and save tracker data: {str(e)}"
         )
 
 @router.post("/refresh")
