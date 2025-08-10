@@ -13,7 +13,7 @@ python3 -m venv backend/venv
 source backend/venv/bin/activate
 
 # 2) Install dependencies
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 
 # 3) Create .env at the repo root (same level as this README)
 cat > .env << 'EOF'
