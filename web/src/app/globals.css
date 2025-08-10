@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/* Design tokens (dark by default) */
+:root {
+  --background: #0b0c10; /* page background */
+  --foreground: #e6edf3; /* primary text */
+  --muted: #8b949e; /* secondary text */
+  --card: #0f1117; /* surfaces/cards */
+  --card-contrast: #11131a; /* slightly lighter card */
+  --border: #21262d; /* borders */
+  --ring: #3b82f6; /* focus ring */
+  --accent: #60a5fa; /* accent (hover) */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+/* Optional light mode override when `.light` class is on html */
+html.light {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --muted: #475569;
+  --card: #f8fafc;
+  --card-contrast: #f1f5f9;
+  --border: #e2e8f0;
+  --ring: #2563eb;
+  --accent: #1d4ed8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Respect user's preference as a fallback when no manual theme is set */
+@media (prefers-color-scheme: light) {
+  html:not(.light):not(.dark) {
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --muted: #475569;
+    --card: #f8fafc;
+    --card-contrast: #f1f5f9;
+    --border: #e2e8f0;
+    --ring: #2563eb;
+    --accent: #1d4ed8;
+  }
+}
+
+/* Base styles */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utilities */
+.container-px { padding-left: 1rem; padding-right: 1rem; }
+@media (min-width: 640px) { .container-px { padding-left: 1.5rem; padding-right: 1.5rem; } }
+@media (min-width: 1024px) { .container-px { padding-left: 2rem; padding-right: 2rem; } }
+
+.card-surface {
+  background: linear-gradient(180deg, var(--card), var(--card-contrast));
+}
+
+.border-default { border-color: var(--border); }
+
+.focus-ring:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.text-muted { color: var(--muted); }
+
+.transition-colors { transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease; }
