@@ -30,7 +30,6 @@ const config: AppConfig = {
         ],
       },
       { column: "hidden", hidden: false },
-      { column: "applied", applied: false },
     ] as ActiveFilter[],
     sorts: [{ column: "date_posted", order: "desc" }] as SortSpec[],
     pagination: {

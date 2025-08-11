@@ -50,7 +50,12 @@ export default function SortModal({ isOpen, onClose, activeSorts, setActiveSorts
         <div className="space-y-4">
           <div>
             <label className="block text-sm mb-1">Column</label>
-            <select value={column} onChange={(e) => setColumn(e.target.value as any)} className="w-full rounded-md border border-default bg-transparent px-3 py-2 text-sm">
+            <select
+              value={column}
+              onChange={(e) => setColumn(e.target.value as any)}
+              className="w-full rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
+              style={{ colorScheme: "dark" }}
+            >
               <option value="company_name">Company Name</option>
               <option value="title">Job Title</option>
               <option value="locations">Location</option>
@@ -60,7 +65,12 @@ export default function SortModal({ isOpen, onClose, activeSorts, setActiveSorts
           </div>
           <div>
             <label className="block text-sm mb-1">Order</label>
-            <select value={order} onChange={(e) => setOrder(e.target.value as any)} className="w-full rounded-md border border-default bg-transparent px-3 py-2 text-sm">
+            <select
+              value={order}
+              onChange={(e) => setOrder(e.target.value as any)}
+              className="w-full rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
+              style={{ colorScheme: "dark" }}
+            >
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
             </select>

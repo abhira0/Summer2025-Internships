@@ -10,7 +10,6 @@ export type TextCondition =
 
 export type ActiveFilter =
   | { column: "date_posted"; fromDate?: string; toDate?: string }
-  | { column: "applied"; applied: boolean }
   | { column: "hidden"; hidden: boolean }
   | { column: "active"; active: boolean }
   | {
@@ -22,7 +21,7 @@ export type ActiveFilter =
 export const applyFilters = (
   jobs: Job[],
   activeFilters: ActiveFilter[] | undefined,
-  getApplicationStatus: (jobId: string, type: "applied" | "hidden") => boolean,
+  getApplicationStatus: (jobId: string, type: "hidden") => boolean,
   username?: string | null
 ): Job[] => {
   if (!activeFilters || activeFilters.length === 0) return jobs;
@@ -40,16 +39,22 @@ export const applyFilters = (
             : new Date(8640000000000000);
           return jobDate >= fromDate && jobDate <= toDate;
         }
-        case "applied":
-          return filter.applied === getApplicationStatus(job.id, "applied");
         case "hidden":
           return filter.hidden === getApplicationStatus(job.id, "hidden");
         case "active":
           return filter.active === job.active;
+        // Gracefully ignore legacy/unknown boolean filters (e.g., "applied")
+        case "applied":
+          return true;
         default: {
-          const text = String(job[filter.column] ?? "").toLowerCase();
+          const text = String((job as any)[(filter as any).column] ?? "").toLowerCase();
+          const conditions = Array.isArray((filter as any).conditions)
+            ? ((filter as any).conditions as TextCondition[])
+            : [];
+          if (conditions.length === 0) return true;
+
           const evaluate = (c: TextCondition) => {
-            const cv = c.value.toLowerCase();
+            const cv = String(c.value ?? "").toLowerCase();
             switch (c.type) {
               case "contains":
                 return text.includes(cv);
@@ -76,9 +81,10 @@ export const applyFilters = (
             }
           };
 
-          return filter.conditionType === "AND"
-            ? filter.conditions.every(evaluate)
-            : filter.conditions.some(evaluate);
+          const conditionType = (filter as any).conditionType === "AND" ? "AND" : "OR";
+          return conditionType === "AND"
+            ? conditions.every(evaluate)
+            : conditions.some(evaluate);
         }
       }
     });

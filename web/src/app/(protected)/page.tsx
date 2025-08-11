@@ -1,6 +1,22 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { parseJwt } from "@/utils/jwt";
 
 export default function Home() {
+  const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    const payload = token ? parseJwt(token) : null;
+    const isExpired = payload?.exp && Date.now() / 1000 >= payload.exp;
+    if (!token || !payload || isExpired) {
+      try { localStorage.removeItem("jwt_token"); } catch {}
+      router.replace("/login?redirect=/");
+    }
+  }, [router]);
+
   return (
     <section className="flex flex-col gap-6 py-8">
       <h1 className="text-2xl font-semibold tracking-tight">KapLabs Jobs</h1>
@@ -18,3 +34,6 @@ export default function Home() {
     </section>
   );
 }
+
+
+

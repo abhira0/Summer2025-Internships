@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { buildApiUrl } from "@/utils/api";
+import { parseJwt } from "@/utils/jwt";
 import config from "@/config";
 import type { Job } from "@/types/job";
 import { ApplicationsProvider, useApplications } from "@/context/ApplicationsContext";
@@ -16,9 +18,22 @@ function JobsInner() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filtersSaveState, setFiltersSaveState] = useState<{ status: "idle" | "saving" | "success" | "error"; message?: string }>({ status: "idle" });
+  const [sortsSaveState, setSortsSaveState] = useState<{ status: "idle" | "saving" | "success" | "error"; message?: string }>({ status: "idle" });
   const { setUsername } = useApplications();
   const router = useRouter();
   const params = useSearchParams();
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    const payload = token ? parseJwt(token) : null;
+    const isExpired = payload?.exp && Date.now() / 1000 >= payload.exp;
+    if (!token || !payload || isExpired) {
+      try { localStorage.removeItem("jwt_token"); } catch {}
+      router.replace("/login?redirect=/jobs");
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     setUsername("local");
@@ -77,6 +92,29 @@ function JobsInner() {
     totalCount,
     searchedData,
   } = useTableManager(jobs);
+
+  // Load saved rules from profile and apply as defaults
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const token = localStorage.getItem("jwt_token");
+        if (!token) return;
+        const res = await fetch(buildApiUrl("/auth/me"), {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: "no-store",
+        });
+        if (!res.ok) return;
+        const me = await res.json();
+        if (Array.isArray(me?.filter_rules)) {
+          (setActiveFilters as unknown as (v: any[]) => void)(me.filter_rules);
+        }
+        if (Array.isArray(me?.sort_rules)) {
+          (setActiveSorts as unknown as (v: any[]) => void)(me.sort_rules);
+        }
+      } catch {}
+    };
+    run();
+  }, [setActiveFilters, setActiveSorts]);
 
   // URL → state (initial)
   useEffect(() => {
@@ -145,10 +183,9 @@ function JobsInner() {
               />
 
               <div className="flex gap-2 flex-wrap">
-                <button onClick={resetFilters} className="rounded-md border border-default px-3 py-1.5 text-sm hover:bg-white/5">Reset Filters</button>
-                <button onClick={resetSorts} className="rounded-md border border-default px-3 py-1.5 text-sm hover:bg-white/5">Reset Sorts</button>
-                <button onClick={clearAll} className="rounded-md border border-default px-3 py-1.5 text-sm hover:bg-white/5">Clear All</button>
-                {/* Options removed: page size lives in pagination bars */}
+                <button onClick={resetFilters} className="rounded-md border border-default px-3 py-1.5 text-sm hover:bg:white/5">Reset Filters</button>
+                <button onClick={resetSorts} className="rounded-md border border-default px-3 py-1.5 text-sm hover:bg:white/5">Reset Sorts</button>
+                <button onClick={clearAll} className="rounded-md border border-default px-3 py-1.5 text-sm hover:bg:white/5">Clear All</button>
               </div>
 
               <details open>
@@ -156,8 +193,43 @@ function JobsInner() {
                   Filters
                   <span className="ml-2 rounded bg-gray-800 px-2 py-0.5 text-xs border border-default align-middle">{filtersCount}</span>
                 </summary>
-                <div className="mt-3">
+                <div className="mt-3 space-y-2">
                   <FilterSection activeFilters={activeFilters} setActiveFilters={setActiveFilters} />
+                  <div className="flex items-center gap-2">
+                    <button
+                      title="Save filters to profile"
+                      disabled={filtersSaveState.status === "saving"}
+                      onClick={async () => {
+                        try {
+                          setFiltersSaveState({ status: "saving" });
+                          const token = localStorage.getItem("jwt_token");
+                          if (!token) throw new Error("Not logged in");
+                          const res = await fetch(buildApiUrl("/auth/me/rules"), {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                            body: JSON.stringify({ filter_rules: activeFilters }),
+                          });
+                          if (!res.ok) {
+                            const j = await res.json().catch(() => ({}));
+                            throw new Error(j?.detail || j?.error || "Failed to save filters");
+                          }
+                          setFiltersSaveState({ status: "success", message: "Saved" });
+                        } catch (e: any) {
+                          setFiltersSaveState({ status: "error", message: e?.message || "Failed" });
+                        } finally {
+                          setTimeout(() => setFiltersSaveState({ status: "idle" }), 2000);
+                        }
+                      }}
+                      className="rounded-md border border-default px-3 py-1.5 text-xs hover:bg-white/5"
+                    >
+                      Save Filters
+                    </button>
+                    <span aria-live="polite">
+                      {filtersSaveState.status === "saving" && <span className="text-xs text-muted">Saving…</span>}
+                      {filtersSaveState.status === "success" && <span className="text-xs text-green-400">Saved!</span>}
+                      {filtersSaveState.status === "error" && <span className="text-xs text-red-400">{filtersSaveState.message}</span>}
+                    </span>
+                  </div>
                 </div>
               </details>
               <details open>
@@ -165,15 +237,49 @@ function JobsInner() {
                   Sort
                   <span className="ml-2 rounded bg-gray-800 px-2 py-0.5 text-xs border border-default align-middle">{sortsCount}</span>
                 </summary>
-                <div className="mt-3">
+                <div className="mt-3 space-y-2">
                   <SortSection activeSorts={activeSorts} setActiveSorts={setActiveSorts} />
+                  <div className="flex items-center gap-2">
+                    <button
+                      title="Save sorts to profile"
+                      disabled={sortsSaveState.status === "saving"}
+                      onClick={async () => {
+                        try {
+                          setSortsSaveState({ status: "saving" });
+                          const token = localStorage.getItem("jwt_token");
+                          if (!token) throw new Error("Not logged in");
+                          const res = await fetch(buildApiUrl("/auth/me/rules"), {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                            body: JSON.stringify({ sort_rules: activeSorts }),
+                          });
+                          if (!res.ok) {
+                            const j = await res.json().catch(() => ({}));
+                            throw new Error(j?.detail || j?.error || "Failed to save sorts");
+                          }
+                          setSortsSaveState({ status: "success", message: "Saved" });
+                        } catch (e: any) {
+                          setSortsSaveState({ status: "error", message: e?.message || "Failed" });
+                        } finally {
+                          setTimeout(() => setSortsSaveState({ status: "idle" }), 2000);
+                        }
+                      }}
+                      className="rounded-md border border-default px-3 py-1.5 text-xs hover:bg-white/5"
+                    >
+                      Save Sorts
+                    </button>
+                    <span aria-live="polite">
+                      {sortsSaveState.status === "saving" && <span className="text-xs text-muted">Saving…</span>}
+                      {sortsSaveState.status === "success" && <span className="text-xs text-green-400">Saved!</span>}
+                      {sortsSaveState.status === "error" && <span className="text-xs text-red-400">{sortsSaveState.message}</span>}
+                    </span>
+                  </div>
                 </div>
               </details>
             </div>
           </details>
         );
       })()}
-      
 
       <JobsTable
         jobs={paginatedData}
@@ -187,8 +293,6 @@ function JobsInner() {
         setActiveSorts={setActiveSorts}
         searchQuery={searchQuery}
       />
-
-      
     </section>
   );
 }
@@ -200,4 +304,6 @@ export default function JobsPage() {
     </ApplicationsProvider>
   );
 }
+
+
 

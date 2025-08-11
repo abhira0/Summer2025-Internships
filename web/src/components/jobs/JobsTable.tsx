@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useApplications } from "@/context/ApplicationsContext";
+import { useRouter } from "next/navigation";
 import type { Job } from "@/types/job";
 import type { SortSpec } from "@/utils/sorts";
 
@@ -19,6 +21,10 @@ type Props = {
 
 export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, onPageSizeChange, totalPages, totalCount, activeSorts, setActiveSorts, searchQuery }: Props) {
   const { getApplicationStatus, updateApplication } = useApplications();
+  const router = useRouter();
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(null);
+  const [openInfo, setOpenInfo] = useState<string | null>(null);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalCount);
 
@@ -134,18 +140,133 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
     </div>
   );
 
-  const handleStatusToggle = async (jobId: string, type: "hidden" | "applied") => {
+  const handleStatusToggle = async (jobId: string, type: "hidden") => {
     const current = getApplicationStatus(jobId, type);
     await updateApplication(jobId, type, !current);
+  };
+
+  const isSelected = (jobId: string) => selectedIds.has(jobId);
+  const toggleSelect = (jobId: string) =>
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(jobId)) next.delete(jobId);
+      else next.add(jobId);
+      return next;
+    });
+  const allVisibleSelected = jobs.length > 0 && jobs.every((j) => selectedIds.has(j.id));
+  const toggleSelectAllVisible = () =>
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (allVisibleSelected) {
+        jobs.forEach((j) => next.delete(j.id));
+      } else {
+        jobs.forEach((j) => next.add(j.id));
+      }
+      return next;
+    });
+  const clearSelection = () => setSelectedIds(new Set());
+  const bulkHideSelected = async () => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    await Promise.all(ids.map((id) => updateApplication(id, "hidden", true)));
+    clearSelection();
+  };
+
+  const getApplicationLinks = (job: Job): string[] => {
+    const links: string[] = [];
+    const hasSimplify = (job.source || "").toLowerCase().includes("simplify");
+    const hasUrl = Boolean(job.url);
+    const simplifyUrl = `https://simplify.jobs/p/${job.id}`;
+    if (hasSimplify && hasUrl) {
+      links.push(job.url!);
+      links.push(simplifyUrl);
+    } else if (hasSimplify && !hasUrl) {
+      links.push(simplifyUrl);
+    } else if (hasUrl) {
+      links.push(job.url!);
+    }
+    return links;
+  };
+
+  const bulkOpenSelected = () => {
+    if (selectedIds.size === 0) return;
+    const selectedJobs = jobs.filter((j) => selectedIds.has(j.id));
+    const urls = new Set<string>();
+    selectedJobs.forEach((job) => getApplicationLinks(job).forEach((u) => urls.add(u)));
+    const payload = encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(Array.from(urls)))));
+    router.push(`/open-links?urls=${payload}`);
+  };
+
+  const handleRowCheckboxClick = (
+    jobId: string,
+    rowIndex: number,
+    e: React.MouseEvent<HTMLInputElement>
+  ) => {
+    if (e.shiftKey && lastSelectedIndex !== null) {
+      const start = Math.min(lastSelectedIndex, rowIndex);
+      const end = Math.max(lastSelectedIndex, rowIndex);
+      const idsInRange = jobs.slice(start, end + 1).map((j) => j.id);
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        idsInRange.forEach((id) => next.add(id));
+        return next;
+      });
+      setLastSelectedIndex(rowIndex);
+      return;
+    }
+    // regular toggle
+    toggleSelect(jobId);
+    setLastSelectedIndex(rowIndex);
   };
 
   return (
     <div className="flex flex-col space-y-4">
       <Pagination />
+      {selectedIds.size > 0 && (
+        <div className="flex items-center justify-between gap-3 bg-gray-800 px-4 py-2 rounded-md border border-default">
+          <div className="text-sm text-gray-300">
+            Selected: <span className="font-semibold">{selectedIds.size}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={bulkHideSelected}
+              className="px-3 py-1.5 text-xs rounded bg-red-600 text-white hover:bg-red-700"
+              title="Hide selected jobs"
+            >
+              Hide Selected
+            </button>
+            <button
+              onClick={bulkOpenSelected}
+              className="px-3 py-1.5 text-xs rounded border border-default hover:bg-white/5"
+              title="Open all application links for selected jobs in new tabs"
+            >
+              Open All
+            </button>
+            <button
+              onClick={clearSelection}
+              className="px-3 py-1.5 text-xs rounded border border-default hover:bg-white/5"
+            >
+              Clear Selection
+            </button>
+            {openInfo && (
+              <span className="ml-2 text-xs text-yellow-400" aria-live="polite">{openInfo}</span>
+            )}
+          </div>
+        </div>
+      )}
       <div className="hidden lg:block overflow-x-auto rounded-lg border border-default">
         <table className="min-w-full table-auto">
           <thead>
             <tr className="bg-gray-900/40 text-left text-sm text-gray-300">
+              <th className="px-4 py-3 w-10">
+                <input
+                  type="checkbox"
+                  checked={allVisibleSelected}
+                  onChange={toggleSelectAllVisible}
+                  className="h-4 w-4 cursor-pointer align-middle"
+                  title={allVisibleSelected ? "Deselect all visible" : "Select all visible"}
+                />
+              </th>
               <th
                 className="px-4 py-3 cursor-pointer select-none"
                 onClick={(e) => onHeaderClick(e, "company_name")}
@@ -241,8 +362,18 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
             </tr>
           </thead>
           <tbody>
-            {jobs.map((job) => (
+            {jobs.map((job, index) => (
               <tr key={job.id} className="border-t border-default hover:bg-white/5">
+                <td className="px-4 py-3 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={isSelected(job.id)}
+                    onClick={(e) => handleRowCheckboxClick(job.id, index, e as any)}
+                    readOnly
+                    className="h-4 w-4 cursor-pointer align-middle"
+                    aria-label="Select row"
+                  />
+                </td>
                 <td className="px-4 py-3 text-sm font-medium">{highlight(job.company_name, searchQuery)}</td>
                 <td className="px-4 py-3 text-sm">{highlight(job.title, searchQuery)}</td>
                 <td className="px-4 py-3 text-sm">{highlight(job.locations, searchQuery)}</td>
@@ -309,7 +440,7 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
                 <td className="px-4 py-3 text-sm text-center">
                   <button
                     onClick={() => handleStatusToggle(job.id, "hidden")}
-                    className={`px-2 py-1 text-xs rounded w-16 ${getApplicationStatus(job.id, "hidden") ? "bg-red-600 text-white" : "bg-gray-600 text-gray-200"}`}
+                    className={`px-2 py-1 text-xs rounded w-16 cursor-pointer ${getApplicationStatus(job.id, "hidden") ? "bg-red-600 text-white" : "bg-gray-600 text-gray-200"}`}
                   >
                     {getApplicationStatus(job.id, "hidden") ? "Yes" : "No"}
                   </button>
@@ -327,9 +458,19 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
 
       {/* Mobile list */}
       <div className="lg:hidden space-y-3">
-        {jobs.map((job) => (
+        {jobs.map((job, index) => (
           <div key={job.id} className="rounded-lg border border-default p-3 bg-gray-900/40">
             <div className="flex items-start justify-between gap-3">
+              <label className="shrink-0 mt-0.5">
+                <input
+                  type="checkbox"
+                  checked={isSelected(job.id)}
+                  onClick={(e) => handleRowCheckboxClick(job.id, index, e as any)}
+                  readOnly
+                  className="h-4 w-4 cursor-pointer align-middle"
+                  aria-label="Select job"
+                />
+              </label>
               <div className="min-w-0">
                 <div className="text-sm font-semibold truncate">{job.title}</div>
                 <div className="text-xs text-muted truncate">{job.company_name}</div>
@@ -400,15 +541,9 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
               <div className="flex items-center gap-2 ml-auto">
                 <button
                   onClick={() => handleStatusToggle(job.id, "hidden")}
-                  className={`px-2 py-1 text-xs rounded w-16 ${getApplicationStatus(job.id, "hidden") ? "bg-red-600 text-white" : "bg-gray-600 text-gray-200"}`}
+                  className={`px-2 py-1 text-xs rounded w-16 cursor-pointer ${getApplicationStatus(job.id, "hidden") ? "bg-red-600 text-white" : "bg-gray-600 text-gray-200"}`}
                 >
                   {getApplicationStatus(job.id, "hidden") ? "Hide" : "Show"}
-                </button>
-                <button
-                  onClick={() => handleStatusToggle(job.id, "applied")}
-                  className={`px-2 py-1 text-xs rounded w-20 ${getApplicationStatus(job.id, "applied") ? "bg-green-600 text-white" : "bg-gray-600 text-gray-200"}`}
-                >
-                  {getApplicationStatus(job.id, "applied") ? "Applied" : "Apply?"}
                 </button>
                 <span className={`px-2 py-1 text-xs rounded ${job.active ? "bg-green-600" : "bg-gray-600"}`}>
                   {job.active ? "Active" : "Inactive"}

@@ -68,7 +68,8 @@ export default function SearchBar({ value, onChange, mode = "exact", setMode, fi
           <select
             value={field}
             onChange={(e) => setField?.(e.target.value as any)}
-            className="rounded-md border border-default bg-transparent px-2 py-1 text-xs"
+            className="rounded-md border border-default bg-gray-900 text-gray-100 px-2 py-1 text-xs appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
+            style={{ colorScheme: "dark" }}
           >
             <option value="all">All fields</option>
             <option value="company_name">Company</option>
@@ -81,7 +82,8 @@ export default function SearchBar({ value, onChange, mode = "exact", setMode, fi
           <select
             value={mode}
             onChange={(e) => setMode?.(e.target.value as any)}
-            className="rounded-md border border-default bg-transparent px-2 py-1 text-xs"
+            className="rounded-md border border-default bg-gray-900 text-gray-100 px-2 py-1 text-xs appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
+            style={{ colorScheme: "dark" }}
           >
             <option value="exact">Exact</option>
             <option value="fuzzy">Fuzzy</option>

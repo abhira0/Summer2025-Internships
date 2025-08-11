@@ -36,9 +36,7 @@ export default function RootLayout({
               <ClientNav />
             </nav>
           </header>
-          <main className="container-px mx-auto w-full max-w-6xl flex-1 py-8">
-            {children}
-          </main>
+          <main className="container-px mx-auto w-full max-w-6xl flex-1 py-8">{children}</main>
           <footer className="container-px mx-auto w-full max-w-6xl py-8 text-xs text-muted">
             <p>© {new Date().getFullYear()} KapLabs Jobs</p>
           </footer>

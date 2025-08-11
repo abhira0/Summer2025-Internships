@@ -3,13 +3,13 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 type ApplicationsShape = {
-  applications: Record<string, { applied?: string[]; hidden?: string[] }>;
+  applications: Record<string, { hidden?: string[] }>;
 };
 
 type ApplicationsContextValue = {
   applications: ApplicationsShape;
-  getApplicationStatus: (jobId: string, type: "applied" | "hidden") => boolean;
-  updateApplication: (jobId: string, type: "applied" | "hidden", value: boolean) => Promise<void>;
+  getApplicationStatus: (jobId: string, type: "hidden") => boolean;
+  updateApplication: (jobId: string, type: "hidden", value: boolean) => Promise<void>;
   username: string | null;
   setUsername: (u: string | null) => void;
 };
@@ -27,7 +27,7 @@ export function ApplicationsProvider({ children }: { children: React.ReactNode }
   const [username, setUsername] = useState<string | null>(null);
 
   const getApplicationStatus = useCallback(
-    (jobId: string, type: "applied" | "hidden") => {
+    (jobId: string, type: "hidden") => {
       if (!username) return false;
       const userApps = applications.applications[username];
       if (!userApps) return false;
@@ -38,7 +38,7 @@ export function ApplicationsProvider({ children }: { children: React.ReactNode }
   );
 
   const updateApplication = useCallback(
-    async (jobId: string, type: "applied" | "hidden", value: boolean) => {
+    async (jobId: string, type: "hidden", value: boolean) => {
       if (!username) return;
       setApplications((prev) => {
         const userApps = prev.applications[username!] ?? {};

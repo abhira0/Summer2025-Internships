@@ -24,7 +24,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
       setColumn(filter.column as any);
       if (filter.column === "date_posted") {
         setDateRange({ fromDate: filter.fromDate, toDate: filter.toDate });
-      } else if (["applied", "active", "hidden"].includes(filter.column)) {
+      } else if (["active", "hidden"].includes(filter.column)) {
         setBooleanValue((filter as any)[filter.column]);
       } else if ("conditions" in filter) {
         setConditions(filter.conditions);
@@ -43,7 +43,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
     let newFilter: ActiveFilter = { column } as any;
     if (column === "date_posted") {
       newFilter = { column, ...dateRange } as any;
-    } else if (["applied", "active", "hidden"].includes(column)) {
+    } else if (["active", "hidden"].includes(column)) {
       (newFilter as any)[column] = booleanValue;
     } else {
       newFilter = { column: column as any, conditions, conditionType } as any;
@@ -72,12 +72,16 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
         <div className="space-y-4">
           <div>
             <label className="block text-sm mb-1">Column</label>
-            <select value={column} onChange={(e) => setColumn(e.target.value as any)} className="w-full rounded-md border border-default bg-transparent px-3 py-2 text-sm">
+            <select
+              value={column}
+              onChange={(e) => setColumn(e.target.value as any)}
+              className="w-full rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
+              style={{ colorScheme: "dark" }}
+            >
               <option value="company_name">Company</option>
               <option value="title">Role</option>
               <option value="locations">Location</option>
               <option value="date_posted">Date Posted</option>
-              <option value="applied">Applied</option>
               <option value="active">Active</option>
               <option value="hidden">Hidden</option>
             </select>
@@ -94,7 +98,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
                 <input type="date" value={dateRange.toDate ?? ""} onChange={(e) => setDateRange({ ...dateRange, toDate: e.target.value })} className="w-full rounded-md border border-default bg-transparent px-3 py-2 text-sm" />
               </div>
             </div>
-          ) : ["applied", "active", "hidden"].includes(column) ? (
+          ) : ["active", "hidden"].includes(column) ? (
             <div>
               <label className="block text-sm mb-1">Value</label>
               <select value={String(booleanValue)} onChange={(e) => setBooleanValue(e.target.value === "true")} className="w-full rounded-md border border-default bg-transparent px-3 py-2 text-sm">
@@ -106,14 +110,24 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
             <div className="space-y-3">
               <div>
                 <label className="block text-sm mb-1">Condition Type</label>
-                <select value={conditionType} onChange={(e) => setConditionType(e.target.value as any)} className="w-full rounded-md border border-default bg-transparent px-3 py-2 text-sm">
+              <select
+                value={conditionType}
+                onChange={(e) => setConditionType(e.target.value as any)}
+                className="w-full rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
+                style={{ colorScheme: "dark" }}
+              >
                   <option value="OR">OR</option>
                   <option value="AND">AND</option>
                 </select>
               </div>
               {conditions.map((c, i) => (
                 <div key={i} className="flex gap-2">
-                  <select value={c.type} onChange={(e) => setConditions((prev) => prev.map((x, idx) => (idx === i ? { ...x, type: e.target.value as any } : x)))} className="rounded-md border border-default bg-transparent px-3 py-2 text-sm">
+                  <select
+                    value={c.type}
+                    onChange={(e) => setConditions((prev) => prev.map((x, idx) => (idx === i ? { ...x, type: e.target.value as any } : x)))}
+                    className="rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
+                    style={{ colorScheme: "dark" }}
+                  >
                     <option value="contains">Contains</option>
                     <option value="equals">Equals</option>
                     <option value="not-equals">Not Equals</option>
@@ -121,7 +135,12 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
                     <option value="regex">Regex</option>
                     <option value="not-regex">Not Regex</option>
                   </select>
-                  <input value={c.value} onChange={(e) => setConditions((prev) => prev.map((x, idx) => (idx === i ? { ...x, value: e.target.value } : x)))} className="flex-1 rounded-md border border-default bg-transparent px-3 py-2 text-sm" />
+                  <input
+                    value={c.value}
+                    onChange={(e) => setConditions((prev) => prev.map((x, idx) => (idx === i ? { ...x, value: e.target.value } : x)))}
+                    className="flex-1 rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-white/10"
+                    style={{ colorScheme: "dark" }}
+                  />
                   <button onClick={() => setConditions((prev) => [...prev, { type: "contains", value: "" }])} className="rounded-md border border-default px-2 text-sm hover:bg-white/5">+</button>
                   {conditions.length > 1 ? (
                     <button onClick={() => setConditions((prev) => prev.filter((_, idx) => idx !== i))} className="rounded-md border border-default px-2 text-sm hover:bg-white/5">-</button>

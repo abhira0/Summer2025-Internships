@@ -30,8 +30,8 @@ export default function FilterSection({ activeFilters, setActiveFilters }: Props
         </span>
       );
     }
-    if (["applied", "active", "hidden"].includes(filter.column)) {
-      const key = filter.column as "applied" | "active" | "hidden";
+    if (["active", "hidden"].includes(filter.column)) {
+      const key = filter.column as "active" | "hidden";
       return (
         <span className="font-mono">
           <span className="text-blue-400">{filter.column}</span>

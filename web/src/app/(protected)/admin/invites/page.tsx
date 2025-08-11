@@ -4,14 +4,19 @@ import { useEffect, useMemo, useState } from "react";
 import type { Invite } from "@/types/invite";
 import Link from "next/link";
 import { buildApiUrl } from "@/utils/api";
+import { parseJwt } from "@/utils/jwt";
 
 export default function AdminInvitesPage() {
   const [invites, setInvites] = useState<Invite[]>([]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(25);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [expiresInDays, setExpiresInDays] = useState(7);
   const [creating, setCreating] = useState(false);
+  const [deletingToken, setDeletingToken] = useState<string | null>(null);
   const [me, setMe] = useState<any | null>(null);
 
   const baseUrl = useMemo(() => {
@@ -20,25 +25,29 @@ export default function AdminInvitesPage() {
   }, []);
 
   useEffect(() => {
-    const loadMe = async () => {
-      try {
-        const res = await fetch(buildApiUrl("/auth/me"), { cache: "no-store" });
-        const json = await res.json();
-        setMe(json);
-      } catch {
-        setMe(null);
-      }
-    };
-    loadMe();
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt_token") : null;
+    if (token) {
+      const payload = parseJwt(token);
+      setMe(payload ?? null);
+    } else {
+      setMe(null);
+    }
   }, []);
 
   const fetchInvites = async () => {
     try {
       setLoading(true);
-      const res = await fetch(buildApiUrl("/invites"), { cache: "no-store" });
+      const token = typeof window !== "undefined" ? localStorage.getItem("jwt_token") : null;
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+      const params = new URLSearchParams({ page: String(page), size: String(size) });
+      const res = await fetch(buildApiUrl(`/invites?${params.toString()}`), { cache: "no-store", headers });
       if (!res.ok) throw new Error("Failed to load invites");
       const data = await res.json();
       setInvites(data.invites ?? []);
+      setTotalPages(data.total_pages ?? 1);
     } catch (e: any) {
       setError(e?.message ?? "Failed to load invites");
     } finally {
@@ -48,16 +57,21 @@ export default function AdminInvitesPage() {
 
   useEffect(() => {
     fetchInvites();
-  }, []);
+  }, [page, size]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setCreating(true);
       setError(null);
+      const token = typeof window !== "undefined" ? localStorage.getItem("jwt_token") : null;
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
       const res = await fetch(buildApiUrl("/invites"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ email, expiresInDays })
       });
       const data = await res.json();
@@ -72,12 +86,33 @@ export default function AdminInvitesPage() {
     }
   };
 
+  const handleDelete = async (token: string) => {
+    try {
+      setDeletingToken(token);
+      setError(null);
+      const jwt = typeof window !== "undefined" ? localStorage.getItem("jwt_token") : null;
+      const headers: Record<string, string> = {};
+      if (jwt) headers["Authorization"] = `Bearer ${jwt}`;
+      const res = await fetch(buildApiUrl(`/invites/${encodeURIComponent(token)}`), {
+        method: "DELETE",
+        headers,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error ?? data?.detail ?? "Failed to delete invite");
+      await fetchInvites();
+    } catch (e: any) {
+      setError(e?.message ?? "Failed to delete invite");
+    } finally {
+      setDeletingToken(null);
+    }
+  };
+
   const now = new Date();
 
   return (
     <section className="flex flex-col gap-6">
       <h1 className="text-xl font-semibold">Invites</h1>
-      {me && me.user && me.user.role !== "admin" ? (
+      {me && me.role !== "admin" ? (
         <div className="text-sm">
           <p>You do not have access to this page. <Link href="/login" className="underline">Login</Link> with an admin account.</p>
         </div>
@@ -121,6 +156,7 @@ export default function AdminInvitesPage() {
       ) : invites.length === 0 ? (
         <p className="text-sm text-muted">No invites yet.</p>
       ) : (
+        <>
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
@@ -131,6 +167,7 @@ export default function AdminInvitesPage() {
                 <th className="py-2 pr-3">Created</th>
                 <th className="py-2 pr-3">Expires</th>
                 <th className="py-2 pr-3">Status</th>
+                <th className="py-2 pr-3"></th>
               </tr>
             </thead>
             <tbody>
@@ -158,15 +195,36 @@ export default function AdminInvitesPage() {
                         <span className="text-blue-400">Pending</span>
                       )}
                     </td>
+                    <td className="py-2 pr-3 text-right">
+                      <button
+                        onClick={() => handleDelete(inv.token)}
+                        disabled={deletingToken === inv.token}
+                        className="rounded-md border border-default/50 hover:bg-white/5 px-3 py-1.5 text-xs"
+                      >
+                        {deletingToken === inv.token ? "Deleting…" : "Delete"}
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
         </div>
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <div className="text-xs text-muted">Page {page} of {totalPages}</div>
+          <div className="flex items-center gap-2">
+            <button disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))} className="rounded-md border border-default px-2 py-1 text-xs hover:bg-white/5 disabled:opacity-50">Prev</button>
+            <button disabled={page >= totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))} className="rounded-md border border-default px-2 py-1 text-xs hover:bg-white/5 disabled:opacity-50">Next</button>
+            <select value={size} onChange={(e) => setSize(Number(e.target.value))} className="ml-2 rounded-md border border-default bg-transparent px-2 py-1 text-xs">
+              {[10,25,50,100,200].map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+          </div>
+        </div>
+        </>
       )}
     </section>
   );
 }
+
 
 
