@@ -11,6 +11,7 @@ export type TextCondition =
 export type ActiveFilter =
   | { column: "date_posted"; fromDate?: string; toDate?: string }
   | { column: "hidden"; hidden: boolean }
+  | { column: "applied"; applied: boolean }
   | { column: "active"; active: boolean }
   | {
       column: "company_name" | "title" | "locations";
@@ -21,7 +22,7 @@ export type ActiveFilter =
 export const applyFilters = (
   jobs: Job[],
   activeFilters: ActiveFilter[] | undefined,
-  getApplicationStatus: (jobId: string, type: "hidden") => boolean,
+  getApplicationStatus: (jobId: string, type: "hidden" | "applied") => boolean,
   username?: string | null
 ): Job[] => {
   if (!activeFilters || activeFilters.length === 0) return jobs;
@@ -39,13 +40,19 @@ export const applyFilters = (
             : new Date(8640000000000000);
           return jobDate >= fromDate && jobDate <= toDate;
         }
-        case "hidden":
-          return filter.hidden === getApplicationStatus(job.id, "hidden");
+        case "hidden": {
+          // Treat legacy "applied" as hidden-equivalent for filtering
+          const isHidden = getApplicationStatus(job.id, "hidden") || getApplicationStatus(job.id, "applied");
+          return filter.hidden === isHidden;
+        }
         case "active":
           return filter.active === job.active;
-        // Gracefully ignore legacy/unknown boolean filters (e.g., "applied")
-        case "applied":
-          return true;
+        // Backward compatibility: treat "applied" like hidden-equivalent
+        case "applied": {
+          const wanted = (filter as any).applied === true;
+          const isHidden = getApplicationStatus(job.id, "hidden") || getApplicationStatus(job.id, "applied");
+          return wanted === isHidden;
+        }
         default: {
           const text = String((job as any)[(filter as any).column] ?? "").toLowerCase();
           const conditions = Array.isArray((filter as any).conditions)

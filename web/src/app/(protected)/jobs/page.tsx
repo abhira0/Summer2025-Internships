@@ -36,7 +36,14 @@ function JobsInner() {
   }, [router]);
 
   useEffect(() => {
-    setUsername("local");
+    try {
+      const token = localStorage.getItem("jwt_token");
+      const payload = token ? parseJwt(token) : null;
+      const uname: string | null = payload?.sub || payload?.username || null;
+      setUsername(uname);
+    } catch {
+      setUsername(null);
+    }
   }, [setUsername]);
 
   useEffect(() => {
@@ -47,6 +54,27 @@ function JobsInner() {
         if (!res.ok) throw new Error("Failed to fetch listings");
         const listings = await res.json();
         if (!Array.isArray(listings)) throw new Error("Invalid data format");
+
+        // Fetch tracker (best effort) to be used for hiding items present in tracker
+        let trackerIds: string[] = [];
+        try {
+          const token = typeof window !== "undefined" ? localStorage.getItem("jwt_token") : null;
+          if (token) {
+            const tr = await fetch(buildApiUrl("/simplify/parsed"), {
+              headers: { Authorization: `Bearer ${token}` },
+              cache: "no-store",
+            });
+            if (tr.ok) {
+              const tracker = await tr.json();
+              if (Array.isArray(tracker)) {
+                trackerIds = tracker
+                  .map((t: any) => (t && t.job_posting_id != null ? String(t.job_posting_id) : null))
+                  .filter((x: any): x is string => Boolean(x));
+              }
+            }
+          }
+        } catch {}
+
         const processed: Job[] = listings.map((item: any) => ({
           id: item.id,
           company_name: item.company_name,
@@ -55,9 +83,33 @@ function JobsInner() {
           url: item.url,
           source: item.source,
           date_posted: new Date(item.date_posted * 1000).toLocaleDateString(),
-          active: item.active ?? true,
+            active: item.active ?? true,
         }));
+
+        // If we have tracker IDs, attempt to mark them hidden via ApplicationsContext API
         setJobs(processed);
+        if (trackerIds.length > 0) {
+          // Defer to allow ApplicationsProvider to initialize username state
+          setTimeout(() => {
+            trackerIds.forEach((id) => {
+              try {
+                // Hidden/applied are mirrored; persist as hidden
+                (async () => {
+                  const token = typeof window !== "undefined" ? localStorage.getItem("jwt_token") : null;
+                  if (!token) return;
+                  await fetch(buildApiUrl("/applications"), {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ job_id: id, status: "hidden", value: true }),
+                  }).catch(() => {});
+                })();
+              } catch {}
+            });
+          }, 0);
+        }
       } catch (e: any) {
         setError(e.message ?? "Failed to load");
       } finally {

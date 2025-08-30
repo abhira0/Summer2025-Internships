@@ -140,7 +140,7 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
     </div>
   );
 
-  const handleStatusToggle = async (jobId: string, type: "hidden") => {
+  const handleStatusToggle = async (jobId: string, type: "hidden" | "applied") => {
     const current = getApplicationStatus(jobId, type);
     await updateApplication(jobId, type, !current);
   };
@@ -168,6 +168,7 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
   const bulkHideSelected = async () => {
     const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
+    // Mirror hidden/applied
     await Promise.all(ids.map((id) => updateApplication(id, "hidden", true)));
     clearSelection();
   };

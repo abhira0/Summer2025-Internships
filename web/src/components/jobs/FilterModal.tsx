@@ -24,7 +24,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
       setColumn(filter.column as any);
       if (filter.column === "date_posted") {
         setDateRange({ fromDate: filter.fromDate, toDate: filter.toDate });
-      } else if (["active", "hidden"].includes(filter.column)) {
+      } else if (["active", "hidden", "applied"].includes(filter.column)) {
         setBooleanValue((filter as any)[filter.column]);
       } else if ("conditions" in filter) {
         setConditions(filter.conditions);
@@ -43,7 +43,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
     let newFilter: ActiveFilter = { column } as any;
     if (column === "date_posted") {
       newFilter = { column, ...dateRange } as any;
-    } else if (["active", "hidden"].includes(column)) {
+    } else if (["active", "hidden", "applied"].includes(column)) {
       (newFilter as any)[column] = booleanValue;
     } else {
       newFilter = { column: column as any, conditions, conditionType } as any;
@@ -84,6 +84,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
               <option value="date_posted">Date Posted</option>
               <option value="active">Active</option>
               <option value="hidden">Hidden</option>
+              {/* Note: 'applied' intentionally not shown for new filters; it's handled for backward compatibility when editing existing filters */}
             </select>
           </div>
 
@@ -98,7 +99,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
                 <input type="date" value={dateRange.toDate ?? ""} onChange={(e) => setDateRange({ ...dateRange, toDate: e.target.value })} className="w-full rounded-md border border-default bg-transparent px-3 py-2 text-sm" />
               </div>
             </div>
-          ) : ["active", "hidden"].includes(column) ? (
+          ) : ["active", "hidden", "applied"].includes(column) ? (
             <div>
               <label className="block text-sm mb-1">Value</label>
               <select value={String(booleanValue)} onChange={(e) => setBooleanValue(e.target.value === "true")} className="w-full rounded-md border border-default bg-transparent px-3 py-2 text-sm">
