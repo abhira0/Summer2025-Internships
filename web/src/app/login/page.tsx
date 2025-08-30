@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildApiUrl } from "@/utils/api";
 import { parseJwt } from "@/utils/jwt";
@@ -14,6 +14,28 @@ function LoginContent() {
   const [demoLoading, setDemoLoading] = useState(false);
   const search = useSearchParams();
   const redirectTo = search.get("redirect") || "/jobs";
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("jwt_token");
+      const cookieToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('jwt_token='))
+        ?.split('=')[1];
+      const loggedInCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('logged_in='))
+        ?.split('=')[1];
+      
+      console.log("Debug - token:", !!token, "cookieToken:", !!cookieToken, "loggedInCookie:", !!loggedInCookie);
+      console.log("Debug - cookies:", document.cookie);
+      
+      if (token || cookieToken || loggedInCookie) {
+        console.log("Debug - redirecting to:", redirectTo);
+        router.replace(redirectTo);
+      }
+    }
+  }, [router, redirectTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
