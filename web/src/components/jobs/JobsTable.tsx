@@ -24,11 +24,9 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
   const router = useRouter();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(null);
-  const [openInfo, setOpenInfo] = useState<string | null>(null);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalCount);
 
-  const primarySort = activeSorts[0];
 
   const onHeaderClick = (
     e: React.MouseEvent,
@@ -249,9 +247,6 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
             >
               Clear Selection
             </button>
-            {openInfo && (
-              <span className="ml-2 text-xs text-yellow-400" aria-live="polite">{openInfo}</span>
-            )}
           </div>
         </div>
       )}
@@ -369,7 +364,7 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
                   <input
                     type="checkbox"
                     checked={isSelected(job.id)}
-                    onClick={(e) => handleRowCheckboxClick(job.id, index, e as any)}
+                    onClick={(e) => handleRowCheckboxClick(job.id, index, e)}
                     readOnly
                     className="h-4 w-4 cursor-pointer align-middle"
                     aria-label="Select row"
@@ -466,7 +461,7 @@ export default function JobsTable({ jobs, pageSize, currentPage, onPageChange, o
                 <input
                   type="checkbox"
                   checked={isSelected(job.id)}
-                  onClick={(e) => handleRowCheckboxClick(job.id, index, e as any)}
+                  onClick={(e) => handleRowCheckboxClick(job.id, index, e)}
                   readOnly
                   className="h-4 w-4 cursor-pointer align-middle"
                   aria-label="Select job"

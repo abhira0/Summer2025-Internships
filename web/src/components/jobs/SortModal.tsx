@@ -52,7 +52,7 @@ export default function SortModal({ isOpen, onClose, activeSorts, setActiveSorts
             <label className="block text-sm mb-1">Column</label>
             <select
               value={column}
-              onChange={(e) => setColumn(e.target.value as any)}
+              onChange={(e) => setColumn(e.target.value as SortSpec["column"])}
               className="w-full rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
               style={{ colorScheme: "dark" }}
             >
@@ -67,7 +67,7 @@ export default function SortModal({ isOpen, onClose, activeSorts, setActiveSorts
             <label className="block text-sm mb-1">Order</label>
             <select
               value={order}
-              onChange={(e) => setOrder(e.target.value as any)}
+              onChange={(e) => setOrder(e.target.value as SortSpec["order"])}
               className="w-full rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
               style={{ colorScheme: "dark" }}
             >

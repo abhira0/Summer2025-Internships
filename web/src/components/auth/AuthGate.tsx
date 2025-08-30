@@ -35,7 +35,7 @@ export default function AuthGate({ children }: Props) {
       return;
     }
     const payload = parseJwt(token);
-    if (!payload || (payload.exp && Date.now() / 1000 >= payload.exp)) {
+    if (!payload || (typeof payload.exp === 'number' && Date.now() / 1000 >= payload.exp)) {
       // Token invalid or expired
       try { localStorage.removeItem("jwt_token"); } catch {}
       if (typeof document !== "undefined") {

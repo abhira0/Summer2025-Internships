@@ -9,8 +9,8 @@ export default function ProfilePage() {
   const [user, setUser] = useState<Pick<User, "_id" | "username" | "email" | "name" | "role"> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filterRules, setFilterRules] = useState<any[]>([]);
-  const [sortRules, setSortRules] = useState<any[]>([]);
+  const [filterRules, setFilterRules] = useState<unknown[]>([]);
+  const [sortRules, setSortRules] = useState<unknown[]>([]);
   const [cookie, setCookie] = useState("");
   const [savingCookie, setSavingCookie] = useState(false);
   const [loadingCookie, setLoadingCookie] = useState(false);
@@ -29,7 +29,13 @@ export default function ProfilePage() {
         }
         const payload = parseJwt(token);
         if (payload) {
-          setUser({ _id: "", username: payload.sub, email: payload.email ?? "", name: payload.name ?? "", role: payload.role ?? "user" });
+          setUser({ 
+            _id: "", 
+            username: typeof payload.sub === 'string' ? payload.sub : '', 
+            email: typeof payload.email === 'string' ? payload.email : '', 
+            name: typeof payload.name === 'string' ? payload.name : '', 
+            role: (typeof payload.role === 'string' && (payload.role === 'user' || payload.role === 'admin')) ? payload.role : 'user' 
+          });
         } else {
           setUser(null);
         }
@@ -55,8 +61,8 @@ export default function ProfilePage() {
             setLoadingCookie(false);
           }
         }
-      } catch (e: any) {
-        setError(e?.message ?? "Failed to load profile");
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Failed to load profile");
       } finally {
         setLoading(false);
       }
@@ -101,8 +107,8 @@ export default function ProfilePage() {
               setFilterRules([]);
               setRulesMsg("Deleted saved filters.");
               setTimeout(() => setRulesMsg(null), 2000);
-            } catch (e: any) {
-              setRulesMsg(e?.message || "Failed to delete filters");
+            } catch (e: unknown) {
+              setRulesMsg(e instanceof Error ? e.message : "Failed to delete filters");
             }
           }}
         >Delete Saved Filters</button>
@@ -128,8 +134,8 @@ export default function ProfilePage() {
               setSortRules([]);
               setRulesMsg("Deleted saved sorts.");
               setTimeout(() => setRulesMsg(null), 2000);
-            } catch (e: any) {
-              setRulesMsg(e?.message || "Failed to delete sorts");
+            } catch (e: unknown) {
+              setRulesMsg(e instanceof Error ? e.message : "Failed to delete sorts");
             }
           }}
         >Delete Saved Sorts</button>
@@ -187,8 +193,8 @@ export default function ProfilePage() {
                 const j = await res.json().catch(() => ({}));
                 if (!res.ok) throw new Error(j?.detail || j?.error || "Failed to refresh data");
                 setRefreshMsg(`Refreshed ${j?.items_count ?? ''}`.trim());
-              } catch (e: any) {
-                setRefreshMsg(e?.message || "Failed to refresh");
+              } catch (e: unknown) {
+                setRefreshMsg(e instanceof Error ? e.message : "Failed to refresh");
               } finally {
                 setRefreshingSimplify(false);
               }

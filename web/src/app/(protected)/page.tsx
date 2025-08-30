@@ -10,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
     const payload = token ? parseJwt(token) : null;
-    const isExpired = payload?.exp && Date.now() / 1000 >= payload.exp;
+    const isExpired = payload && typeof payload.exp === 'number' && Date.now() / 1000 >= payload.exp;
     if (!token || !payload || isExpired) {
       try { localStorage.removeItem("jwt_token"); } catch {}
       router.replace("/login?redirect=/");

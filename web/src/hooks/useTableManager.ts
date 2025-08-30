@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import type { Job } from "@/types/job";
 import { applyFilters, type ActiveFilter } from "@/utils/filters";
 import { applySorts, type SortSpec } from "@/utils/sorts";
@@ -56,7 +56,7 @@ export function useTableManager(initialData: Job[]): UseTableManagerReturn {
   const filteredData = useMemo(() => {
     if (!initialData || !Array.isArray(initialData)) return [] as Job[];
     if (activeFilters.length === 0) return initialData;
-    return applyFilters(initialData, activeFilters, getApplicationStatus, null);
+    return applyFilters(initialData, activeFilters, getApplicationStatus);
   }, [initialData, activeFilters, getApplicationStatus]);
 
   const searchedData = useMemo(() => {
@@ -65,7 +65,7 @@ export function useTableManager(initialData: Job[]): UseTableManagerReturn {
     const q = searchQuery.toLowerCase();
     const isSubsequence = (needle: string, haystack: string) => {
       let i = 0;
-      for (let c of haystack) if (c === needle[i]) i += 1;
+      for (const c of haystack) if (c === needle[i]) i += 1;
       return i === needle.length;
     };
     const match = (text: string) =>

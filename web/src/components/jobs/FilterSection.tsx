@@ -14,7 +14,7 @@ export default function FilterSection({ activeFilters, setActiveFilters }: Props
   const [editingFilter, setEditingFilter] = useState<{ filter: ActiveFilter; index: number } | null>(null);
 
   const removeFilter = (index: number) => setActiveFilters(activeFilters.filter((_, i) => i !== index));
-  const duplicateFilter = (filter: ActiveFilter) => setActiveFilters([...activeFilters, { ...(filter as any) }]);
+  const duplicateFilter = (filter: ActiveFilter) => setActiveFilters([...activeFilters, { ...filter }]);
   const getFilterSymbol = (type: string) => ({ contains: "⊇", equals: "=", "not-equals": "≠", "not-contains": "⊉", regex: "~", "not-regex": "≁" }[type] ?? type);
 
   const getFilterDisplay = (filter: ActiveFilter) => {
@@ -36,7 +36,7 @@ export default function FilterSection({ activeFilters, setActiveFilters }: Props
         <span className="font-mono">
           <span className="text-blue-400">{filter.column}</span>
           <span className="text-gray-400"> = </span>
-          <span className="text-green-400">{(filter as any)[key] ? "✓" : "✗"}</span>
+          <span className="text-green-400">{(filter as Record<string, unknown>)[key] ? "✓" : "✗"}</span>
         </span>
       );
     }
@@ -45,7 +45,7 @@ export default function FilterSection({ activeFilters, setActiveFilters }: Props
         <span key={i}>
           {i > 0 && <span className="text-yellow-400"> {filter.conditionType === "AND" ? "∧" : "∨"} </span>}
           <span className="text-gray-400">{getFilterSymbol(c.type)}</span>
-          <span className="text-green-400"> "{c.value}"</span>
+          <span className="text-green-400"> &quot;{c.value}&quot;</span>
         </span>
       ));
       return (
@@ -54,7 +54,7 @@ export default function FilterSection({ activeFilters, setActiveFilters }: Props
         </span>
       );
     }
-    return String((filter as any).column);
+    return String(filter.column);
   };
 
   return (

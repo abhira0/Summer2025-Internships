@@ -16,7 +16,7 @@ function getValueForSort(job: Job, column: SortSpec["column"]) {
     case "active":
       return Boolean(job.active);
     default:
-      return (job as any)[column];
+      return "";
   }
 }
 

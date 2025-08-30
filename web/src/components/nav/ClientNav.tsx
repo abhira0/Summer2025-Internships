@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { parseJwt } from "@/utils/jwt";
 
 export default function ClientNav() {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<{ username: string; role: string } | null>(null);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,12 +20,12 @@ export default function ClientNav() {
       if (token) {
         const payload = parseJwt(token);
         setUser(
-          payload
+          payload && typeof payload.sub === 'string'
             ? {
                 username: payload.sub,
-                role: payload.role ?? "user",
+                role: (typeof payload.role === 'string' && (payload.role === 'user' || payload.role === 'admin')) ? payload.role : "user",
               }
-            : { username: "", role: "user" }
+            : null
         );
       } else {
         setUser(null);
@@ -52,11 +52,11 @@ export default function ClientNav() {
       if (e.key === "Escape") setMenuOpen(false);
     };
     document.addEventListener("mousedown", handlePointer);
-    document.addEventListener("touchstart", handlePointer, { passive: true } as any);
+    document.addEventListener("touchstart", handlePointer, { passive: true });
     document.addEventListener("keydown", handleKey);
     return () => {
       document.removeEventListener("mousedown", handlePointer);
-      document.removeEventListener("touchstart", handlePointer as any);
+      document.removeEventListener("touchstart", handlePointer);
       document.removeEventListener("keydown", handleKey);
     };
   }, [menuOpen]);

@@ -17,7 +17,7 @@ export default function AdminUsers() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [me, setMe] = useState<any | null>(null);
+  const [me, setMe] = useState<{ role?: string } | null>(null);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(25);
   const [totalPages, setTotalPages] = useState(1);
@@ -44,8 +44,8 @@ export default function AdminUsers() {
       const data = await res.json();
       setUsers(data.users ?? []);
       setTotalPages(data.total_pages ?? 1);
-    } catch (e: any) {
-      setError(e?.message ?? "Failed to load users");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to load users");
     } finally {
       setLoading(false);
     }

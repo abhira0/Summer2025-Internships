@@ -67,7 +67,7 @@ export default function SearchBar({ value, onChange, mode = "exact", setMode, fi
           <span className="text-muted">Search</span>
           <select
             value={field}
-            onChange={(e) => setField?.(e.target.value as any)}
+            onChange={(e) => setField?.(e.target.value as "all" | "company_name" | "title" | "locations")}
             className="rounded-md border border-default bg-gray-900 text-gray-100 px-2 py-1 text-xs appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
             style={{ colorScheme: "dark" }}
           >
@@ -81,7 +81,7 @@ export default function SearchBar({ value, onChange, mode = "exact", setMode, fi
           <span className="text-muted">Mode</span>
           <select
             value={mode}
-            onChange={(e) => setMode?.(e.target.value as any)}
+            onChange={(e) => setMode?.(e.target.value as "fuzzy" | "exact")}
             className="rounded-md border border-default bg-gray-900 text-gray-100 px-2 py-1 text-xs appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
             style={{ colorScheme: "dark" }}
           >

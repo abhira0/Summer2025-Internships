@@ -17,7 +17,7 @@ export default function AdminInvites() {
   const [expiresInDays, setExpiresInDays] = useState(7);
   const [creating, setCreating] = useState(false);
   const [deletingToken, setDeletingToken] = useState<string | null>(null);
-  const [me, setMe] = useState<any | null>(null);
+  const [me, setMe] = useState<{ role?: string } | null>(null);
 
   const baseUrl = useMemo(() => {
     if (typeof window === "undefined") return "";
@@ -48,8 +48,8 @@ export default function AdminInvites() {
       const data = await res.json();
       setInvites(data.invites ?? []);
       setTotalPages(data.total_pages ?? 1);
-    } catch (e: any) {
-      setError(e?.message ?? "Failed to load invites");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to load invites");
     } finally {
       setLoading(false);
     }
@@ -80,8 +80,8 @@ export default function AdminInvites() {
       setEmail("");
       setExpiresInDays(7);
       await fetchInvites();
-    } catch (e: any) {
-      setError(e?.message ?? "Failed to create invite");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to create invite");
     } finally {
       setCreating(false);
     }
@@ -101,8 +101,8 @@ export default function AdminInvites() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error ?? data?.detail ?? "Failed to delete invite");
       await fetchInvites();
-    } catch (e: any) {
-      setError(e?.message ?? "Failed to delete invite");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to delete invite");
     } finally {
       setDeletingToken(null);
     }

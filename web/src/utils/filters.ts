@@ -23,7 +23,6 @@ export const applyFilters = (
   jobs: Job[],
   activeFilters: ActiveFilter[] | undefined,
   getApplicationStatus: (jobId: string, type: "hidden" | "applied") => boolean,
-  username?: string | null
 ): Job[] => {
   if (!activeFilters || activeFilters.length === 0) return jobs;
 
@@ -49,14 +48,15 @@ export const applyFilters = (
           return filter.active === job.active;
         // Backward compatibility: treat "applied" like hidden-equivalent
         case "applied": {
-          const wanted = (filter as any).applied === true;
+          const wanted = (filter as ActiveFilter & { applied?: boolean }).applied === true;
           const isHidden = getApplicationStatus(job.id, "hidden") || getApplicationStatus(job.id, "applied");
           return wanted === isHidden;
         }
         default: {
-          const text = String((job as any)[(filter as any).column] ?? "").toLowerCase();
-          const conditions = Array.isArray((filter as any).conditions)
-            ? ((filter as any).conditions as TextCondition[])
+          const jobKey = (filter as ActiveFilter & { column: keyof Job }).column;
+          const text = String(job[jobKey] ?? "").toLowerCase();
+          const conditions = Array.isArray((filter as ActiveFilter & { conditions?: TextCondition[] }).conditions)
+            ? (filter as ActiveFilter & { conditions: TextCondition[] }).conditions
             : [];
           if (conditions.length === 0) return true;
 
@@ -88,7 +88,7 @@ export const applyFilters = (
             }
           };
 
-          const conditionType = (filter as any).conditionType === "AND" ? "AND" : "OR";
+          const conditionType = (filter as ActiveFilter & { conditionType?: string }).conditionType === "AND" ? "AND" : "OR";
           return conditionType === "AND"
             ? conditions.every(evaluate)
             : conditions.some(evaluate);

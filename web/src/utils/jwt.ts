@@ -1,4 +1,4 @@
-export function parseJwt(token: string): any | null {
+export function parseJwt(token: string): Record<string, unknown> | null {
   try {
     const parts = token.split(".");
     if (parts.length !== 3) return null;
@@ -6,7 +6,8 @@ export function parseJwt(token: string): any | null {
     const decoded = typeof window !== "undefined" && typeof atob === "function"
       ? atob(payload)
       : Buffer.from(payload, "base64").toString("utf-8");
-    return JSON.parse(decoded);
+    const parsed = JSON.parse(decoded);
+    return typeof parsed === 'object' && parsed !== null ? parsed as Record<string, unknown> : null;
   } catch {
     return null;
   }

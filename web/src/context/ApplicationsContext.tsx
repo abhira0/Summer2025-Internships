@@ -35,7 +35,7 @@ export function ApplicationsProvider({ children }: { children: React.ReactNode }
         const token = typeof window !== "undefined" ? localStorage.getItem("jwt_token") : null;
         if (!token) return;
         const payload = parseJwt(token);
-        const uname: string | null = payload?.sub || payload?.username || null;
+        const uname: string | null = (payload && typeof payload.sub === 'string') ? payload.sub : (payload && typeof payload.username === 'string') ? payload.username : null;
         if (!uname) return;
         setUsername(uname);
         const res = await fetch(buildApiUrl("/applications"), {
@@ -56,7 +56,7 @@ export function ApplicationsProvider({ children }: { children: React.ReactNode }
             const tracker = (await tr.json()) as Array<{ job_posting_id?: string | number }>; // best-effort shape
             trackerIds = Array.isArray(tracker)
               ? tracker
-                  .map((t) => (t && (t as any).job_posting_id != null ? String((t as any).job_posting_id) : null))
+                  .map((t: { job_posting_id?: string | number }) => (t && t.job_posting_id != null ? String(t.job_posting_id) : null))
                   .filter((x): x is string => Boolean(x))
               : [];
           }
@@ -64,7 +64,7 @@ export function ApplicationsProvider({ children }: { children: React.ReactNode }
           // ignore tracker failures
         }
 
-        if (data && typeof data === "object" && (data as any).applications) {
+        if (data && typeof data === "object" && "applications" in data && data.applications) {
           // Migrate/merge: ensure all "applied" ids are treated as hidden, and include tracker ids as well
           const next: ApplicationsShape = { applications: { ...(data as ApplicationsShape).applications } };
           const userApps = next.applications[uname] ?? { applied: [], hidden: [] };
@@ -84,7 +84,7 @@ export function ApplicationsProvider({ children }: { children: React.ReactNode }
   }, []);
 
   const getApplicationStatus = useCallback(
-    (jobId: string, type: "hidden" | "applied") => {
+    (jobId: string, _type: "hidden" | "applied") => {
       if (!username) return false;
       const userApps = applications.applications[username];
       if (!userApps) return false;

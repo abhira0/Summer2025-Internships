@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KapLabs Jobs",
-  description: "Track and manage jobs with a clean, dark UI.",
+  title: "KapLabs Jobs/Internships",
+  description: "Track and manage jobs/internships from simplify repo",
 };
 
 export default function RootLayout({

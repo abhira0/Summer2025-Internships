@@ -10,7 +10,7 @@ export default async function ProtectedLayout({ children }: { children: React.Re
   }
   try {
     const payload = parseJwt(token);
-    const isExpired = payload?.exp && Date.now() / 1000 >= payload.exp;
+    const isExpired = payload && typeof payload.exp === 'number' && Date.now() / 1000 >= payload.exp;
     if (!payload || isExpired) {
       redirect("/login");
     }

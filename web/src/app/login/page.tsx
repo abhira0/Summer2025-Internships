@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildApiUrl } from "@/utils/api";
 import { parseJwt } from "@/utils/jwt";
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -34,9 +34,9 @@ export default function LoginPage() {
         // Set a lightweight cookie so edge middleware can protect routes.
         // Align cookie lifetime with JWT expiry when available to avoid stale sessions.
         try {
-          const payload: any | null = parseJwt(token);
+          const payload = parseJwt(token);
           const nowSeconds = Math.floor(Date.now() / 1000);
-          const maxAgeSeconds = payload?.exp ? Math.max(0, payload.exp - nowSeconds) : 30 * 24 * 60 * 60; // default 30d
+          const maxAgeSeconds = payload && typeof payload.exp === 'number' ? Math.max(0, payload.exp - nowSeconds) : 30 * 24 * 60 * 60; // default 30d
           // Mirror JWT into a cookie so middleware can reliably protect routes
           document.cookie = `jwt_token=${encodeURIComponent(token)}; Max-Age=${maxAgeSeconds}; path=/; SameSite=Lax`;
           // Lightweight presence cookie (kept for backward-compat)
@@ -48,8 +48,8 @@ export default function LoginPage() {
         }
       }
       router.replace(redirectTo);
-    } catch (e: any) {
-      setError(e?.message ?? "Login failed");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Login failed");
     } finally {
       setLoading(false);
     }
@@ -99,9 +99,9 @@ export default function LoginPage() {
               if (typeof window !== "undefined") {
                 localStorage.setItem("jwt_token", token);
                 try {
-                  const payload: any | null = parseJwt(token);
+                  const payload = parseJwt(token);
                   const nowSeconds = Math.floor(Date.now() / 1000);
-                  const maxAgeSeconds = payload?.exp ? Math.max(0, payload.exp - nowSeconds) : 30 * 24 * 60 * 60;
+                  const maxAgeSeconds = payload && typeof payload.exp === 'number' ? Math.max(0, payload.exp - nowSeconds) : 30 * 24 * 60 * 60;
                   document.cookie = `jwt_token=${encodeURIComponent(token)}; Max-Age=${maxAgeSeconds}; path=/; SameSite=Lax`;
                   document.cookie = `logged_in=1; Max-Age=${maxAgeSeconds}; path=/; SameSite=Lax`;
                 } catch {
@@ -111,8 +111,8 @@ export default function LoginPage() {
                 }
               }
               router.replace(redirectTo);
-            } catch (e: any) {
-              setError(e?.message ?? "Demo login failed");
+            } catch (e: unknown) {
+              setError(e instanceof Error ? e.message : "Demo login failed");
             } finally {
               setDemoLoading(false);
             }
@@ -126,6 +126,14 @@ export default function LoginPage() {
       </form>
       </div>
     </section>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="max-w-md mx-auto mt-8 p-6">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
 

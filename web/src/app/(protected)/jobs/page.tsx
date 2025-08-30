@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildApiUrl } from "@/utils/api";
 import { parseJwt } from "@/utils/jwt";
@@ -27,7 +27,7 @@ function JobsInner() {
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
     const payload = token ? parseJwt(token) : null;
-    const isExpired = payload?.exp && Date.now() / 1000 >= payload.exp;
+    const isExpired = payload && typeof payload.exp === 'number' && Date.now() / 1000 >= payload.exp;
     if (!token || !payload || isExpired) {
       try { localStorage.removeItem("jwt_token"); } catch {}
       router.replace("/login?redirect=/jobs");
@@ -39,7 +39,7 @@ function JobsInner() {
     try {
       const token = localStorage.getItem("jwt_token");
       const payload = token ? parseJwt(token) : null;
-      const uname: string | null = payload?.sub || payload?.username || null;
+      const uname: string | null = (payload && typeof payload.sub === 'string') ? payload.sub : (payload && typeof payload.username === 'string') ? payload.username : null;
       setUsername(uname);
     } catch {
       setUsername(null);
@@ -68,14 +68,23 @@ function JobsInner() {
               const tracker = await tr.json();
               if (Array.isArray(tracker)) {
                 trackerIds = tracker
-                  .map((t: any) => (t && t.job_posting_id != null ? String(t.job_posting_id) : null))
-                  .filter((x: any): x is string => Boolean(x));
+                  .map((t: { job_posting_id?: string | number }) => (t && t.job_posting_id != null ? String(t.job_posting_id) : null))
+                  .filter((x: string | null): x is string => Boolean(x));
               }
             }
           }
         } catch {}
 
-        const processed: Job[] = listings.map((item: any) => ({
+        const processed: Job[] = listings.map((item: {
+          id: string;
+          company_name: string;
+          title: string;
+          locations: string | string[];
+          url?: string;
+          source?: string;
+          date_posted: number;
+          active?: boolean;
+        }) => ({
           id: item.id,
           company_name: item.company_name,
           title: item.title,
@@ -110,8 +119,8 @@ function JobsInner() {
             });
           }, 0);
         }
-      } catch (e: any) {
-        setError(e.message ?? "Failed to load");
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Failed to load");
       } finally {
         setLoading(false);
       }
@@ -141,7 +150,7 @@ function JobsInner() {
     resetFilters,
     resetSorts,
     clearAll,
-    totalCount,
+    // totalCount,
     searchedData,
   } = useTableManager(jobs);
 
@@ -158,10 +167,10 @@ function JobsInner() {
         if (!res.ok) return;
         const me = await res.json();
         if (Array.isArray(me?.filter_rules)) {
-          (setActiveFilters as unknown as (v: any[]) => void)(me.filter_rules);
+          setActiveFilters(me.filter_rules);
         }
         if (Array.isArray(me?.sort_rules)) {
-          (setActiveSorts as unknown as (v: any[]) => void)(me.sort_rules);
+          setActiveSorts(me.sort_rules);
         }
       } catch {}
     };
@@ -177,11 +186,13 @@ function JobsInner() {
     const mode = params.get("mode");
     const field = params.get("field");
     if (q) setSearchQuery(q);
-    if (p) (goToPage as unknown as (v: number) => void)(Number(p));
-    if (s) (setPageSize as unknown as (v: number) => void)(Number(s));
+    if (p) goToPage(Number(p));
+    if (s) setPageSize(Number(s));
     if (scope) setSearchInFiltered(scope === "filtered");
     if (mode === "fuzzy" || mode === "exact") setSearchMode(mode);
-    if (field === "all" || field === "company_name" || field === "title" || field === "locations") setSearchField(field as any);
+    if (field === "all" || field === "company_name" || field === "title" || field === "locations") {
+      setSearchField(field as "all" | "company_name" | "title" | "locations");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -198,10 +209,6 @@ function JobsInner() {
     router.replace(`/jobs${qs ? `?${qs}` : ""}`);
   }, [router, searchQuery, page, pageSize, searchInFiltered, searchMode, searchField]);
 
-  const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const n = Number(e.target.value);
-    (setPageSize as unknown as (v: number) => void)(n);
-  };
 
   if (loading) return <p className="text-sm text-muted">Loading jobs…</p>;
   if (error) return <p className="text-sm text-red-400">{error}</p>;
@@ -266,8 +273,8 @@ function JobsInner() {
                             throw new Error(j?.detail || j?.error || "Failed to save filters");
                           }
                           setFiltersSaveState({ status: "success", message: "Saved" });
-                        } catch (e: any) {
-                          setFiltersSaveState({ status: "error", message: e?.message || "Failed" });
+                        } catch (e: unknown) {
+                          setFiltersSaveState({ status: "error", message: e instanceof Error ? e.message : "Failed" });
                         } finally {
                           setTimeout(() => setFiltersSaveState({ status: "idle" }), 2000);
                         }
@@ -310,8 +317,8 @@ function JobsInner() {
                             throw new Error(j?.detail || j?.error || "Failed to save sorts");
                           }
                           setSortsSaveState({ status: "success", message: "Saved" });
-                        } catch (e: any) {
-                          setSortsSaveState({ status: "error", message: e?.message || "Failed" });
+                        } catch (e: unknown) {
+                          setSortsSaveState({ status: "error", message: e instanceof Error ? e.message : "Failed" });
                         } finally {
                           setTimeout(() => setSortsSaveState({ status: "idle" }), 2000);
                         }
@@ -338,7 +345,7 @@ function JobsInner() {
         pageSize={pageSize}
         currentPage={page}
         onPageChange={goToPage}
-        onPageSizeChange={(n) => (setPageSize as unknown as (v: number) => void)(n)}
+        onPageSizeChange={setPageSize}
         totalPages={totalPages}
         totalCount={searchedData.length}
         activeSorts={activeSorts}

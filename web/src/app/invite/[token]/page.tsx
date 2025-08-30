@@ -39,8 +39,8 @@ export default function InviteAcceptPage() {
         const json = await res.json();
         if (!res.ok) throw new Error(json?.error ?? "Invalid or expired invite");
         setData(json);
-      } catch (e: any) {
-        setError(e?.message ?? "Failed to load invite");
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Failed to load invite");
       } finally {
         setLoading(false);
       }
@@ -72,9 +72,9 @@ export default function InviteAcceptPage() {
       const json = await res.json();
       if (!res.ok) throw new Error(json?.detail ?? json?.error ?? "Unable to redeem invite");
       router.replace("/login");
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Prefer inline form error for validation issues
-      const msg = e?.message ?? "Unable to redeem invite";
+      const msg = e instanceof Error ? e.message : "Unable to redeem invite";
       if (msg.toLowerCase().includes("password")) {
         setFormError(msg);
       } else {

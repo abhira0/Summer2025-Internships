@@ -21,11 +21,11 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
   useEffect(() => {
     if (editingFilter) {
       const { filter } = editingFilter;
-      setColumn(filter.column as any);
+      setColumn(filter.column);
       if (filter.column === "date_posted") {
         setDateRange({ fromDate: filter.fromDate, toDate: filter.toDate });
       } else if (["active", "hidden", "applied"].includes(filter.column)) {
-        setBooleanValue((filter as any)[filter.column]);
+        setBooleanValue((filter as Record<string, unknown>)[filter.column] as boolean);
       } else if ("conditions" in filter) {
         setConditions(filter.conditions);
         setConditionType(filter.conditionType);
@@ -40,13 +40,13 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
   }, [editingFilter]);
 
   const handleApply = () => {
-    let newFilter: ActiveFilter = { column } as any;
+    let newFilter: ActiveFilter;
     if (column === "date_posted") {
-      newFilter = { column, ...dateRange } as any;
+      newFilter = { column, ...dateRange };
     } else if (["active", "hidden", "applied"].includes(column)) {
-      (newFilter as any)[column] = booleanValue;
+      newFilter = { column, [column]: booleanValue } as ActiveFilter;
     } else {
-      newFilter = { column: column as any, conditions, conditionType } as any;
+      newFilter = { column, conditions, conditionType } as ActiveFilter;
     }
     if (editingFilter) {
       const next = [...activeFilters];
@@ -74,7 +74,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
             <label className="block text-sm mb-1">Column</label>
             <select
               value={column}
-              onChange={(e) => setColumn(e.target.value as any)}
+              onChange={(e) => setColumn(e.target.value as ActiveFilter["column"])}
               className="w-full rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
               style={{ colorScheme: "dark" }}
             >
@@ -113,7 +113,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
                 <label className="block text-sm mb-1">Condition Type</label>
               <select
                 value={conditionType}
-                onChange={(e) => setConditionType(e.target.value as any)}
+                onChange={(e) => setConditionType(e.target.value as "AND" | "OR")}
                 className="w-full rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
                 style={{ colorScheme: "dark" }}
               >
@@ -125,7 +125,7 @@ export default function FilterModal({ isOpen, onClose, activeFilters, setActiveF
                 <div key={i} className="flex gap-2">
                   <select
                     value={c.type}
-                    onChange={(e) => setConditions((prev) => prev.map((x, idx) => (idx === i ? { ...x, type: e.target.value as any } : x)))}
+                    onChange={(e) => setConditions((prev) => prev.map((x, idx) => (idx === i ? { ...x, type: e.target.value as TextCondition["type"] } : x)))}
                     className="rounded-md border border-default bg-gray-900 text-gray-100 px-3 py-2 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-white/10"
                     style={{ colorScheme: "dark" }}
                   >
