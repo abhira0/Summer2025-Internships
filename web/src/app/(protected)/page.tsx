@@ -27,6 +27,9 @@ export default function Home() {
         <Link href="/jobs" className="focus-ring inline-flex items-center rounded-md bg-white/10 px-4 py-2 text-sm font-medium transition-colors hover:bg-white/15">
           Browse Jobs
         </Link>
+        <Link href="/internships" className="focus-ring inline-flex items-center rounded-md bg-white/10 px-4 py-2 text-sm font-medium transition-colors hover:bg-white/15">
+          Browse Internships
+        </Link>
         <button className="focus-ring inline-flex items-center rounded-md border border-default px-4 py-2 text-sm font-medium transition-colors hover:bg-white/5" disabled>
           Analytics (soon)
         </button>
