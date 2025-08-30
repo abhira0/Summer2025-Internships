@@ -14,8 +14,8 @@ import SortSection from "@/components/jobs/SortSection";
 import JobsTable from "@/components/jobs/JobsTable";
 // simplified URL params; no custom query language
 
-function JobsInner() {
-  const [jobs, setJobs] = useState<Job[]>([]);
+function InternshipsInner() {
+  const [internships, setInternships] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filtersSaveState, setFiltersSaveState] = useState<{ status: "idle" | "saving" | "success" | "error"; message?: string }>({ status: "idle" });
@@ -30,7 +30,7 @@ function JobsInner() {
     const isExpired = payload?.exp && Date.now() / 1000 >= payload.exp;
     if (!token || !payload || isExpired) {
       try { localStorage.removeItem("jwt_token"); } catch {}
-      router.replace("/login?redirect=/jobs");
+      router.replace("/login?redirect=/internships");
       return;
     }
   }, [router]);
@@ -47,10 +47,10 @@ function JobsInner() {
   }, [setUsername]);
 
   useEffect(() => {
-    const fetchJobs = async () => {
+    const fetchInternships = async () => {
       try {
         setLoading(true);
-        const res = await fetch(config.api.jobs);
+        const res = await fetch(config.api.internships);
         if (!res.ok) throw new Error("Failed to fetch listings");
         const listings = await res.json();
         if (!Array.isArray(listings)) throw new Error("Invalid data format");
@@ -87,7 +87,7 @@ function JobsInner() {
         }));
 
         // If we have tracker IDs, attempt to mark them hidden via ApplicationsContext API
-        setJobs(processed);
+        setInternships(processed);
         if (trackerIds.length > 0) {
           // Defer to allow ApplicationsProvider to initialize username state
           setTimeout(() => {
@@ -116,7 +116,7 @@ function JobsInner() {
         setLoading(false);
       }
     };
-    fetchJobs();
+    fetchInternships();
   }, []);
 
   const {
@@ -143,7 +143,7 @@ function JobsInner() {
     clearAll,
     totalCount,
     searchedData,
-  } = useTableManager(jobs);
+  } = useTableManager(internships);
 
   // Load saved rules from profile and apply as defaults
   useEffect(() => {
@@ -195,7 +195,7 @@ function JobsInner() {
     usp.set("mode", searchMode);
     usp.set("field", searchField);
     const qs = usp.toString();
-    router.replace(`/jobs${qs ? `?${qs}` : ""}`);
+    router.replace(`/internships${qs ? `?${qs}` : ""}`);
   }, [router, searchQuery, page, pageSize, searchInFiltered, searchMode, searchField]);
 
   const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -203,7 +203,7 @@ function JobsInner() {
     (setPageSize as unknown as (v: number) => void)(n);
   };
 
-  if (loading) return <p className="text-sm text-muted">Loading jobs…</p>;
+  if (loading) return <p className="text-sm text-muted">Loading internships…</p>;
   if (error) return <p className="text-sm text-red-400">{error}</p>;
 
   return (
@@ -349,13 +349,11 @@ function JobsInner() {
   );
 }
 
-export default function JobsPage() {
+export default function InternshipsPage() {
   return (
     <ApplicationsProvider>
-      <JobsInner />
+      <InternshipsInner />
     </ApplicationsProvider>
   );
 }
-
-
 
