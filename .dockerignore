@@ -1,0 +1,8 @@
+.git
+.gitignore
+.next
+node_modules
+__pycache__
+venv
+*.pyc
+.env

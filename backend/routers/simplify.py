@@ -82,7 +82,7 @@ async def post_tracker_local(
     background_tasks: BackgroundTasks,
     current_user: dict = Depends(get_current_user)
 ):
-    # try:
+    try:
         # Get cookie from database
         db = get_database()
         user = await db.users.find_one({"username": current_user["username"]})
@@ -95,53 +95,67 @@ async def post_tracker_local(
         # Fetch all results from Simplify
         results = await fetch_all_results(user["simplify_cookie"])
 
-        # Create directory if it doesn't exist
-        os.makedirs(f"cache/{current_user['username']}", exist_ok=True)
-
-        # Save to local file
-        with open(f"cache/{current_user['username']}/raw.json", 'w') as f:
-            json.dump(results, f)
-
         # Process data WITHOUT coordinates first (fast)
-        raw_path = f"cache/{current_user['username']}/raw.json"
-        parsed_path = f"cache/{current_user['username']}/parsed.json"
+        parsed_data = parse_simplify.main_without_coordinates(results)
 
-        parse_simplify.main_without_coordinates(raw_path, parsed_path)
+        # Save to database cache
+        await db.simplify_cache.update_one(
+            {"username": current_user["username"]},
+            {"$set": {"data": parsed_data, "updated_at": datetime.utcnow()}},
+            upsert=True
+        )
+
+        async def background_add_coordinates(username: str, data: list):
+            db_client = get_database()
+            try:
+                # Add coordinates
+                updated_data = parse_simplify.add_coordinates_to_existing(data)
+                
+                # Update database
+                await db_client.simplify_cache.update_one(
+                    {"username": username},
+                    {"$set": {"data": updated_data, "updated_at": datetime.utcnow()}}
+                )
+                logger.info(f"Successfully added coordinates for {username}")
+            except Exception as e:
+                logger.error(f"Background coordinate task failed for {username}: {str(e)}")
 
         # Add coordinate fetching as a background task (slow)
         background_tasks.add_task(
-            parse_simplify.add_coordinates_to_existing,
-            parsed_path
+            background_add_coordinates,
+            current_user["username"],
+            parsed_data
         )
 
         logger.info(f"Started background task to add coordinates for {current_user['username']}")
 
         return {
-            "message": "Tracker data fetched and saved locally. Coordinates are being added in the background.",
+            "message": "Tracker data fetched and saved to database. Coordinates are being added in the background.",
             "items_count": len(results)
         }
-    # except Exception as e:
-    #     raise HTTPException(
-    #         status_code=500,
-    #         detail=f"Failed to fetch and save tracker data locally: {str(e)}"
-    #     )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch and save tracker data locally: {str(e)}"
+        )
 
 @router.get("/parsed")
 async def get_parsed(
     current_user: dict = Depends(get_current_user)
 ):
     try:
-        file_path = f"cache/{current_user['username']}/parsed.json"
-        if not os.path.exists(file_path):
-            # Create directory if it doesn't exist
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            # Create empty file with empty list
-            with open(file_path, 'w') as f:
-                json.dump([], f)
+        db = get_database()
+        cache = await db.simplify_cache.find_one({"username": current_user["username"]})
+        
+        if not cache or "data" not in cache:
             return []
             
-        with open(file_path, 'r') as f:
-            data = json.load(f)
+        return cache["data"]
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to read parsed data: {str(e)}"
+        )
             
         return data
     except Exception as e:

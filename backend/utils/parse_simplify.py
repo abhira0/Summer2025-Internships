@@ -63,7 +63,7 @@ class JSONFile:
         thread.start()
 
 
-LOCATION_CACHE = JSONFile("utils/locations.json")
+LOCATION_CACHE = JSONFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), "locations.json"))
 
 
 def save_json_atomic(file_path: str, data: Any) -> None:
@@ -250,41 +250,46 @@ class RemoveUnusedKeys:
             new_data.append(tmp_dict)
         self.input.data = new_data
 
-def main(from_path: str, to_path: str):
+class DataContainer:
+    def __init__(self, data: List[Dict[str, Any]]):
+        self.data = data
+
+def main(data_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Main function that processes all data including coordinates (synchronous)"""
-    data = JSONFile(from_path, auto_save=False)
+    data = DataContainer(data_list)
 
     AddCoordinates(data)
     StatusEvents(data)
     ProcessSalary(data)
     # RemoveUnusedKeys(data)
 
-    save_json_atomic(to_path, data.data)
+    return data.data
 
-def main_without_coordinates(from_path: str, to_path: str):
+def main_without_coordinates(data_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Process data without coordinates - fast initial processing"""
-    data = JSONFile(from_path, auto_save=False)
+    data = DataContainer(data_list)
 
     # Initialize empty coordinates for all items
     for item in data.data:
-        item["coordinates"] = []
+        if "coordinates" not in item:
+            item["coordinates"] = []
 
     StatusEvents(data)
     ProcessSalary(data)
     # RemoveUnusedKeys(data)
 
-    save_json_atomic(to_path, data.data)
+    return data.data
 
-def add_coordinates_to_existing(parsed_path: str):
+def add_coordinates_to_existing(data_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Add coordinates to already parsed data - can be run asynchronously"""
     try:
-        logger.info(f"Starting coordinate fetching for {parsed_path}")
-        data = JSONFile(parsed_path, auto_save=False)
+        logger.info(f"Starting coordinate fetching for {len(data_list)} items")
+        data = DataContainer(data_list)
 
         AddCoordinates(data)
 
-        # Save the updated data
-        save_json_atomic(parsed_path, data.data)
         logger.info(f"Finished adding coordinates to {len(data.data)} items")
+        return data.data
     except Exception as e:
         logger.error(f"Error adding coordinates: {str(e)}", exc_info=True)
+        return data_list

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaplabs-jobs
+    container_name: kaplabs-jobs-app
+    ports:
+      - "5173:5173"
+    env_file:
+      - backend/.env
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
