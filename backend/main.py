@@ -24,7 +24,8 @@ FRONTEND_URL = f"http://localhost:5173"
 # CORS middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL],
+    allow_origins=[],
+    allow_origin_regex="https?://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

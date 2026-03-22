@@ -49,6 +49,8 @@ function AnalyticsPageInner() {
   const [snapshotName, setSnapshotName] = useState<string | null>(null);
   const [currentSnapshotId, setCurrentSnapshotId] = useState<string | null>(null);
 
+  const [isInitializing, setIsInitializing] = useState(true);
+
   // Fetch data with SWR - auto-refresh every 5 minutes
   const {
     data: rawData,
@@ -147,10 +149,12 @@ function AnalyticsPageInner() {
       if (res.ok) {
         const data = await res.json();
         setSnapshots(data);
+        return data;
       }
     } catch (error) {
       console.error('Failed to fetch snapshots:', error);
     }
+    return [];
   };
 
   // Fetch saved filters (snapshot-specific or default)
@@ -213,16 +217,23 @@ function AnalyticsPageInner() {
   // Fetch snapshots and restore snapshot view if needed
   useEffect(() => {
     const init = async () => {
-      await fetchSnapshots();
+      const loadedSnapshots = await fetchSnapshots();
 
       // Check if we were viewing a snapshot before refresh
       const savedSnapshotId = localStorage.getItem('viewing_snapshot_id');
       if (savedSnapshotId) {
         // Restore snapshot view
         await handleViewSnapshot(savedSnapshotId);
+        setIsInitializing(false);
       } else {
         // Load default filters
         await fetchSavedFilters(null);
+        
+        // If there's no snapshot to auto-load yet, we can end initialization early
+        // otherwise we let autoLoadSnapshot finish the initialization
+        if (loadedSnapshots.length === 0) {
+            setIsInitializing(false);
+        }
       }
     };
 
@@ -232,14 +243,13 @@ function AnalyticsPageInner() {
   // Auto-load first snapshot if no current data
   useEffect(() => {
     const autoLoadSnapshot = async () => {
-      // Only auto-load if:
-      // 1. We're not already viewing a snapshot
-      // 2. There's no current data
-      // 3. We have snapshots available
-      // 4. Data has finished loading
-      if (!viewingSnapshot && (!rawData || rawData.length === 0) && !isLoading && snapshots.length > 0) {
-        // Load the most recent snapshot (first in the list)
-        await handleViewSnapshot(snapshots[0].id);
+      // If we've finished SWR loading but the data is empty and we have snapshots
+      if (!viewingSnapshot && !isLoading) {
+        if ((!rawData || rawData.length === 0) && snapshots.length > 0) {
+          // Load the most recent snapshot (first in the list)
+          await handleViewSnapshot(snapshots[0].id);
+        }
+        setIsInitializing(false);
       }
     };
 
@@ -268,13 +278,23 @@ function AnalyticsPageInner() {
   ];
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || isInitializing) {
+    const isSnapshotLoading = !isLoading && isInitializing && (!rawData || rawData.length === 0);
+
     return (
       <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Analytics</h1>
         </div>
-        <LoadingSkeleton />
+        {isSnapshotLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 bg-white/5 rounded-lg border border-white/10">
+            <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin mb-4"></div>
+            <h3 className="text-lg font-medium text-white mb-2">Loading Latest Snapshot</h3>
+            <p className="text-sm text-gray-400">No live data found. Loading your most recent snapshot instead...</p>
+          </div>
+        ) : (
+          <LoadingSkeleton />
+        )}
       </section>
     );
   }

@@ -9,8 +9,14 @@ services:
     container_name: kaplabs-jobs-app
     ports:
       - "5173:5173"
-    env_file:
-      - backend/.env
+    environment:
+      - SECRET_KEY
+      - ALGORITHM
+      - ACCESS_TOKEN_EXPIRE_MINUTES
+      - MONGODB_URL
+      - SERVER_HOST
+      - SERVER_PORT
+      - FRONTEND_URL
     restart: unless-stopped
     dns:
       - 8.8.8.8
